@@ -1,0 +1,22 @@
+PODS:
+  - WDImagePicker (0.2.2)
+
+DEPENDENCIES:
+  - WDImagePicker (from `https://github.com/justwudi/WDImagePicker.git`, tag `0.2.2`)
+
+EXTERNAL SOURCES:
+  WDImagePicker:
+    :git: https://github.com/justwudi/WDImagePicker.git
+    :tag: 0.2.2
+
+CHECKOUT OPTIONS:
+  WDImagePicker:
+    :git: https://github.com/justwudi/WDImagePicker.git
+    :tag: 0.2.2
+
+SPEC CHECKSUMS:
+  WDImagePicker: 0014e231d67a63db9a97db74332a8a16723809bc
+
+PODFILE CHECKSUM: 041ccbd7f7c21a7bca6c5da796f715f00cfbb805
+
+COCOAPODS: 1.0.1

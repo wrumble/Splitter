@@ -7,21 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		453083045110880759778D10 /* Pods_Splitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E61A09EDC8B6B2BB2096CC0 /* Pods_Splitter.framework */; };
 		684B88941DA3E7A200134F0D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684B88931DA3E7A200134F0D /* AppDelegate.swift */; };
-		684B88961DA3E7A200134F0D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684B88951DA3E7A200134F0D /* ViewController.swift */; };
+		684B88961DA3E7A200134F0D /* MyBillsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684B88951DA3E7A200134F0D /* MyBillsViewController.swift */; };
 		684B88991DA3E7A200134F0D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 684B88971DA3E7A200134F0D /* Main.storyboard */; };
 		684B889B1DA3E7A200134F0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 684B889A1DA3E7A200134F0D /* Assets.xcassets */; };
 		684B889E1DA3E7A200134F0D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 684B889C1DA3E7A200134F0D /* LaunchScreen.storyboard */; };
+		689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */; };
+		689B9A441DC2837900EEF40F /* Bill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A431DC2837900EEF40F /* Bill.swift */; };
+		689B9A461DC2840000EEF40F /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A451DC2840000EEF40F /* Item.swift */; };
+		68D2DF211DC2A4E40044AD8D /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D2DF201DC2A4E40044AD8D /* ImageStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2D98CC496BE0BD3471363ADA /* Pods-Splitter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Splitter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Splitter/Pods-Splitter.debug.xcconfig"; sourceTree = "<group>"; };
+		5E61A09EDC8B6B2BB2096CC0 /* Pods_Splitter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Splitter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		684B88901DA3E7A200134F0D /* Splitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Splitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		684B88931DA3E7A200134F0D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		684B88951DA3E7A200134F0D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		684B88951DA3E7A200134F0D /* MyBillsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBillsViewController.swift; sourceTree = "<group>"; };
 		684B88981DA3E7A200134F0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		684B889A1DA3E7A200134F0D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		684B889D1DA3E7A200134F0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		684B889F1DA3E7A200134F0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewBillViewController.swift; sourceTree = "<group>"; };
+		689B9A431DC2837900EEF40F /* Bill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bill.swift; sourceTree = "<group>"; };
+		689B9A451DC2840000EEF40F /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		68D2DF201DC2A4E40044AD8D /* ImageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
+		B9A6672F974ECB999FB0A4C7 /* Pods-Splitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Splitter.release.xcconfig"; path = "Pods/Target Support Files/Pods-Splitter/Pods-Splitter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				453083045110880759778D10 /* Pods_Splitter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +53,8 @@
 			children = (
 				684B88921DA3E7A200134F0D /* Splitter */,
 				684B88911DA3E7A200134F0D /* Products */,
+				A3C5794C611D7AFDA75B01A4 /* Pods */,
+				B1192D7F07D411A622A7A5A2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -55,13 +70,34 @@
 			isa = PBXGroup;
 			children = (
 				684B88931DA3E7A200134F0D /* AppDelegate.swift */,
-				684B88951DA3E7A200134F0D /* ViewController.swift */,
 				684B88971DA3E7A200134F0D /* Main.storyboard */,
+				684B88951DA3E7A200134F0D /* MyBillsViewController.swift */,
+				689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */,
+				68D2DF201DC2A4E40044AD8D /* ImageStore.swift */,
+				689B9A431DC2837900EEF40F /* Bill.swift */,
+				689B9A451DC2840000EEF40F /* Item.swift */,
 				684B889A1DA3E7A200134F0D /* Assets.xcassets */,
 				684B889C1DA3E7A200134F0D /* LaunchScreen.storyboard */,
 				684B889F1DA3E7A200134F0D /* Info.plist */,
 			);
 			path = Splitter;
+			sourceTree = "<group>";
+		};
+		A3C5794C611D7AFDA75B01A4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2D98CC496BE0BD3471363ADA /* Pods-Splitter.debug.xcconfig */,
+				B9A6672F974ECB999FB0A4C7 /* Pods-Splitter.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		B1192D7F07D411A622A7A5A2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5E61A09EDC8B6B2BB2096CC0 /* Pods_Splitter.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +107,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 684B88A21DA3E7A200134F0D /* Build configuration list for PBXNativeTarget "Splitter" */;
 			buildPhases = (
+				B986AA0DAB3376000F5BDDED /* [CP] Check Pods Manifest.lock */,
 				684B888C1DA3E7A200134F0D /* Sources */,
 				684B888D1DA3E7A200134F0D /* Frameworks */,
 				684B888E1DA3E7A200134F0D /* Resources */,
+				47A93FF8AEE65FBBEBC5E65E /* [CP] Embed Pods Frameworks */,
+				CBCEA43FB7CE66C8776B06AB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -131,13 +170,65 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		47A93FF8AEE65FBBEBC5E65E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Splitter/Pods-Splitter-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B986AA0DAB3376000F5BDDED /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		CBCEA43FB7CE66C8776B06AB /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Splitter/Pods-Splitter-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		684B888C1DA3E7A200134F0D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				684B88961DA3E7A200134F0D /* ViewController.swift in Sources */,
+				689B9A461DC2840000EEF40F /* Item.swift in Sources */,
+				689B9A441DC2837900EEF40F /* Bill.swift in Sources */,
+				684B88961DA3E7A200134F0D /* MyBillsViewController.swift in Sources */,
 				684B88941DA3E7A200134F0D /* AppDelegate.swift in Sources */,
+				689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */,
+				68D2DF211DC2A4E40044AD8D /* ImageStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,6 +341,7 @@
 		};
 		684B88A31DA3E7A200134F0D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D98CC496BE0BD3471363ADA /* Pods-Splitter.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Splitter/Info.plist;
@@ -261,6 +353,7 @@
 		};
 		684B88A41DA3E7A200134F0D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B9A6672F974ECB999FB0A4C7 /* Pods-Splitter.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Splitter/Info.plist;
@@ -289,6 +382,7 @@
 				684B88A41DA3E7A200134F0D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
