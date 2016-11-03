@@ -5,7 +5,7 @@ target 'Splitter' do
   # Comment this line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
-    pod 'WDImagePicker', :git => 'https://github.com/justwudi/WDImagePicker.git', :tag => '0.2.2'
+    pod 'TesseractOCRiOS', '4.0.0'
 
   # Pods for Splitter
 

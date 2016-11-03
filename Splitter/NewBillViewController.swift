@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import TesseractOCR
 
 class NewBillViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     var imageStore = ImageStore()
     var newBill: Bill = Bill()
+    var activityIndicator: UIActivityIndicatorView!
         
     @IBOutlet var imageView: UIImageView?
     @IBOutlet var billName: UITextField?
@@ -52,10 +54,14 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-        imageStore.setImage(image, forKey: newBill.billID)
+        imageStore.setImage(image, forKey: newBill.id)
         imageView!.image = image
         
-        dismissViewControllerAnimated(true, completion: nil)
+        addActivityIndicator()
+        
+        dismissViewControllerAnimated(true, completion: {
+            self.performImageRecognition(image)
+        })
     }
     
     func assignDate() -> String {
@@ -68,14 +74,38 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         return formatter.stringFromDate(currentDateTime)
     }
     
+    func addActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(frame: view.bounds)
+        activityIndicator.activityIndicatorViewStyle = .WhiteLarge
+        activityIndicator.backgroundColor = UIColor(white: 0, alpha: 0.25)
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
+    }
+    
+    func removeActivityIndicator() {
+        activityIndicator.removeFromSuperview()
+        activityIndicator = nil
+    }
+    
+    func performImageRecognition(image: UIImage) {
+        let tesseract = G8Tesseract(language: "eng")
+        var textFromImage: String?
+        tesseract.engineMode = .TesseractCubeCombined
+        tesseract.pageSegmentationMode = .SingleColumn
+        tesseract.maximumRecognitionTime = 10.0
+//        tesseract.image = image.g8_blackAndWhite()
+        tesseract.recognize()
+        textFromImage = tesseract.recognizedText
+        print(textFromImage)
+        removeActivityIndicator()
+    }
+    
     @IBAction func saveButtonWasPressed() {
-        //newBill.image =
         newBill.name = billName?.text
         newBill.date = assignDate()
         newBill.location = billLocation?.text
-        
-        self.performSegueWithIdentifier("segueToMyBills", sender: self)
-        
+        addActivityIndicator()
         newBill.setBillImage()
+        self.performSegueWithIdentifier("segueToMyBills", sender: self)
     }
 }

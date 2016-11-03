@@ -1,22 +1,12 @@
 PODS:
-  - WDImagePicker (0.2.2)
+  - TesseractOCRiOS (4.0.0)
 
 DEPENDENCIES:
-  - WDImagePicker (from `https://github.com/justwudi/WDImagePicker.git`, tag `0.2.2`)
-
-EXTERNAL SOURCES:
-  WDImagePicker:
-    :git: https://github.com/justwudi/WDImagePicker.git
-    :tag: 0.2.2
-
-CHECKOUT OPTIONS:
-  WDImagePicker:
-    :git: https://github.com/justwudi/WDImagePicker.git
-    :tag: 0.2.2
+  - TesseractOCRiOS (= 4.0.0)
 
 SPEC CHECKSUMS:
-  WDImagePicker: 0014e231d67a63db9a97db74332a8a16723809bc
+  TesseractOCRiOS: 90638afbe43d082433f2e76b384c7901d23956df
 
-PODFILE CHECKSUM: 041ccbd7f7c21a7bca6c5da796f715f00cfbb805
+PODFILE CHECKSUM: f81e1f5e0e661d4894f441ab42cad8c262f3d633
 
 COCOAPODS: 1.0.1

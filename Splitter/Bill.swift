@@ -8,18 +8,19 @@
 
 import UIKit
 
-class Bill {
+class Bill: NSObject {
     
     var imageStore: ImageStore!
     var name: String!
     var date: String!
     var location: String?
-    var itemArray: [Item]?
-    var billID = NSUUID().UUIDString
+    var itemsArray: [Item]?
+    var id = NSUUID().UUIDString
     var image: UIImageView?
+    var total: Int?
         
     func setBillImage() {
-        image?.image = imageStore.imageForKey(billID)
+        image?.image = imageStore.imageForKey(id)
     }
     
 }

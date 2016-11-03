@@ -8,8 +8,10 @@
 
 import UIKit
 
-class Item {
+class Item: NSObject {
     
-    var itemName: UILabel!
-    var itemPrice: UILabel!
+    var name: UILabel!
+    var price: UILabel!
+    var billId = NSUUID().UUIDString
+    
 }

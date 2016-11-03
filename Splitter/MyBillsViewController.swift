@@ -8,13 +8,28 @@
 
 import UIKit
 
-class MyBillsViewController: UIViewController {
+class MyBillsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    var allBills: [Bill]?
     
     @IBOutlet var newBillButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // (allBills?.count)!
+        return 0
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell: BillCell = tableView.dequeueReusableCellWithIdentifier("billCell") as! BillCell
+        let bill = allBills![indexPath.row]
+        cell.name.text = bill.name
+        cell.date.text = bill.date
+        cell.total!.text = "£\(bill.total)"
+        return cell
     }
     
     @IBAction func newBillsButtonWasPressed() {
