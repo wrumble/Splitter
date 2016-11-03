@@ -93,7 +93,7 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         tesseract.engineMode = .TesseractCubeCombined
         tesseract.pageSegmentationMode = .SingleColumn
         tesseract.maximumRecognitionTime = 10.0
-//        tesseract.image = image.g8_blackAndWhite()
+        tesseract.image = image.g8_blackAndWhite()
         tesseract.recognize()
         textFromImage = tesseract.recognizedText
         print(textFromImage)
