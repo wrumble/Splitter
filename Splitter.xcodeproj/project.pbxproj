@@ -22,6 +22,7 @@
 		689B9A441DC2837900EEF40F /* Bill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A431DC2837900EEF40F /* Bill.swift */; };
 		689B9A461DC2840000EEF40F /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A451DC2840000EEF40F /* Item.swift */; };
 		68D2DF211DC2A4E40044AD8D /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D2DF201DC2A4E40044AD8D /* ImageStore.swift */; };
+		68D517F31DCBECCC00028759 /* TextToItemConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D517F21DCBECCC00028759 /* TextToItemConverter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		689B9A431DC2837900EEF40F /* Bill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bill.swift; sourceTree = "<group>"; };
 		689B9A451DC2840000EEF40F /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		68D2DF201DC2A4E40044AD8D /* ImageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
+		68D517F21DCBECCC00028759 /* TextToItemConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextToItemConverter.swift; sourceTree = "<group>"; };
 		B9A6672F974ECB999FB0A4C7 /* Pods-Splitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Splitter.release.xcconfig"; path = "Pods/Target Support Files/Pods-Splitter/Pods-Splitter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,6 +90,7 @@
 				684B88971DA3E7A200134F0D /* Main.storyboard */,
 				684B88951DA3E7A200134F0D /* MyBillsViewController.swift */,
 				689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */,
+				68D517F21DCBECCC00028759 /* TextToItemConverter.swift */,
 				68D2DF201DC2A4E40044AD8D /* ImageStore.swift */,
 				680516EA1DCBAB5600949A13 /* BillCell.swift */,
 				689B9A431DC2837900EEF40F /* Bill.swift */,
@@ -247,6 +250,7 @@
 				689B9A461DC2840000EEF40F /* Item.swift in Sources */,
 				689B9A441DC2837900EEF40F /* Bill.swift in Sources */,
 				684B88961DA3E7A200134F0D /* MyBillsViewController.swift in Sources */,
+				68D517F31DCBECCC00028759 /* TextToItemConverter.swift in Sources */,
 				684B88941DA3E7A200134F0D /* AppDelegate.swift in Sources */,
 				680516EB1DCBAB5600949A13 /* BillCell.swift in Sources */,
 				689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */,

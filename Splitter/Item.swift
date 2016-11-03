@@ -10,8 +10,9 @@ import UIKit
 
 class Item: NSObject {
     
-    var name: UILabel!
-    var price: UILabel!
+    var name: String!
+    var quantity: Int!
+    var price: Float!
     var billId = NSUUID().UUIDString
     
 }
