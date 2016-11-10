@@ -12,7 +12,7 @@ class Item: NSObject {
     
     var name: String!
     var quantity: Int!
-    var price: Float!
+    var price: Double!
     var billId = NSUUID().UUIDString
     
 }
