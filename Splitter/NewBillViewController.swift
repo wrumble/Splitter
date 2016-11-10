@@ -12,6 +12,7 @@ import TesseractOCR
 class NewBillViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     var imageStore = ImageStore()
+    var billStore = BillStore()
     var newBill: Bill = Bill()
     var itemConverter = TextToItemConverter()
     var activityIndicator: UIActivityIndicatorView!
@@ -58,8 +59,6 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         imageStore.setImage(image, forKey: newBill.id)
         imageView!.image = image
         
-        addActivityIndicator()
-        
         dismissViewControllerAnimated(true, completion: {
             self.performImageRecognition(image)
         })
@@ -95,6 +94,7 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         tesseract.pageSegmentationMode = .SingleBlock
         tesseract.maximumRecognitionTime = 10.0
         tesseract.image = image.g8_blackAndWhite()
+        addActivityIndicator()
         tesseract.recognize()
         textFromImage = tesseract.recognizedText
         itemConverter.itemBillID = newBill.id
@@ -106,8 +106,9 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         newBill.name = billName?.text
         newBill.date = assignDate()
         newBill.location = billLocation?.text
-        addActivityIndicator()
         newBill.setBillImage()
+        newBill.getBillTotal()
+        billStore.setBill(newBill, forKey: newBill.id)
         self.performSegueWithIdentifier("segueToMyBills", sender: self)
     }
 }

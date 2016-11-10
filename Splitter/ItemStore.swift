@@ -11,7 +11,6 @@ import UIKit
 class ItemStore: NSObject {
     
     let cache = NSCache()
-    var itemsArray = [Item]()
     
     func setItem(item: [Item], forKey key: String) {
         cache.setObject(item, forKey: key)

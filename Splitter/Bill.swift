@@ -17,14 +17,22 @@ class Bill: NSObject {
     var location: String?
     var id = NSUUID().UUIDString
     var image: UIImageView?
-    var total: Int?
+    var total = Double()
         
     func setBillImage() {
-        image?.image = imageStore.imageForKey(id)
+        self.image?.image = imageStore.imageForKey(id)
     }
     
     func getBillItems() -> [Item] {
         return itemStore.itemForKey(self.id)!
+    }
+    
+    func getBillTotal() {
+        let itemArray = getBillItems()
+        
+        for item in itemArray {
+            self.total += item.price
+        }
     }
     
 }
