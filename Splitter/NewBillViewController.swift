@@ -13,6 +13,7 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
     
     var imageStore = ImageStore()
     var newBill: Bill = Bill()
+    var itemConverter = TextToItemConverter()
     var activityIndicator: UIActivityIndicatorView!
         
     @IBOutlet var imageView: UIImageView?
@@ -91,12 +92,13 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         let tesseract = G8Tesseract(language: "eng")
         var textFromImage: String?
         tesseract.engineMode = .TesseractCubeCombined
-        tesseract.pageSegmentationMode = .SingleColumn
+        tesseract.pageSegmentationMode = .SingleBlock
         tesseract.maximumRecognitionTime = 10.0
         tesseract.image = image.g8_blackAndWhite()
         tesseract.recognize()
         textFromImage = tesseract.recognizedText
-        print(textFromImage)
+        itemConverter.itemBillID = newBill.id
+        itemConverter.seperateTextToLines(textFromImage!)
         removeActivityIndicator()
     }
     

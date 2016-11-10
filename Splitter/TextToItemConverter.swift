@@ -11,21 +11,42 @@ import UIKit
 class TextToItemConverter {
     
     var itemBillID = String()
+    var itemStore = ItemStore()
+    var itemArray = [Item]()
     
     func seperateTextToLines(receiptText: String) {
-        var receiptLines:[String] = []
-        receiptText.enumerateLines { receiptLines.append($0.line) }
-        for line in receiptLines { createItems(line) }
+        let newlineChars = NSCharacterSet.newlineCharacterSet()
+        let lines = receiptText.utf16.split { newlineChars.characterIsMember($0) }.flatMap(String.init)
+        for line in lines { createItems(line) }
+        saveItemArray()
     }
     
     func createItems(itemText: String) {
-        if itemText.characters.count != 0 {
+        if itemText.characters.count > 5 {
             let item = Item()
             item.billId = itemBillID
             item.name = returnItemName(itemText)
             item.quantity = returnItemQuantity(itemText)
             item.price = returnItemPrice(itemText)
+            createItemArray(item)
         }
+    }
+    
+    func createItemArray(item: Item) {
+        let quantity = item.quantity
+        if quantity > 1 {
+            item.price = (item.price/Double(quantity))
+            item.quantity = 1
+            for _ in 1...quantity {
+                itemArray.append(item)
+            }
+        } else {
+            itemArray.append(item)
+        }
+    }
+    
+    func saveItemArray() {
+        itemStore.setItem(itemArray, forKey: itemBillID)
     }
     
     func returnItemName(itemText: String) -> String {
@@ -37,27 +58,31 @@ class TextToItemConverter {
                 name.append(word)
             }
         }
-        
         return name.joinWithSeparator(" ")
     }
     
     func returnItemQuantity(itemText: String) -> Int {
         let int = itemText.stringByReplacingOccurrencesOfString(",", withString: ".")
-        return NSString(string: int).integerValue
+        var quantity = 0
+        if NSString(string: int).integerValue == 0 {
+            quantity = NSString(string: int).integerValue
+        }
+        return quantity
     }
     
     func returnItemPrice(itemText: String) -> Double {
         let removedCommas = itemText.stringByReplacingOccurrencesOfString(",", withString: ".")
         let words = removedCommas.characters.split{$0 == " "}.map(String.init)
         var double = String()
+        var price: Double = 0.0
         
         for number in words {
             if number.containsADouble {
                 double = number
+                price = priceFromString(double)
             }
         }
-        
-        return priceFromString(double)
+        return price
     }
     
     func removeCharsFromString(text: String) -> String {
