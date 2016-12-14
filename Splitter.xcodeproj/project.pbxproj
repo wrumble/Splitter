@@ -13,6 +13,9 @@
 		680516E31DCBA9EC00949A13 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 680516E21DCBA9EC00949A13 /* libstdc++.6.0.9.tbd */; };
 		680516EB1DCBAB5600949A13 /* BillCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680516EA1DCBAB5600949A13 /* BillCell.swift */; };
 		680516F11DCBACC900949A13 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 680516F01DCBACC900949A13 /* tessdata */; };
+		683E2EA81E002B830029AEB3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 683E2EA61E002B830029AEB3 /* Model.xcdatamodeld */; };
+		683E2EAA1E0036650029AEB3 /* Bill+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683E2EA91E0036650029AEB3 /* Bill+CoreDataProperties.swift */; };
+		683E2EAD1E0037970029AEB3 /* Item+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683E2EAC1E0037970029AEB3 /* Item+CoreDataProperties.swift */; };
 		684B88941DA3E7A200134F0D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684B88931DA3E7A200134F0D /* AppDelegate.swift */; };
 		684B88961DA3E7A200134F0D /* MyBillsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684B88951DA3E7A200134F0D /* MyBillsViewController.swift */; };
 		684B88991DA3E7A200134F0D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 684B88971DA3E7A200134F0D /* Main.storyboard */; };
@@ -21,10 +24,10 @@
 		689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */; };
 		689B9A441DC2837900EEF40F /* Bill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A431DC2837900EEF40F /* Bill.swift */; };
 		689B9A461DC2840000EEF40F /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A451DC2840000EEF40F /* Item.swift */; };
-		689EC7B01DD4DA6D00DEA53E /* ItemStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689EC7AF1DD4DA6D00DEA53E /* ItemStore.swift */; };
-		689EC7B21DD5171F00DEA53E /* BillStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689EC7B11DD5171F00DEA53E /* BillStore.swift */; };
 		68D2DF211DC2A4E40044AD8D /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D2DF201DC2A4E40044AD8D /* ImageStore.swift */; };
 		68D517F31DCBECCC00028759 /* TextToItemConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D517F21DCBECCC00028759 /* TextToItemConverter.swift */; };
+		68E29B321E008E5D001E887A /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E29B311E008E5D001E887A /* ItemCell.swift */; };
+		68E29B341E008E95001E887A /* BillViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E29B331E008E95001E887A /* BillViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +39,9 @@
 		680516E41DCBAAC100949A13 /* Splitter-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Splitter-Bridging-Header.h"; sourceTree = "<group>"; };
 		680516EA1DCBAB5600949A13 /* BillCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillCell.swift; sourceTree = "<group>"; };
 		680516F01DCBACC900949A13 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
+		683E2EA71E002B830029AEB3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		683E2EA91E0036650029AEB3 /* Bill+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bill+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		683E2EAC1E0037970029AEB3 /* Item+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Item+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		684B88901DA3E7A200134F0D /* Splitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Splitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		684B88931DA3E7A200134F0D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		684B88951DA3E7A200134F0D /* MyBillsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBillsViewController.swift; sourceTree = "<group>"; };
@@ -46,10 +52,10 @@
 		689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewBillViewController.swift; sourceTree = "<group>"; };
 		689B9A431DC2837900EEF40F /* Bill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bill.swift; sourceTree = "<group>"; };
 		689B9A451DC2840000EEF40F /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
-		689EC7AF1DD4DA6D00DEA53E /* ItemStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemStore.swift; sourceTree = "<group>"; };
-		689EC7B11DD5171F00DEA53E /* BillStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillStore.swift; sourceTree = "<group>"; };
 		68D2DF201DC2A4E40044AD8D /* ImageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 		68D517F21DCBECCC00028759 /* TextToItemConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextToItemConverter.swift; sourceTree = "<group>"; };
+		68E29B311E008E5D001E887A /* ItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCell.swift; sourceTree = "<group>"; };
+		68E29B331E008E95001E887A /* BillViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillViewController.swift; sourceTree = "<group>"; };
 		B9A6672F974ECB999FB0A4C7 /* Pods-Splitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Splitter.release.xcconfig"; path = "Pods/Target Support Files/Pods-Splitter/Pods-Splitter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -68,6 +74,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		683E2EA41E0029FE0029AEB3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				68D517F21DCBECCC00028759 /* TextToItemConverter.swift */,
+				68D2DF201DC2A4E40044AD8D /* ImageStore.swift */,
+				680516EA1DCBAB5600949A13 /* BillCell.swift */,
+				68E29B311E008E5D001E887A /* ItemCell.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		683E2EA51E002A160029AEB3 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				68E29B331E008E95001E887A /* BillViewController.swift */,
+				684B88951DA3E7A200134F0D /* MyBillsViewController.swift */,
+				689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		683E2EAB1E0037460029AEB3 /* DataModels */ = {
+			isa = PBXGroup;
+			children = (
+				683E2EA61E002B830029AEB3 /* Model.xcdatamodeld */,
+				689B9A451DC2840000EEF40F /* Item.swift */,
+				683E2EAC1E0037970029AEB3 /* Item+CoreDataProperties.swift */,
+				689B9A431DC2837900EEF40F /* Bill.swift */,
+				683E2EA91E0036650029AEB3 /* Bill+CoreDataProperties.swift */,
+			);
+			name = DataModels;
+			sourceTree = "<group>";
+		};
 		684B88871DA3E7A100134F0D = {
 			isa = PBXGroup;
 			children = (
@@ -90,23 +129,25 @@
 		684B88921DA3E7A200134F0D /* Splitter */ = {
 			isa = PBXGroup;
 			children = (
+				68E29B351E0094BB001E887A /* Views */,
+				683E2EAB1E0037460029AEB3 /* DataModels */,
+				683E2EA51E002A160029AEB3 /* Controllers */,
+				683E2EA41E0029FE0029AEB3 /* Models */,
 				684B88931DA3E7A200134F0D /* AppDelegate.swift */,
-				684B88971DA3E7A200134F0D /* Main.storyboard */,
-				684B88951DA3E7A200134F0D /* MyBillsViewController.swift */,
-				689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */,
-				68D517F21DCBECCC00028759 /* TextToItemConverter.swift */,
-				68D2DF201DC2A4E40044AD8D /* ImageStore.swift */,
-				689EC7AF1DD4DA6D00DEA53E /* ItemStore.swift */,
-				680516EA1DCBAB5600949A13 /* BillCell.swift */,
-				689B9A431DC2837900EEF40F /* Bill.swift */,
-				689EC7B11DD5171F00DEA53E /* BillStore.swift */,
-				689B9A451DC2840000EEF40F /* Item.swift */,
 				684B889A1DA3E7A200134F0D /* Assets.xcassets */,
-				684B889C1DA3E7A200134F0D /* LaunchScreen.storyboard */,
 				684B889F1DA3E7A200134F0D /* Info.plist */,
 				680516F01DCBACC900949A13 /* tessdata */,
 			);
 			path = Splitter;
+			sourceTree = "<group>";
+		};
+		68E29B351E0094BB001E887A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				684B889C1DA3E7A200134F0D /* LaunchScreen.storyboard */,
+				684B88971DA3E7A200134F0D /* Main.storyboard */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		A3C5794C611D7AFDA75B01A4 /* Pods */ = {
@@ -253,15 +294,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				689EC7B21DD5171F00DEA53E /* BillStore.swift in Sources */,
 				689B9A461DC2840000EEF40F /* Item.swift in Sources */,
 				689B9A441DC2837900EEF40F /* Bill.swift in Sources */,
-				689EC7B01DD4DA6D00DEA53E /* ItemStore.swift in Sources */,
 				684B88961DA3E7A200134F0D /* MyBillsViewController.swift in Sources */,
 				68D517F31DCBECCC00028759 /* TextToItemConverter.swift in Sources */,
 				684B88941DA3E7A200134F0D /* AppDelegate.swift in Sources */,
+				683E2EA81E002B830029AEB3 /* Model.xcdatamodeld in Sources */,
+				68E29B341E008E95001E887A /* BillViewController.swift in Sources */,
+				683E2EAA1E0036650029AEB3 /* Bill+CoreDataProperties.swift in Sources */,
 				680516EB1DCBAB5600949A13 /* BillCell.swift in Sources */,
+				68E29B321E008E5D001E887A /* ItemCell.swift in Sources */,
 				689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */,
+				683E2EAD1E0037970029AEB3 /* Item+CoreDataProperties.swift in Sources */,
 				68D2DF211DC2A4E40044AD8D /* ImageStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -381,6 +425,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Splitter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -395,6 +441,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.waynerumble.Splitter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Splitter-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -406,6 +453,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Splitter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -420,6 +469,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.waynerumble.Splitter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Splitter-Bridging-Header.h";
 			};
 			name = Release;
@@ -446,6 +496,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		683E2EA61E002B830029AEB3 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				683E2EA71E002B830029AEB3 /* Model.xcdatamodel */,
+			);
+			currentVersion = 683E2EA71E002B830029AEB3 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 684B88881DA3E7A200134F0D /* Project object */;
 }

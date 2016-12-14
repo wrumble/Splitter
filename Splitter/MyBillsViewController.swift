@@ -7,28 +7,57 @@
 //
 
 import UIKit
+import CoreData
 
 class MyBillsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var allBills: [Bill]?
+    var allBills = [Bill]()
     
     @IBOutlet var newBillButton: UIButton!
+    @IBOutlet var tableView: UITableView!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: "Bill")
+        
+        do {
+            let results =
+                try managedContext.executeFetchRequest(fetchRequest)
+            allBills = results as! [Bill]
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "segueToBill" {
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                
+                let destinationVC = segue.destinationViewController as! BillViewController
+                let bill: NSManagedObject = allBills[selectedIndexPath.row] as NSManagedObject
+                
+                destinationVC.bill = bill
+            }
+        }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // (allBills?.count)!
-        return 0
+        return allBills.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: BillCell = tableView.dequeueReusableCellWithIdentifier("billCell") as! BillCell
-        let bill = allBills![indexPath.row]
+        
+        let cell: BillCell = tableView.dequeueReusableCellWithIdentifier("BillCell") as! BillCell
+        let bill = allBills[indexPath.row]
         cell.name.text = bill.name
         cell.date.text = bill.date
-        cell.total!.text = "£\(bill.total)"
+        cell.total!.text = "£\(bill.total!)"
+        
         return cell
     }
     

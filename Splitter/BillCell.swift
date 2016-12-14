@@ -12,5 +12,5 @@ class BillCell: UITableViewCell {
     
     @IBOutlet var name: UILabel!
     @IBOutlet var date: UILabel!
-    @IBOutlet var total: UILabel?
+    @IBOutlet var total: UILabel!
 }

@@ -7,32 +7,33 @@
 //
 
 import UIKit
+import CoreData
 
-class Bill: NSObject {
+class Bill: NSManagedObject {
     
-    var imageStore: ImageStore!
-    var itemStore: ItemStore!
-    var name: String!
-    var date: String!
-    var location: String?
-    var id = NSUUID().UUIDString
     var image: UIImageView?
-    var total = Double()
+    var imageStore: ImageStore?
+    
+    override func awakeFromInsert() {
+        super.awakeFromInsert()
         
+        name = ""
+        date = assignDate()
+        id = ""
+    }
+    
+    func assignDate() -> String {
+        
+        let currentDateTime = NSDate()
+        let formatter = NSDateFormatter()
+        formatter.timeStyle = .NoStyle
+        formatter.dateStyle = .LongStyle
+        
+        return formatter.stringFromDate(currentDateTime)
+    }
+    
     func setBillImage() {
-        self.image?.image = imageStore.imageForKey(id)
-    }
-    
-    func getBillItems() -> [Item] {
-        return itemStore.itemForKey(self.id)!
-    }
-    
-    func getBillTotal() {
-        let itemArray = getBillItems()
-        
-        for item in itemArray {
-            self.total += item.price
-        }
+        self.image?.image = imageStore!.imageForKey(id!)
     }
     
 }

@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
-class Item: NSObject {
+class Item: NSManagedObject {
     
-    var name: String!
-    var quantity: Int!
-    var price: Double!
-    var billId = NSUUID().UUIDString
+    override func awakeFromInsert() {
+        super.awakeFromInsert()
+        
+        id = NSUUID().UUIDString
+    }
     
 }

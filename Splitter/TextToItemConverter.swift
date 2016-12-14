@@ -7,46 +7,71 @@
 //
 
 import UIKit
+import CoreData
+
+extension String {
+    var containsADouble: Bool {
+        return rangeOfString("[0-9]{1,}.[0-9]{1,}", options: .RegularExpressionSearch) != nil
+    }
+}
+
+extension String {
+    var isaWord: Bool {
+        return rangeOfString("^[a-zA-Z]+$", options: .RegularExpressionSearch) != nil
+    }
+}
 
 class TextToItemConverter {
     
-    var itemBillID = String()
-    var itemStore = ItemStore()
-    var itemArray = [Item]()
+    var billObject: NSManagedObject!
     
     func seperateTextToLines(receiptText: String) {
         let newlineChars = NSCharacterSet.newlineCharacterSet()
         let lines = receiptText.utf16.split { newlineChars.characterIsMember($0) }.flatMap(String.init)
         for line in lines { createItems(line) }
-        saveItemArray()
+        setBillTotal()
     }
     
     func createItems(itemText: String) {
         if itemText.characters.count > 5 {
-            let item = Item()
-            item.billId = itemBillID
-            item.name = returnItemName(itemText)
-            item.quantity = returnItemQuantity(itemText)
-            item.price = returnItemPrice(itemText)
-            createItemArray(item)
-        }
-    }
-    
-    func createItemArray(item: Item) {
-        let quantity = item.quantity
-        if quantity > 1 {
-            item.price = (item.price/Double(quantity))
-            item.quantity = 1
-            for _ in 1...quantity {
-                itemArray.append(item)
+            
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let managedContext = appDelegate.managedObjectContext
+            let entity =  NSEntityDescription.entityForName("Item", inManagedObjectContext: managedContext)
+            let newItem = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
+            
+            newItem.setValue(returnItemName(itemText), forKey: "name")
+            newItem.setValue(returnItemQuantity(itemText), forKey: "quantity")
+            newItem.setValue(returnItemPrice(itemText), forKey: "price")
+            
+            do {
+                try managedContext.save()
+            } catch let error as NSError  {
+                print("Could not save \(error), \(error.userInfo)")
             }
-        } else {
-            itemArray.append(item)
+            
+            let currentItems = billObject.mutableSetValueForKey("items")
+            currentItems.addObject(newItem)
         }
     }
     
-    func saveItemArray() {
-        itemStore.setItem(itemArray, forKey: itemBillID)
+    func setBillTotal() {
+        let managedContext = billObject.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: "Item")
+        var items = [Item]()
+        do {
+            let results =
+                try managedContext!.executeFetchRequest(fetchRequest)
+            items = results as! [Item]
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        var sum = Int(0.0)
+        for item in items {
+            sum += Int(item.price)
+        }
+        
+        billObject.setValue(sum, forKey: "total")
     }
     
     func returnItemName(itemText: String) -> String {
@@ -63,7 +88,7 @@ class TextToItemConverter {
     
     func returnItemQuantity(itemText: String) -> Int {
         let int = itemText.stringByReplacingOccurrencesOfString(",", withString: ".")
-        var quantity = 0
+        var quantity = 1
         if NSString(string: int).integerValue == 0 {
             quantity = NSString(string: int).integerValue
         }
@@ -101,14 +126,3 @@ class TextToItemConverter {
     }
 }
 
-extension String {
-    var containsADouble: Bool {
-        return rangeOfString("[0-9]{1,}.[0-9]{1,}", options: .RegularExpressionSearch) != nil
-    }
-}
-
-extension String {
-    var isaWord: Bool {
-        return rangeOfString("^[a-zA-Z]+$", options: .RegularExpressionSearch) != nil
-    }
-}
