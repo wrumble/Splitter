@@ -12,13 +12,22 @@ import CoreData
 class MyBillsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var allBills = [Bill]()
+    var newBackButton = UIBarButtonItem()
     
     @IBOutlet var newBillButton: UIButton!
     @IBOutlet var tableView: UITableView!
+
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        newBackButton.title = ""
+        
+        self.navigationItem.title = "Splitter"
+        
+        self.navigationController?.navigationBar.tintColor = UIColor.blackColor()
+        self.navigationItem.backBarButtonItem = newBackButton
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
@@ -42,6 +51,7 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
                 let bill: NSManagedObject = allBills[selectedIndexPath.row] as NSManagedObject
                 
                 destinationVC.bill = bill
+                destinationVC.billName = allBills[selectedIndexPath.row].name
             }
         }
     }
@@ -54,16 +64,13 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let cell: BillCell = tableView.dequeueReusableCellWithIdentifier("BillCell") as! BillCell
         let bill = allBills[indexPath.row]
+
         cell.name.text = bill.name
         cell.date.text = bill.date
-        cell.total!.text = "£\(bill.total!)"
+        cell.location.text = bill.location
+        cell.total!.text = "£\(Double(bill.total!))"
         
         return cell
     }
-    
-    @IBAction func newBillsButtonWasPressed() {
-        self.performSegueWithIdentifier("segueToNewBill", sender: self)
-    }
-
 }
 

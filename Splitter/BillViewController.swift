@@ -12,13 +12,19 @@ import CoreData
 class BillViewController: UIViewController, UITableViewDataSource {
     
     var bill: NSManagedObject!
+    var billName: String!
     var allItems: [Item]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = billName
+        
         let managedContext = bill.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "Item")
+        let predicate = NSPredicate(format: "bill == %@", bill)
+        fetchRequest.predicate = predicate
+        
         do {
             let results =
                 try managedContext!.executeFetchRequest(fetchRequest)
@@ -26,6 +32,16 @@ class BillViewController: UIViewController, UITableViewDataSource {
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+
+                
+        let destinationVC = segue.destinationViewController as! BillReceiptViewController
+        let passedBill: NSManagedObject = bill as NSManagedObject
+                
+        destinationVC.billObject = passedBill
+
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -36,7 +52,7 @@ class BillViewController: UIViewController, UITableViewDataSource {
         
         let cell: ItemCell = tableView.dequeueReusableCellWithIdentifier("ItemCell") as! ItemCell
         let item = allItems[indexPath.row]
-
+        
         cell.name.text = item.name
         cell.price.text = "£\(item.price)"
         

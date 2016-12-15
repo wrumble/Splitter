@@ -23,7 +23,7 @@ extension String {
 
 class TextToItemConverter {
     
-    var billObject: NSManagedObject!
+    var bill: NSManagedObject!
     
     func seperateTextToLines(receiptText: String) {
         let newlineChars = NSCharacterSet.newlineCharacterSet()
@@ -35,29 +35,31 @@ class TextToItemConverter {
     func createItems(itemText: String) {
         if itemText.characters.count > 5 {
             
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            let managedContext = appDelegate.managedObjectContext
-            let entity =  NSEntityDescription.entityForName("Item", inManagedObjectContext: managedContext)
+            let managedContext = bill.managedObjectContext
+            let entity =  NSEntityDescription.entityForName("Item", inManagedObjectContext: managedContext!)
             let newItem = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
+            
             
             newItem.setValue(returnItemName(itemText), forKey: "name")
             newItem.setValue(returnItemQuantity(itemText), forKey: "quantity")
             newItem.setValue(returnItemPrice(itemText), forKey: "price")
             
+            let currentItems = bill.mutableSetValueForKey("items")
+            currentItems.addObject(newItem)
             do {
-                try managedContext.save()
+                try managedContext!.save()
             } catch let error as NSError  {
                 print("Could not save \(error), \(error.userInfo)")
             }
-            
-            let currentItems = billObject.mutableSetValueForKey("items")
-            currentItems.addObject(newItem)
         }
     }
     
     func setBillTotal() {
-        let managedContext = billObject.managedObjectContext
+        let managedContext = bill.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "Item")
+        let predicate = NSPredicate(format: "bill == %@", bill)
+        fetchRequest.predicate = predicate
+        
         var items = [Item]()
         do {
             let results =
@@ -66,12 +68,18 @@ class TextToItemConverter {
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
+
         var sum = Int(0.0)
         for item in items {
             sum += Int(item.price)
         }
         
-        billObject.setValue(sum, forKey: "total")
+        bill.setValue(sum, forKey: "total")
+        do {
+            try managedContext!.save()
+        } catch let error as NSError  {
+            print("Could not save \(error), \(error.userInfo)")
+        }
     }
     
     func returnItemName(itemText: String) -> String {

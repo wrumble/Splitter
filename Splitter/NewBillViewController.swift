@@ -12,7 +12,6 @@ import CoreData
 
 class NewBillViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    var imageStore = ImageStore()
     var newBill: NSManagedObject?
     var itemConverter = TextToItemConverter()
     var activityIndicator: UIActivityIndicatorView!
@@ -25,9 +24,18 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = "Splitter"
+        
+        self.navigationItem.hidesBackButton = true
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.blackColor()]
+        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(NewBillViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
 
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        self.navigationItem.backBarButtonItem?.tintColor = UIColor.blackColor()
     }
     
     func dismissKeyboard() {
@@ -43,18 +51,6 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func addActivityIndicator() {
-        activityIndicator = UIActivityIndicatorView(frame: view.bounds)
-        activityIndicator.activityIndicatorViewStyle = .WhiteLarge
-        activityIndicator.backgroundColor = UIColor(white: 0, alpha: 0.25)
-        activityIndicator.startAnimating()
-        view.addSubview(activityIndicator)
-    }
-    
-    func removeActivityIndicator() {
-        activityIndicator.removeFromSuperview()
-        activityIndicator = nil
-    }
     
     func performImageRecognition(image: UIImage) {
         let tesseract = G8Tesseract(language: "eng")
@@ -63,11 +59,9 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         tesseract.pageSegmentationMode = .SingleBlock
         tesseract.maximumRecognitionTime = 10.0
         tesseract.image = image.g8_blackAndWhite()
-        addActivityIndicator()
         tesseract.recognize()
         textFromImage = tesseract.recognizedText
         itemConverter.seperateTextToLines(textFromImage!)
-        removeActivityIndicator()
     }
     
     @IBAction func myBillsButonWasPressed() {
@@ -101,6 +95,8 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         newBill.setValue(billName?.text, forKey: "name")
         newBill.setValue(billLocation?.text, forKey: "location")
         newBill.setValue(id, forKey: "id")
+                
+        appDelegate.imageStore.setImage(image, forKey: id)
         
         do {
             try managedContext.save()
@@ -108,10 +104,10 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
             print("Could not save \(error), \(error.userInfo)")
         }
         
-        imageStore.setImage(image, forKey: id)
-        itemConverter.billObject = managedContext.objectWithID(newBill.objectID)
+        let bill: NSManagedObject = newBill as NSManagedObject
+        itemConverter.bill = bill
         
-        self.performImageRecognition(image)
         self.performSegueWithIdentifier("segueToMyBills", sender: self)
+        self.performImageRecognition(image)
     }
 }

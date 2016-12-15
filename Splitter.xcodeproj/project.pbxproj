@@ -24,6 +24,7 @@
 		689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */; };
 		689B9A441DC2837900EEF40F /* Bill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A431DC2837900EEF40F /* Bill.swift */; };
 		689B9A461DC2840000EEF40F /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A451DC2840000EEF40F /* Item.swift */; };
+		68B47FDB1E03173C00B0A6AC /* BillReceiptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B47FDA1E03173C00B0A6AC /* BillReceiptViewController.swift */; };
 		68D2DF211DC2A4E40044AD8D /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D2DF201DC2A4E40044AD8D /* ImageStore.swift */; };
 		68D517F31DCBECCC00028759 /* TextToItemConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D517F21DCBECCC00028759 /* TextToItemConverter.swift */; };
 		68E29B321E008E5D001E887A /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E29B311E008E5D001E887A /* ItemCell.swift */; };
@@ -52,6 +53,7 @@
 		689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewBillViewController.swift; sourceTree = "<group>"; };
 		689B9A431DC2837900EEF40F /* Bill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bill.swift; sourceTree = "<group>"; };
 		689B9A451DC2840000EEF40F /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		68B47FDA1E03173C00B0A6AC /* BillReceiptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillReceiptViewController.swift; sourceTree = "<group>"; };
 		68D2DF201DC2A4E40044AD8D /* ImageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 		68D517F21DCBECCC00028759 /* TextToItemConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextToItemConverter.swift; sourceTree = "<group>"; };
 		68E29B311E008E5D001E887A /* ItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCell.swift; sourceTree = "<group>"; };
@@ -88,9 +90,10 @@
 		683E2EA51E002A160029AEB3 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				68E29B331E008E95001E887A /* BillViewController.swift */,
 				684B88951DA3E7A200134F0D /* MyBillsViewController.swift */,
 				689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */,
+				68E29B331E008E95001E887A /* BillViewController.swift */,
+				68B47FDA1E03173C00B0A6AC /* BillReceiptViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -269,7 +272,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		CBCEA43FB7CE66C8776B06AB /* [CP] Copy Pods Resources */ = {
@@ -305,6 +308,7 @@
 				680516EB1DCBAB5600949A13 /* BillCell.swift in Sources */,
 				68E29B321E008E5D001E887A /* ItemCell.swift in Sources */,
 				689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */,
+				68B47FDB1E03173C00B0A6AC /* BillReceiptViewController.swift in Sources */,
 				683E2EAD1E0037970029AEB3 /* Item+CoreDataProperties.swift in Sources */,
 				68D2DF211DC2A4E40044AD8D /* ImageStore.swift in Sources */,
 			);
@@ -413,6 +417,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

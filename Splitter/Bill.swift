@@ -11,9 +11,6 @@ import CoreData
 
 class Bill: NSManagedObject {
     
-    var image: UIImageView?
-    var imageStore: ImageStore?
-    
     override func awakeFromInsert() {
         super.awakeFromInsert()
         
@@ -27,13 +24,9 @@ class Bill: NSManagedObject {
         let currentDateTime = NSDate()
         let formatter = NSDateFormatter()
         formatter.timeStyle = .NoStyle
-        formatter.dateStyle = .LongStyle
+        formatter.dateFormat = "dd/MM/yyyy"
         
         return formatter.stringFromDate(currentDateTime)
-    }
-    
-    func setBillImage() {
-        self.image?.image = imageStore!.imageForKey(id!)
     }
     
 }
