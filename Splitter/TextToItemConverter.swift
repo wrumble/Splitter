@@ -39,7 +39,6 @@ class TextToItemConverter {
             let entity =  NSEntityDescription.entityForName("Item", inManagedObjectContext: managedContext!)
             let newItem = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
             
-            
             newItem.setValue(returnItemName(itemText), forKey: "name")
             newItem.setValue(returnItemQuantity(itemText), forKey: "quantity")
             newItem.setValue(returnItemPrice(itemText), forKey: "price")

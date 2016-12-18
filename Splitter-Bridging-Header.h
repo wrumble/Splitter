@@ -3,4 +3,3 @@
 //
 
 #import <TesseractOCR/TesseractOCR.h>
-#import <RSKImageCropper/RSKImageCropper.h>
