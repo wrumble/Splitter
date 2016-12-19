@@ -121,7 +121,10 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let managedContext = bill.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "Item")
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         let predicate = NSPredicate(format: "bill == %@", bill)
+        
+        fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.predicate = predicate
         
         do {
@@ -145,7 +148,6 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let entity = NSEntityDescription.entityForName("Item", inManagedObjectContext: managedContext!)
         let newItem = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
         let currentItems = self.bill.mutableSetValueForKey("items")
-        print(itemStringPrice)
         let itemPriceNumber = returnItemPrice(itemStringPrice)
         
         newItem.setValue(itemName, forKey: "name")

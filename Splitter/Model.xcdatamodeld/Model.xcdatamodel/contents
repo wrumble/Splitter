@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="16B2657" minimumToolsVersion="Xcode 7.0">
     <entity name="Bill" representedClassName=".Bill" syncable="YES">
-        <attribute name="date" attributeType="String" syncable="YES"/>
+        <attribute name="date" attributeType="Date" syncable="YES"/>
         <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
@@ -18,7 +18,7 @@
     </entity>
     <elements>
         <element name="Bill" positionX="-72" positionY="-153" width="128" height="135"/>
-        <element name="Item" positionX="162" positionY="-153" width="128" height="118"/>
         <element name="Entity" positionX="45" positionY="-99" width="128" height="45"/>
+        <element name="Item" positionX="162" positionY="-153" width="128" height="118"/>
     </elements>
 </model>

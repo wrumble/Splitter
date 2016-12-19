@@ -30,6 +30,9 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "Bill")
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+        
+        fetchRequest.sortDescriptors = [sortDescriptor]
         
         do {
             let results =
@@ -62,9 +65,13 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let cell: BillCell = tableView.dequeueReusableCellWithIdentifier("BillCell") as! BillCell
         let bill = allBills[indexPath.row]
+        let formatter = NSDateFormatter()
+        formatter.timeStyle = .NoStyle
+        formatter.dateFormat = "dd/MM/yyyy"
+        let date = formatter.stringFromDate(bill.date!)
 
         cell.name.text = bill.name
-        cell.date.text = bill.date
+        cell.date.text = date
         cell.location.text = bill.location
         cell.total!.text = "£\(Double(bill.total!))"
         

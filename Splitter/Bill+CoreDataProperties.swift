@@ -15,7 +15,7 @@ import CoreData
 extension Bill {
 
     @NSManaged var name: String?
-    @NSManaged var date: String?
+    @NSManaged var date: NSDate?
     @NSManaged var location: String?
     @NSManaged var id: String?
     @NSManaged var total: NSNumber?

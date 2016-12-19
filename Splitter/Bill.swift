@@ -15,18 +15,7 @@ class Bill: NSManagedObject {
         super.awakeFromInsert()
         
         name = ""
-        date = assignDate()
+        date = NSDate()
         id = ""
     }
-    
-    func assignDate() -> String {
-        
-        let currentDateTime = NSDate()
-        let formatter = NSDateFormatter()
-        formatter.timeStyle = .NoStyle
-        formatter.dateFormat = "dd/MM/yyyy"
-        
-        return formatter.stringFromDate(currentDateTime)
-    }
-    
 }
