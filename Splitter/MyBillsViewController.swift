@@ -17,8 +17,6 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet var newBillButton: UIButton!
     @IBOutlet var tableView: UITableView!
 
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -71,6 +69,42 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.total!.text = "£\(Double(bill.total!))"
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            let bill = allBills[indexPath.row]
+            let managedContext = bill.managedObjectContext
+            let billObject = (managedContext?.objectWithID(bill.objectID))! as NSManagedObject
+            
+            managedContext?.deleteObject(billObject)
+            removeBill(bill)
+            
+            do {
+                try managedContext!.save()
+            }
+            catch let error as NSError {
+                print("Core Data save failed: \(error)")
+            }
+            tableView.reloadData()
+        }
+    }
+    
+    func removeBill(bill: Bill) {
+        if let index = allBills.indexOf(bill) {
+            allBills.removeAtIndex(index)
+        }
+    }
+    
+    @IBAction func toggleEditingMode(sender: AnyObject) {
+        
+        if self.tableView.editing == true {
+            self.tableView.editing = false
+            self.navigationItem.rightBarButtonItem?.title = "Done"
+        } else {
+            self.tableView.editing = true
+            self.navigationItem.rightBarButtonItem?.title = "Edit"
+        }
     }
 }
 

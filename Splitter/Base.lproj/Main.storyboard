@@ -76,9 +76,29 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bQK-Te-ySi">
                                 <rect key="frame" x="0.0" y="124" width="600" height="476"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="1xu-kc-1Sb">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cUb-HY-b43">
+                                            <rect key="frame" x="266" y="7" width="69" height="30"/>
+                                            <state key="normal" title="Delete Bill">
+                                                <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="toggleEditingMode:" destination="uEY-Eo-sjy" eventType="touchUpInside" id="7kZ-it-Vjc"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstItem="cUb-HY-b43" firstAttribute="centerY" secondItem="1xu-kc-1Sb" secondAttribute="centerY" id="cXM-tM-5vl"/>
+                                        <constraint firstItem="cUb-HY-b43" firstAttribute="centerX" secondItem="1xu-kc-1Sb" secondAttribute="centerX" id="nE1-tw-ApG"/>
+                                    </constraints>
+                                </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BillCell" id="F7Y-Pi-Xtw" customClass="BillCell" customModule="Splitter" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="72" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="F7Y-Pi-Xtw" id="k71-NR-aRd">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>

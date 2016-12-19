@@ -145,7 +145,8 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let entity = NSEntityDescription.entityForName("Item", inManagedObjectContext: managedContext!)
         let newItem = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
         let currentItems = self.bill.mutableSetValueForKey("items")
-        let itemPriceNumber = Int(itemStringPrice)
+        print(itemStringPrice)
+        let itemPriceNumber = returnItemPrice(itemStringPrice)
         
         newItem.setValue(itemName, forKey: "name")
         newItem.setValue(itemPriceNumber, forKey: "price")
@@ -195,6 +196,27 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         return alertController
     }
+    
+    func returnItemPrice(itemText: String) -> Double {
+        let removedCommas = itemText.stringByReplacingOccurrencesOfString(",", withString: ".")
+        let words = removedCommas.characters.split{$0 == " "}.map(String.init)
+        var double = String()
+        var price: Double = 0.0
+        
+        for number in words {
+            if number.containsADouble {
+                double = number
+                price = priceFromString(double)
+            }
+        }
+        return price
+    }
+    
+    func priceFromString(string: String) -> Double {
+        let price = (NSNumberFormatter().numberFromString(string)?.doubleValue)!
+        return price
+    }
+    
     
 }
 
