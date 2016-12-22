@@ -1,5 +1,5 @@
 //
-//  Item+CoreDataProperties.swift
+//  BillSplitter+CoreDataProperties.swift
 //  Splitter
 //
 //  Created by Wayne Rumble on 21/12/2016.
@@ -12,13 +12,13 @@
 import Foundation
 import CoreData
 
-extension Item {
+extension BillSplitter {
 
+    @NSManaged var email: String?
     @NSManaged var id: String?
     @NSManaged var name: String?
-    @NSManaged var price: NSNumber?
-    @NSManaged var quantity: NSNumber?
+    @NSManaged var total: NSNumber?
     @NSManaged var bill: Bill?
-    @NSManaged var billSplitters: NSSet?
+    @NSManaged var items: NSSet?
 
 }

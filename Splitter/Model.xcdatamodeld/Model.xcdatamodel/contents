@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="16B2657" minimumToolsVersion="Xcode 7.0">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="16C67" minimumToolsVersion="Xcode 7.0">
     <entity name="Bill" representedClassName=".Bill" syncable="YES">
         <attribute name="date" attributeType="Date" syncable="YES"/>
         <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="total" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="bill" inverseEntity="Item" syncable="YES"/>
+        <relationship name="billSplitters" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BillSplitter" inverseName="bill" inverseEntity="BillSplitter" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="bill" inverseEntity="Item" syncable="YES"/>
     </entity>
-    <entity name="Entity" syncable="YES"/>
+    <entity name="BillSplitter" representedClassName=".BillSplitter" syncable="YES">
+        <attribute name="email" attributeType="String" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="total" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="bill" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Bill" inverseName="billSplitters" inverseEntity="Bill" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="billSplitters" inverseEntity="Item" syncable="YES"/>
+    </entity>
     <entity name="Item" representedClassName=".Item" syncable="YES">
         <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="quantity" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="bill" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Bill" inverseName="items" inverseEntity="Bill" syncable="YES"/>
+        <relationship name="billSplitters" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BillSplitter" inverseName="items" inverseEntity="BillSplitter" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Bill" positionX="-72" positionY="-153" width="128" height="135"/>
-        <element name="Entity" positionX="45" positionY="-99" width="128" height="45"/>
-        <element name="Item" positionX="162" positionY="-153" width="128" height="118"/>
+        <element name="Bill" positionX="81" positionY="-375" width="128" height="148"/>
+        <element name="BillSplitter" positionX="-11" positionY="-171" width="128" height="133"/>
+        <element name="Item" positionX="171" positionY="-171" width="128" height="133"/>
     </elements>
 </model>

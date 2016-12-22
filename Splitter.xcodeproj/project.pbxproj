@@ -21,10 +21,17 @@
 		684B88991DA3E7A200134F0D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 684B88971DA3E7A200134F0D /* Main.storyboard */; };
 		684B889B1DA3E7A200134F0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 684B889A1DA3E7A200134F0D /* Assets.xcassets */; };
 		684B889E1DA3E7A200134F0D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 684B889C1DA3E7A200134F0D /* LaunchScreen.storyboard */; };
+		685E97EE1E09EE480013F367 /* BillSplitterItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685E97ED1E09EE480013F367 /* BillSplitterItemsViewController.swift */; };
+		6883545A1E085BEC00B343FB /* BillSplitter+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688354581E085BEC00B343FB /* BillSplitter+CoreDataProperties.swift */; };
+		6883545B1E085BEC00B343FB /* BillSplitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688354591E085BEC00B343FB /* BillSplitter.swift */; };
+		6883545D1E085C5D00B343FB /* BillSplittersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6883545C1E085C5D00B343FB /* BillSplittersViewController.swift */; };
+		6883545F1E085C6C00B343FB /* NewBillSplitterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6883545E1E085C6C00B343FB /* NewBillSplitterViewController.swift */; };
+		688354611E085C7800B343FB /* BillSplitterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688354601E085C7800B343FB /* BillSplitterCell.swift */; };
 		689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */; };
 		689B9A441DC2837900EEF40F /* Bill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A431DC2837900EEF40F /* Bill.swift */; };
 		689B9A461DC2840000EEF40F /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A451DC2840000EEF40F /* Item.swift */; };
 		68B47FDB1E03173C00B0A6AC /* BillReceiptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B47FDA1E03173C00B0A6AC /* BillReceiptViewController.swift */; };
+		68BB52EB1E09A0440036DB40 /* NewBillSplitterItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BB52EA1E09A0440036DB40 /* NewBillSplitterItemCell.swift */; };
 		68D2DF211DC2A4E40044AD8D /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D2DF201DC2A4E40044AD8D /* ImageStore.swift */; };
 		68D517F31DCBECCC00028759 /* TextToItemConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D517F21DCBECCC00028759 /* TextToItemConverter.swift */; };
 		68E29B321E008E5D001E887A /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E29B311E008E5D001E887A /* ItemCell.swift */; };
@@ -50,10 +57,17 @@
 		684B889A1DA3E7A200134F0D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		684B889D1DA3E7A200134F0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		684B889F1DA3E7A200134F0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		685E97ED1E09EE480013F367 /* BillSplitterItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillSplitterItemsViewController.swift; sourceTree = "<group>"; };
+		688354581E085BEC00B343FB /* BillSplitter+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BillSplitter+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		688354591E085BEC00B343FB /* BillSplitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillSplitter.swift; sourceTree = "<group>"; };
+		6883545C1E085C5D00B343FB /* BillSplittersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillSplittersViewController.swift; sourceTree = "<group>"; };
+		6883545E1E085C6C00B343FB /* NewBillSplitterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewBillSplitterViewController.swift; sourceTree = "<group>"; };
+		688354601E085C7800B343FB /* BillSplitterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillSplitterCell.swift; sourceTree = "<group>"; };
 		689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewBillViewController.swift; sourceTree = "<group>"; };
 		689B9A431DC2837900EEF40F /* Bill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bill.swift; sourceTree = "<group>"; };
 		689B9A451DC2840000EEF40F /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		68B47FDA1E03173C00B0A6AC /* BillReceiptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillReceiptViewController.swift; sourceTree = "<group>"; };
+		68BB52EA1E09A0440036DB40 /* NewBillSplitterItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewBillSplitterItemCell.swift; sourceTree = "<group>"; };
 		68D2DF201DC2A4E40044AD8D /* ImageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 		68D517F21DCBECCC00028759 /* TextToItemConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextToItemConverter.swift; sourceTree = "<group>"; };
 		68E29B311E008E5D001E887A /* ItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCell.swift; sourceTree = "<group>"; };
@@ -83,6 +97,8 @@
 				68D2DF201DC2A4E40044AD8D /* ImageStore.swift */,
 				680516EA1DCBAB5600949A13 /* BillCell.swift */,
 				68E29B311E008E5D001E887A /* ItemCell.swift */,
+				688354601E085C7800B343FB /* BillSplitterCell.swift */,
+				68BB52EA1E09A0440036DB40 /* NewBillSplitterItemCell.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -94,6 +110,9 @@
 				689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */,
 				68E29B331E008E95001E887A /* BillViewController.swift */,
 				68B47FDA1E03173C00B0A6AC /* BillReceiptViewController.swift */,
+				6883545C1E085C5D00B343FB /* BillSplittersViewController.swift */,
+				6883545E1E085C6C00B343FB /* NewBillSplitterViewController.swift */,
+				685E97ED1E09EE480013F367 /* BillSplitterItemsViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -106,6 +125,8 @@
 				683E2EAC1E0037970029AEB3 /* Item+CoreDataProperties.swift */,
 				689B9A431DC2837900EEF40F /* Bill.swift */,
 				683E2EA91E0036650029AEB3 /* Bill+CoreDataProperties.swift */,
+				688354591E085BEC00B343FB /* BillSplitter.swift */,
+				688354581E085BEC00B343FB /* BillSplitter+CoreDataProperties.swift */,
 			);
 			name = DataModels;
 			sourceTree = "<group>";
@@ -299,18 +320,25 @@
 			files = (
 				689B9A461DC2840000EEF40F /* Item.swift in Sources */,
 				689B9A441DC2837900EEF40F /* Bill.swift in Sources */,
+				6883545D1E085C5D00B343FB /* BillSplittersViewController.swift in Sources */,
 				684B88961DA3E7A200134F0D /* MyBillsViewController.swift in Sources */,
 				68D517F31DCBECCC00028759 /* TextToItemConverter.swift in Sources */,
 				684B88941DA3E7A200134F0D /* AppDelegate.swift in Sources */,
 				683E2EA81E002B830029AEB3 /* Model.xcdatamodeld in Sources */,
 				68E29B341E008E95001E887A /* BillViewController.swift in Sources */,
+				6883545B1E085BEC00B343FB /* BillSplitter.swift in Sources */,
 				683E2EAA1E0036650029AEB3 /* Bill+CoreDataProperties.swift in Sources */,
 				680516EB1DCBAB5600949A13 /* BillCell.swift in Sources */,
+				6883545F1E085C6C00B343FB /* NewBillSplitterViewController.swift in Sources */,
 				68E29B321E008E5D001E887A /* ItemCell.swift in Sources */,
 				689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */,
 				68B47FDB1E03173C00B0A6AC /* BillReceiptViewController.swift in Sources */,
+				68BB52EB1E09A0440036DB40 /* NewBillSplitterItemCell.swift in Sources */,
 				683E2EAD1E0037970029AEB3 /* Item+CoreDataProperties.swift in Sources */,
 				68D2DF211DC2A4E40044AD8D /* ImageStore.swift in Sources */,
+				688354611E085C7800B343FB /* BillSplitterCell.swift in Sources */,
+				6883545A1E085BEC00B343FB /* BillSplitter+CoreDataProperties.swift in Sources */,
+				685E97EE1E09EE480013F367 /* BillSplitterItemsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

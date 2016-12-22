@@ -14,9 +14,7 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
     
     var newBill: NSManagedObject?
     var itemConverter = TextToItemConverter()
-    var activityIndicator: UIActivityIndicatorView!
-        
-    @IBOutlet var myBillsButton: UIButton!
+    
     @IBOutlet var billName: UITextField?
     @IBOutlet var billLocation: UITextField?
     @IBOutlet var imageView: UIImageView?
@@ -25,9 +23,7 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         super.viewDidLoad()
         
         self.navigationItem.title = "Splitter"
-        
         self.navigationItem.hidesBackButton = true
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.blackColor()]
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(NewBillViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
@@ -51,7 +47,6 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    
     func performImageRecognition(image: UIImage) {
         let tesseract = G8Tesseract(language: "eng")
         var textFromImage: String?
@@ -64,11 +59,7 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         itemConverter.seperateTextToLines(textFromImage!)
     }
     
-    @IBAction func myBillsButonWasPressed() {
-        self.performSegueWithIdentifier("segueToMyBills", sender: self)
-    }
-    
-    @IBAction func takeBillPicture(sender: UIBarButtonItem) {
+    @IBAction func takeBillPicture(sender: UIButton) {
         
         let imagePicker = UIImagePickerController()
         
@@ -95,7 +86,7 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         newBill.setValue(billName?.text, forKey: "name")
         newBill.setValue(billLocation?.text, forKey: "location")
         newBill.setValue(id, forKey: "id")
-                
+        
         appDelegate.imageStore.setImage(image, forKey: id)
         
         do {
@@ -107,7 +98,7 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         let bill: NSManagedObject = newBill as NSManagedObject
         itemConverter.bill = bill
         
-        self.performSegueWithIdentifier("segueToMyBills", sender: self)
         self.performImageRecognition(image)
+        self.performSegueWithIdentifier("segueToMyBills", sender: self)
     }
 }

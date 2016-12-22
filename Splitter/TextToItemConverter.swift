@@ -29,7 +29,6 @@ class TextToItemConverter {
         let newlineChars = NSCharacterSet.newlineCharacterSet()
         let lines = receiptText.utf16.split { newlineChars.characterIsMember($0) }.flatMap(String.init)
         for line in lines { createItems(line) }
-        setBillTotal()
     }
     
     func createItems(itemText: String) {
@@ -50,34 +49,6 @@ class TextToItemConverter {
             } catch let error as NSError  {
                 print("Could not save \(error), \(error.userInfo)")
             }
-        }
-    }
-    
-    func setBillTotal() {
-        let managedContext = bill.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "Item")
-        let predicate = NSPredicate(format: "bill == %@", bill)
-        fetchRequest.predicate = predicate
-        
-        var items = [Item]()
-        do {
-            let results =
-                try managedContext!.executeFetchRequest(fetchRequest)
-            items = results as! [Item]
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
-        }
-
-        var sum = Int(0.0)
-        for item in items {
-            sum += Int(item.price)
-        }
-        
-        bill.setValue(sum, forKey: "total")
-        do {
-            try managedContext!.save()
-        } catch let error as NSError  {
-            print("Could not save \(error), \(error.userInfo)")
         }
     }
     

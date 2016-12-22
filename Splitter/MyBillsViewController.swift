@@ -12,7 +12,6 @@ import CoreData
 class MyBillsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var allBills = [Bill]()
-    var newBackButton = UIBarButtonItem()
     
     @IBOutlet var newBillButton: UIButton!
     @IBOutlet var tableView: UITableView!
@@ -20,13 +19,9 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        newBackButton.title = ""
-        
         self.navigationItem.title = "Splitter"
-        
-        self.navigationController?.navigationBar.tintColor = UIColor.blackColor()
-        self.navigationItem.backBarButtonItem = newBackButton
-        
+        self.navigationItem.hidesBackButton = true
+                
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "Bill")
@@ -41,6 +36,16 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
+        
+        if allBills.count > 0 {
+            setbillTotals()
+            do {
+                try managedContext.save()
+            } catch let error as NSError  {
+                print("Could not save \(error), \(error.userInfo)")
+            }
+        }
+        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -100,6 +105,18 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
     func removeBill(bill: Bill) {
         if let index = allBills.indexOf(bill) {
             allBills.removeAtIndex(index)
+        }
+    }
+    
+    func setbillTotals() {
+        allBills.forEach { bill in
+            var total = Double()
+            let items = bill.items?.allObjects as! [Item]
+            items.forEach { item in
+                total += Double(item.price!)
+            }
+            total = Double(round(100*total)/100)
+            bill.setValue(total, forKey: "total")
         }
     }
     

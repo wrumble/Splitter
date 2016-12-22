@@ -21,16 +21,25 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         super.viewDidLoad()
         
         self.navigationItem.title = billName
+        self.navigationItem.hidesBackButton = true
         
         fetchBillItems()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 
-        let destinationVC = segue.destinationViewController as! BillReceiptViewController
-        let passedBill: NSManagedObject = bill as NSManagedObject
-                
-        destinationVC.billObject = passedBill
+        if segue.identifier == "segueToReceiptImage" {
+            let destinationVC = segue.destinationViewController as! BillReceiptViewController
+            let passedBill: NSManagedObject = bill as NSManagedObject
+            
+            destinationVC.billObject = passedBill
+        } else if segue.identifier == "segueToBillSplitters" {
+            let destinationVC = segue.destinationViewController as! BillSplittersViewController
+            let passedBill: NSManagedObject = bill as NSManagedObject
+            
+            destinationVC.billName = billName
+            destinationVC.bill = passedBill
+        }
     }
     
     @IBAction func addNewItem(sender: UIButton) {
@@ -94,7 +103,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let item = allItems[indexPath.row]
         
         cell.name.text = item.name
-        cell.price.text = "£\(item.price)"
+        cell.price.text = "£\(item.price!)"
         
         return cell
     }
@@ -107,12 +116,14 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             removeItem(item)
             currentItems.removeObject(item)
+            
             do {
                 try managedContext!.save()
             }
             catch let error as NSError {
                 print("Core Data save failed: \(error)")
             }
+            setBillTotal()
             tableView.reloadData()
         }
     }
@@ -121,10 +132,8 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let managedContext = bill.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "Item")
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         let predicate = NSPredicate(format: "bill == %@", bill)
         
-        fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.predicate = predicate
         
         do {
@@ -148,7 +157,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let entity = NSEntityDescription.entityForName("Item", inManagedObjectContext: managedContext!)
         let newItem = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
         let currentItems = self.bill.mutableSetValueForKey("items")
-        let itemPriceNumber = returnItemPrice(itemStringPrice)
+        let itemPriceNumber = priceFromString(itemStringPrice)
         
         newItem.setValue(itemName, forKey: "name")
         newItem.setValue(itemPriceNumber, forKey: "price")
@@ -160,7 +169,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         catch let error as NSError {
             print("Core Data save failed: \(error)")
         }
-        
+        setBillTotal()
     }
     
     func createAlertSubView() -> UIAlertController {
@@ -180,6 +189,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         itemPrice.placeholder = "Item Price"
         itemPrice.borderStyle = .RoundedRect
         itemPrice.keyboardAppearance = .Alert
+        itemPrice.keyboardType = UIKeyboardType.NumberPad
         itemPrice.tag = 2
         itemPrice.delegate = self
         view.addSubview(itemPrice)
@@ -188,6 +198,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         itemQuantity.placeholder = "Item Quantity"
         itemQuantity.borderStyle = .RoundedRect
         itemQuantity.keyboardAppearance = .Alert
+        itemQuantity.keyboardType = UIKeyboardType.NumberPad
         itemQuantity.tag = 3
         itemQuantity.delegate = self
         view.addSubview(itemQuantity)
@@ -199,27 +210,38 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return alertController
     }
     
-    func returnItemPrice(itemText: String) -> Double {
-        let removedCommas = itemText.stringByReplacingOccurrencesOfString(",", withString: ".")
-        let words = removedCommas.characters.split{$0 == " "}.map(String.init)
-        var double = String()
-        var price: Double = 0.0
-        
-        for number in words {
-            if number.containsADouble {
-                double = number
-                price = priceFromString(double)
-            }
-        }
-        return price
-    }
-    
     func priceFromString(string: String) -> Double {
         let price = (NSNumberFormatter().numberFromString(string)?.doubleValue)!
         return price
     }
     
-    
+    func setBillTotal() {
+        let managedContext = bill.managedObjectContext
+        let fetchRequest = NSFetchRequest(entityName: "Item")
+        let predicate = NSPredicate(format: "bill == %@", bill)
+        fetchRequest.predicate = predicate
+        
+        var items = [Item]()
+        do {
+            let results =
+                try managedContext!.executeFetchRequest(fetchRequest)
+            items = results as! [Item]
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        
+        var total = Double()
+        items.forEach { item in
+            total += Double(item.price!)
+        }
+        total = Double(round(100*total)/100)
+        bill.setValue(total, forKey: "total")
+        do {
+            try managedContext!.save()
+        } catch let error as NSError  {
+            print("Could not save \(error), \(error.userInfo)")
+        }
+    }
 }
 
 
