@@ -63,7 +63,13 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allBills.count
+        
+        if allBills.count > 0 {
+            return allBills.count
+        } else {
+            TableViewHelper.EmptyMessage("You don't have any bills yet.\nTap New Bills to begin.", tableView: tableView)
+            return 0
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

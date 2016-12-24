@@ -93,7 +93,12 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allItems.count
+        if allItems.count > 0 {
+            return allItems.count
+        } else {
+            TableViewHelper.EmptyMessage("\(billName) has no items.\nTap Add to manually add items or try to re-take the phot by creating a new bill again.", tableView: tableView)
+            return 0
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

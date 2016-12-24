@@ -6,6 +6,7 @@ target 'Splitter' do
   use_frameworks!
 
     pod 'TesseractOCRiOS', '4.0.0'
+    pod 'WDImagePicker', :git => 'https://github.com/justwudi/WDImagePicker.git', :tag => '0.2.2'
 
   # Pods for Splitter
 

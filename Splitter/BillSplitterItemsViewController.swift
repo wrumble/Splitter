@@ -33,8 +33,12 @@ class BillSplitterItemsViewController: UIViewController, UITableViewDelegate, UI
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return splitterItems.count
-    }
+        if splitterItems.count > 0 {
+            return splitterItems.count
+        } else {
+            TableViewHelper.EmptyMessage("\(splitter.name!) has no items to pay for.\nGo back to assign some items to their name.", tableView: tableView)
+            return 0
+        }    }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         

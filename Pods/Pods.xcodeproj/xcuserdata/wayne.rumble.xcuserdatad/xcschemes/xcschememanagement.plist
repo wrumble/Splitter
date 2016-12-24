@@ -14,15 +14,25 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>WDImagePicker.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>46DE626588CF6B2FF0D866A61DC14957</key>
+		<key>07BE3E980A8BE69AC3F7CB14C3F43004</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7AD6464A977FD1FCF957EAAEC4567FD8</key>
+		<key>4DD860881905297F1C5FC05FC66715FA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F0FB1D82650987BF1493E69ED296AE47</key>
 		<dict>
 			<key>primary</key>
 			<true/>

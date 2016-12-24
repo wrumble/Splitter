@@ -67,7 +67,12 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allBillSplitters.count
+        if allBillSplitters.count > 0 {
+            return allBillSplitters.count
+        } else {
+            TableViewHelper.EmptyMessage("\(billName) has no bill splitters assigned to it yet.\nTap New Bill Splitter to add and assign items to a person.", tableView: tableView)
+            return 0
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

@@ -9,11 +9,15 @@
 import UIKit
 import TesseractOCR
 import CoreData
+import WDImagePicker
 
-class NewBillViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class NewBillViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, WDImagePickerDelegate {
     
     var newBill: NSManagedObject?
     var itemConverter = TextToItemConverter()
+    var imagePicker: WDImagePicker!
+    var popoverController: UIPopoverController!
+    var imagePickerController: UIImagePickerController!
     
     @IBOutlet var billName: UITextField?
     @IBOutlet var billLocation: UITextField?
@@ -38,15 +42,6 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         view.endEditing(true)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        
-        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-        imageView!.image = image
-        
-        view.setNeedsDisplay()
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
     func performImageRecognition(image: UIImage) {
         let tesseract = G8Tesseract(language: "eng")
         var textFromImage: String?
@@ -57,21 +52,6 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         tesseract.recognize()
         textFromImage = tesseract.recognizedText
         itemConverter.seperateTextToLines(textFromImage!)
-    }
-    
-    @IBAction func takeBillPicture(sender: UIButton) {
-        
-        let imagePicker = UIImagePickerController()
-        
-        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
-            imagePicker.sourceType = .Camera
-        } else {
-            imagePicker.sourceType = .PhotoLibrary
-        }
-        
-        imagePicker.delegate = self
-        imagePicker.allowsEditing = true
-        presentViewController(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func saveButtonWasPressed() {
@@ -100,5 +80,42 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         
         self.performImageRecognition(image)
         self.performSegueWithIdentifier("segueToMyBills", sender: self)
+    }
+    
+    @IBAction func takeBillPicture(button: UIButton) {
+        self.imagePicker = WDImagePicker()
+        self.imagePicker.cropSize = CGSizeMake(280, 280)
+        self.imagePicker.delegate = self
+        self.imagePicker.resizableCropArea = true
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            self.popoverController = UIPopoverController(contentViewController: self.imagePicker.imagePickerController)
+            self.popoverController.presentPopoverFromRect(button.frame, inView: self.view, permittedArrowDirections: .Any, animated: true)
+        } else {
+            self.presentViewController(self.imagePicker.imagePickerController, animated: true, completion: nil)
+        }
+    }
+    
+    func imagePicker(imagePicker: WDImagePicker, pickedImage: UIImage) {
+        self.imageView!.image = pickedImage
+        self.hideImagePicker()
+    }
+    
+    func hideImagePicker() {
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            self.popoverController.dismissPopoverAnimated(true)
+        } else {
+            self.imagePicker.imagePickerController.dismissViewControllerAnimated(true, completion: nil)
+        }
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+        self.imageView!.image = image
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            self.popoverController.dismissPopoverAnimated(true)
+        } else {
+            picker.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
 }
