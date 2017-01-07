@@ -15,7 +15,7 @@
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="total" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <relationship name="bill" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Bill" inverseName="billSplitters" inverseEntity="Bill" syncable="YES"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="billSplitters" inverseEntity="Item" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="billSplitters" inverseEntity="Item" syncable="YES"/>
     </entity>
     <entity name="Item" representedClassName=".Item" syncable="YES">
         <attribute name="id" attributeType="String" syncable="YES"/>
@@ -23,11 +23,11 @@
         <attribute name="price" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="quantity" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="bill" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Bill" inverseName="items" inverseEntity="Bill" syncable="YES"/>
-        <relationship name="billSplitters" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BillSplitter" inverseName="items" inverseEntity="BillSplitter" syncable="YES"/>
+        <relationship name="billSplitters" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BillSplitter" inverseName="items" inverseEntity="BillSplitter" syncable="YES"/>
     </entity>
     <elements>
         <element name="Bill" positionX="81" positionY="-375" width="128" height="148"/>
-        <element name="BillSplitter" positionX="-11" positionY="-171" width="128" height="133"/>
-        <element name="Item" positionX="171" positionY="-171" width="128" height="133"/>
+        <element name="BillSplitter" positionX="-11" positionY="-171" width="128" height="135"/>
+        <element name="Item" positionX="171" positionY="-171" width="128" height="135"/>
     </elements>
 </model>

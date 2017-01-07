@@ -22,16 +22,16 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         self.navigationItem.title = "Splitter"
         self.navigationItem.hidesBackButton = true
                 
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "Bill")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Bill")
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         do {
             let results =
-                try managedContext.executeFetchRequest(fetchRequest)
+                try managedContext.fetch(fetchRequest)
             allBills = results as! [Bill]
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
@@ -48,12 +48,12 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "segueToBill" {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 
-                let destinationVC = segue.destinationViewController as! BillViewController
+                let destinationVC = segue.destination as! BillViewController
                 let bill: NSManagedObject = allBills[selectedIndexPath.row] as NSManagedObject
                 
                 destinationVC.bill = bill
@@ -62,7 +62,7 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if allBills.count > 0 {
             return allBills.count
@@ -72,14 +72,14 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell: BillCell = tableView.dequeueReusableCellWithIdentifier("BillCell") as! BillCell
+        let cell: BillCell = tableView.dequeueReusableCell(withIdentifier: "BillCell") as! BillCell
         let bill = allBills[indexPath.row]
-        let formatter = NSDateFormatter()
-        formatter.timeStyle = .NoStyle
+        let formatter = DateFormatter()
+        formatter.timeStyle = .none
         formatter.dateFormat = "dd/MM/yyyy"
-        let date = formatter.stringFromDate(bill.date!)
+        let date = formatter.string(from: bill.date! as Date)
 
         cell.name.text = bill.name
         cell.date.text = date
@@ -89,13 +89,13 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         return cell
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             let bill = allBills[indexPath.row]
             let managedContext = bill.managedObjectContext
-            let billObject = (managedContext?.objectWithID(bill.objectID))! as NSManagedObject
+            let billObject = (managedContext?.object(with: bill.objectID))! as NSManagedObject
             
-            managedContext?.deleteObject(billObject)
+            managedContext?.delete(billObject)
             removeBill(bill)
             
             do {
@@ -108,9 +108,9 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func removeBill(bill: Bill) {
-        if let index = allBills.indexOf(bill) {
-            allBills.removeAtIndex(index)
+    func removeBill(_ bill: Bill) {
+        if let index = allBills.index(of: bill) {
+            allBills.remove(at: index)
         }
     }
     
@@ -126,13 +126,13 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    @IBAction func toggleEditingMode(sender: AnyObject) {
+    @IBAction func toggleEditingMode(_ sender: AnyObject) {
         
-        if self.tableView.editing == true {
-            self.tableView.editing = false
+        if self.tableView.isEditing == true {
+            self.tableView.isEditing = false
             self.navigationItem.rightBarButtonItem?.title = "Done"
         } else {
-            self.tableView.editing = true
+            self.tableView.isEditing = true
             self.navigationItem.rightBarButtonItem?.title = "Edit"
         }
     }

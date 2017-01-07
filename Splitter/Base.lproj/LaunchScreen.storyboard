@@ -1,8 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -14,14 +19,59 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SplitterLaunchScreenBackground" translatesAutoresizingMaskIntoConstraints="NO" id="Arg-Nl-Kvn">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenTitleText" translatesAutoresizingMaskIntoConstraints="NO" id="Ejm-hW-rvR">
+                                <rect key="frame" x="0.0" y="96" width="320" height="150"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="v41-yh-GGN"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenDescriptionText" translatesAutoresizingMaskIntoConstraints="NO" id="c8w-ce-x0Y">
+                                <rect key="frame" x="0.0" y="186" width="320" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="qsG-ot-oot"/>
+                                </constraints>
+                            </imageView>
+                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenNameText" translatesAutoresizingMaskIntoConstraints="NO" id="5Op-1X-bje">
+                                <rect key="frame" x="0.0" y="538" width="320" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="cDR-iK-gfb"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="5Op-1X-bje" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="73K-za-UYs"/>
+                            <constraint firstAttribute="trailing" secondItem="Ejm-hW-rvR" secondAttribute="trailing" id="82y-r5-rIE"/>
+                            <constraint firstItem="c8w-ce-x0Y" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="8xX-Vj-AvL"/>
+                            <constraint firstItem="Ejm-hW-rvR" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="0.6" id="EKQ-Eh-JDD"/>
+                            <constraint firstItem="Ejm-hW-rvR" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="MOW-hH-uMU"/>
+                            <constraint firstItem="Arg-Nl-Kvn" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="NWs-fY-xcQ"/>
+                            <constraint firstAttribute="trailing" secondItem="c8w-ce-x0Y" secondAttribute="trailing" id="YEi-sN-3ST"/>
+                            <constraint firstItem="c8w-ce-x0Y" firstAttribute="top" secondItem="Ejm-hW-rvR" secondAttribute="bottom" constant="-60" id="YPY-49-iza"/>
+                            <constraint firstAttribute="trailing" secondItem="Arg-Nl-Kvn" secondAttribute="trailing" id="ZfZ-cc-XeJ"/>
+                            <constraint firstAttribute="trailing" secondItem="5Op-1X-bje" secondAttribute="trailing" id="bfw-xd-fO7"/>
+                            <constraint firstItem="Arg-Nl-Kvn" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-20" id="ka9-fl-vig"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="5Op-1X-bje" secondAttribute="bottom" id="spz-uu-LJK"/>
+                            <constraint firstItem="Arg-Nl-Kvn" firstAttribute="bottom" secondItem="xb3-aO-Qok" secondAttribute="top" id="xFD-Ur-oJz"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52.5" y="373.94366197183098"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="LaunchScreenDescriptionText" width="207" height="22"/>
+        <image name="LaunchScreenNameText" width="207" height="12"/>
+        <image name="LaunchScreenTitleText" width="207" height="83"/>
+        <image name="SplitterLaunchScreenBackground" width="512" height="683"/>
+    </resources>
 </document>

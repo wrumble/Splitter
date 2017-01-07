@@ -4,7 +4,22 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>AFNetworking.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Splitter.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Stripe-Stripe.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Stripe.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -22,17 +37,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>07BE3E980A8BE69AC3F7CB14C3F43004</key>
+		<key>208C2F48D12D652B94A68A9A7982E712</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4DD860881905297F1C5FC05FC66715FA</key>
+		<key>71C83775FECBA5F5222B425EBAB33D01</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F0FB1D82650987BF1493E69ED296AE47</key>
+		<key>BA33048AB591C26836A5A99E9A4FA5D8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CF671F7E57B92905F1CC91D036D6B4A7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DCFC12EB56EBFD245BED7E125060E35C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EDB82B1C88760A7264F757ABFF0DCD8F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

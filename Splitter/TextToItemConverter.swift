@@ -11,13 +11,13 @@ import CoreData
 
 extension String {
     var containsADouble: Bool {
-        return rangeOfString("[0-9]{1,}.[0-9]{1,}", options: .RegularExpressionSearch) != nil
+        return range(of: "[0-9]{1,}.[0-9]{1,}", options: .regularExpression) != nil
     }
 }
 
 extension String {
     var isaWord: Bool {
-        return rangeOfString("^[a-zA-Z]+$", options: .RegularExpressionSearch) != nil
+        return range(of: "^[a-zA-Z]+$", options: .regularExpression) != nil
     }
 }
 
@@ -25,25 +25,25 @@ class TextToItemConverter {
     
     var bill: NSManagedObject!
     
-    func seperateTextToLines(receiptText: String) {
-        let newlineChars = NSCharacterSet.newlineCharacterSet()
-        let lines = receiptText.utf16.split { newlineChars.characterIsMember($0) }.flatMap(String.init)
+    func seperateTextToLines(_ receiptText: String) {
+        let newlineChars = CharacterSet.newlines
+        let lines = receiptText.utf16.split { newlineChars.contains(UnicodeScalar($0)!) }.flatMap(String.init)
         for line in lines { createItems(line) }
     }
     
-    func createItems(itemText: String) {
+    func createItems(_ itemText: String) {
         if itemText.characters.count > 5 {
             
             let managedContext = bill.managedObjectContext
-            let entity =  NSEntityDescription.entityForName("Item", inManagedObjectContext: managedContext!)
-            let newItem = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
+            let entity =  NSEntityDescription.entity(forEntityName: "Item", in: managedContext!)
+            let newItem = NSManagedObject(entity: entity!, insertInto: managedContext)
             
             newItem.setValue(returnItemName(itemText), forKey: "name")
             newItem.setValue(returnItemQuantity(itemText), forKey: "quantity")
             newItem.setValue(returnItemPrice(itemText), forKey: "price")
             
-            let currentItems = bill.mutableSetValueForKey("items")
-            currentItems.addObject(newItem)
+            let currentItems = bill.mutableSetValue(forKey: "items")
+            currentItems.add(newItem)
             do {
                 try managedContext!.save()
             } catch let error as NSError  {
@@ -52,7 +52,7 @@ class TextToItemConverter {
         }
     }
     
-    func returnItemName(itemText: String) -> String {
+    func returnItemName(_ itemText: String) -> String {
         let words = itemText.characters.split{$0 == " "}.map(String.init)
         var name = [String]()
         
@@ -61,11 +61,11 @@ class TextToItemConverter {
                 name.append(word)
             }
         }
-        return name.joinWithSeparator(" ")
+        return name.joined(separator: " ")
     }
     
-    func returnItemQuantity(itemText: String) -> Int {
-        let int = itemText.stringByReplacingOccurrencesOfString(",", withString: ".")
+    func returnItemQuantity(_ itemText: String) -> Int {
+        let int = itemText.replacingOccurrences(of: ",", with: ".")
         var quantity = 1
         if NSString(string: int).integerValue == 0 {
             quantity = NSString(string: int).integerValue
@@ -73,8 +73,8 @@ class TextToItemConverter {
         return quantity
     }
     
-    func returnItemPrice(itemText: String) -> Double {
-        let removedCommas = itemText.stringByReplacingOccurrencesOfString(",", withString: ".")
+    func returnItemPrice(_ itemText: String) -> Double {
+        let removedCommas = itemText.replacingOccurrences(of: ",", with: ".")
         let words = removedCommas.characters.split{$0 == " "}.map(String.init)
         var double = String()
         var price: Double = 0.0
@@ -88,17 +88,17 @@ class TextToItemConverter {
         return price
     }
     
-    func removeCharsFromString(text: String) -> String {
+    func removeCharsFromString(_ text: String) -> String {
         let okayChars : Set<Character> =
             Set("0123456789".characters)
         return String(text.characters.filter {okayChars.contains($0) })
     }
     
-    func priceFromString(string: String) -> Double {
+    func priceFromString(_ string: String) -> Double {
         var newString = removeCharsFromString(string)
         let index = newString.characters.count - 2
-        newString.insert(".", atIndex: newString.startIndex.advancedBy(index))
-        let price = (NSNumberFormatter().numberFromString(newString)?.doubleValue)!
+        newString.insert(".", at: newString.characters.index(newString.startIndex, offsetBy: index))
+        let price = (NumberFormatter().number(from: newString)?.doubleValue)!
         
         return price
     }

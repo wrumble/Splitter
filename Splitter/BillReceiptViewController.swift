@@ -19,12 +19,12 @@ class BillReceiptViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
         
         do {
             let results =
-                try managedContext.existingObjectWithID(billObject.objectID)
+                try managedContext.existingObject(with: billObject.objectID)
             bill = results as! Bill
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")

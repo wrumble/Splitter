@@ -15,7 +15,7 @@ class Bill: NSManagedObject {
         super.awakeFromInsert()
         
         name = ""
-        date = NSDate()
+        date = Date()
         id = ""
     }
 }

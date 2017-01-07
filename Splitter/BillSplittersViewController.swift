@@ -20,11 +20,11 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "\(billName) Splitters"
+        self.navigationItem.title = "\(billName!) Splitters"
         self.navigationItem.hidesBackButton = true
         
         let managedContext = bill.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "BillSplitter")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BillSplitter")
         let predicate = NSPredicate(format: "bill == %@", bill)
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
         
@@ -33,7 +33,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         
         do {
             let results =
-                try managedContext!.executeFetchRequest(fetchRequest)
+                try managedContext!.fetch(fetchRequest)
             allBillSplitters = results as! [BillSplitter]
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
@@ -42,11 +42,11 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         setAllSplitterTotals()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "segueToNewBillSplitter" {
             
-            let destinationVC = segue.destinationViewController as! NewBillSplitterViewController
+            let destinationVC = segue.destination as! NewBillSplitterViewController
             let passedBill: NSManagedObject = bill as NSManagedObject
                 
             destinationVC.bill = passedBill
@@ -56,7 +56,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         if segue.identifier == "segueToBillSplitterItems" {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 
-                let destinationVC = segue.destinationViewController as! BillSplitterItemsViewController
+                let destinationVC = segue.destination as! BillSplitterItemsViewController
                 let splitter: BillSplitter = allBillSplitters[selectedIndexPath.row]
                 let bill = self.bill as! Bill
                 
@@ -66,23 +66,23 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if allBillSplitters.count > 0 {
             return allBillSplitters.count
         } else {
-            TableViewHelper.EmptyMessage("\(billName) has no bill splitters assigned to it yet.\nTap New Bill Splitter to add and assign items to a person.", tableView: tableView)
+            TableViewHelper.EmptyMessage("\(billName!) has no bill splitters assigned to it yet.\nTap New Bill Splitter to add and assign items to a person.", tableView: tableView)
             return 0
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell: BillSplitterCell = tableView.dequeueReusableCellWithIdentifier("BillSplitterCell") as! BillSplitterCell
+        let cell: BillSplitterCell = tableView.dequeueReusableCell(withIdentifier: "BillSplitterCell") as! BillSplitterCell
         let billSplitter = allBillSplitters[indexPath.row]
         
         cell.name.text = billSplitter.name
         cell.email.text = billSplitter.email
-        if billSplitter.total == "" || billSplitter.total == nil {
+        if billSplitter.total == 0 || billSplitter.total == nil {
             cell.total.text = "£0.00"
         } else {
             cell.total.text = "£\(billSplitter.total!)"
@@ -90,14 +90,14 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         return cell
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
 
             let billSplitter = allBillSplitters[indexPath.row]
             let managedContext = bill.managedObjectContext
             
             removeBillSplitter(billSplitter)
-            managedContext!.deleteObject(billSplitter as NSManagedObject)
+            managedContext!.delete(billSplitter as NSManagedObject)
             
             do {
                 try managedContext!.save()
@@ -110,19 +110,19 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
-    func removeBillSplitter(billSplitter: BillSplitter) {
-        if let index = allBillSplitters.indexOf(billSplitter) {
-            allBillSplitters.removeAtIndex(index)
+    func removeBillSplitter(_ billSplitter: BillSplitter) {
+        if let index = allBillSplitters.index(of: billSplitter) {
+            allBillSplitters.remove(at: index)
         }
     }
     
-    @IBAction func toggleEditingMode(sender: AnyObject) {
+    @IBAction func toggleEditingMode(_ sender: AnyObject) {
         
-        if self.tableView.editing == true {
-            self.tableView.editing = false
+        if self.tableView.isEditing == true {
+            self.tableView.isEditing = false
             self.navigationItem.rightBarButtonItem?.title = "Done"
         } else {
-            self.tableView.editing = true
+            self.tableView.isEditing = true
             self.navigationItem.rightBarButtonItem?.title = "Edit"
         }
     }

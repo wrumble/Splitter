@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 class BillViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
-    
+
     var bill: NSManagedObject!
     var billName: String!
     var allItems: [Item]!
@@ -26,15 +26,15 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         fetchBillItems()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         if segue.identifier == "segueToReceiptImage" {
-            let destinationVC = segue.destinationViewController as! BillReceiptViewController
+            let destinationVC = segue.destination as! BillReceiptViewController
             let passedBill: NSManagedObject = bill as NSManagedObject
             
             destinationVC.billObject = passedBill
         } else if segue.identifier == "segueToBillSplitters" {
-            let destinationVC = segue.destinationViewController as! BillSplittersViewController
+            let destinationVC = segue.destination as! BillSplittersViewController
             let passedBill: NSManagedObject = bill as NSManagedObject
             
             destinationVC.billName = billName
@@ -42,7 +42,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    @IBAction func addNewItem(sender: UIButton) {
+    @IBAction func addNewItem(_ sender: UIButton) {
         
         let alertController = createAlertSubView()
         
@@ -52,7 +52,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let itemPrice = alertControllerView?.viewWithTag(2) as! UITextField
         let itemQuantityText = alertControllerView?.viewWithTag(3) as! UITextField
         
-        let okAction = UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
             let itemQuantity: Int
             
             if itemQuantityText.text == "" {
@@ -75,24 +75,24 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         alertController.addAction(okAction)
             
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
-    @IBAction func toggleEditingMode(sender: AnyObject) {
+    @IBAction func toggleEditingMode(_ sender: AnyObject) {
         
-        if self.tableView.editing == true {
-            self.tableView.editing = false
+        if self.tableView.isEditing == true {
+            self.tableView.isEditing = false
             self.navigationItem.rightBarButtonItem?.title = "Done"
         } else {
-            self.tableView.editing = true
+            self.tableView.isEditing = true
             self.navigationItem.rightBarButtonItem?.title = "Edit"
         }
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if allItems.count > 0 {
             return allItems.count
         } else {
@@ -101,9 +101,8 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell: ItemCell = tableView.dequeueReusableCellWithIdentifier("ItemCell") as! ItemCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: ItemCell = tableView.dequeueReusableCell(withIdentifier: "ItemCell") as! ItemCell
         fetchBillItems()
         let item = allItems[indexPath.row]
         
@@ -113,14 +112,14 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return cell
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             let item = allItems[indexPath.row]
-            let currentItems = self.bill.mutableSetValueForKey("items")
+            let currentItems = self.bill.mutableSetValue(forKey: "items")
             let managedContext = self.bill.managedObjectContext
             
             removeItem(item)
-            currentItems.removeObject(item)
+            currentItems.remove(item)
             
             do {
                 try managedContext!.save()
@@ -136,37 +135,37 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func fetchBillItems() {
         
         let managedContext = bill.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "Item")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
         let predicate = NSPredicate(format: "bill == %@", bill)
         
         fetchRequest.predicate = predicate
         
         do {
             let results =
-                try managedContext!.executeFetchRequest(fetchRequest)
+                try managedContext!.fetch(fetchRequest)
             allItems = results as! [Item]
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
     }
     
-    func removeItem(item: Item) {
-        if let index = allItems.indexOf(item) {
-            allItems.removeAtIndex(index)
+    func removeItem(_ item: Item) {
+        if let index = allItems.index(of: item) {
+            allItems.remove(at: index)
         }
     }
     
-    func createAlertViewItem(alertController: UIAlertController, itemName: String, itemStringPrice: String) {
+    func createAlertViewItem(_ alertController: UIAlertController, itemName: String, itemStringPrice: String) {
 
         let managedContext = self.bill.managedObjectContext
-        let entity = NSEntityDescription.entityForName("Item", inManagedObjectContext: managedContext!)
-        let newItem = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: managedContext)
-        let currentItems = self.bill.mutableSetValueForKey("items")
+        let entity = NSEntityDescription.entity(forEntityName: "Item", in: managedContext!)
+        let newItem = NSManagedObject(entity: entity!, insertInto: managedContext)
+        let currentItems = self.bill.mutableSetValue(forKey: "items")
         let itemPriceNumber = priceFromString(itemStringPrice)
         
         newItem.setValue(itemName, forKey: "name")
         newItem.setValue(itemPriceNumber, forKey: "price")
-        currentItems.addObject(newItem)
+        currentItems.add(newItem)
         
         do {
             try managedContext!.save()
@@ -183,53 +182,53 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         view.tag = 0
         
         let itemName = UITextField(frame: CGRect(x: CGFloat(10), y: CGFloat(0), width: CGFloat(252), height: CGFloat(25)))
-        itemName.borderStyle = .RoundedRect
+        itemName.borderStyle = .roundedRect
         itemName.placeholder = "Item Name"
-        itemName.keyboardAppearance = .Alert
+        itemName.keyboardAppearance = .alert
         itemName.tag = 1
         itemName.delegate = self
         view.addSubview(itemName)
         
         let itemPrice = UITextField(frame: CGRect(x: CGFloat(10), y: CGFloat(30), width: CGFloat(252), height: CGFloat(25)))
         itemPrice.placeholder = "Item Price"
-        itemPrice.borderStyle = .RoundedRect
-        itemPrice.keyboardAppearance = .Alert
-        itemPrice.keyboardType = UIKeyboardType.NumberPad
+        itemPrice.borderStyle = .roundedRect
+        itemPrice.keyboardAppearance = .alert
+        itemPrice.keyboardType = UIKeyboardType.numberPad
         itemPrice.tag = 2
         itemPrice.delegate = self
         view.addSubview(itemPrice)
         
         let itemQuantity = UITextField(frame: CGRect(x: CGFloat(10), y: CGFloat(60), width: CGFloat(252), height: CGFloat(25)))
         itemQuantity.placeholder = "Item Quantity"
-        itemQuantity.borderStyle = .RoundedRect
-        itemQuantity.keyboardAppearance = .Alert
-        itemQuantity.keyboardType = UIKeyboardType.NumberPad
+        itemQuantity.borderStyle = .roundedRect
+        itemQuantity.keyboardAppearance = .alert
+        itemQuantity.keyboardType = UIKeyboardType.numberPad
         itemQuantity.tag = 3
         itemQuantity.delegate = self
         view.addSubview(itemQuantity)
         
-        let alertController = UIAlertController(title: "Add Item\n\n\n\n", message: nil, preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Add Item\n\n\n\n", message: nil, preferredStyle: .alert)
         
         alertController.view.addSubview(view)
         
         return alertController
     }
     
-    func priceFromString(string: String) -> Double {
-        let price = (NSNumberFormatter().numberFromString(string)?.doubleValue)!
+    func priceFromString(_ string: String) -> Double {
+        let price = (NumberFormatter().number(from: string)?.doubleValue)!
         return price
     }
     
     func setBillTotal() {
         let managedContext = bill.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "Item")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
         let predicate = NSPredicate(format: "bill == %@", bill)
         fetchRequest.predicate = predicate
         
         var items = [Item]()
         do {
             let results =
-                try managedContext!.executeFetchRequest(fetchRequest)
+                try managedContext!.fetch(fetchRequest)
             items = results as! [Item]
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")

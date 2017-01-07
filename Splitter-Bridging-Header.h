@@ -3,3 +3,5 @@
 //
 
 #import <TesseractOCR/TesseractOCR.h>
+#import "CardIO.h"
+@import AFNetworking;

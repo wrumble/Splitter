@@ -14,7 +14,7 @@ class Item: NSManagedObject {
     override func awakeFromInsert() {
         super.awakeFromInsert()
         
-        id = NSUUID().UUIDString
+        id = UUID().uuidString
     }
     
 }
