@@ -29,7 +29,7 @@ class BillSplitterItemsViewController: UIViewController, UITableViewDelegate, UI
         splitterItems = splitter.items?.allObjects as! [Item]
         splitterItems.sort { $0.name! < $1.name! }
         emailLabel.text = splitter.email
-        totalLabel.text = "Total price £\(splitter.total!)"
+        totalLabel.text = "Total price £\(splitter.total)"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -37,7 +37,7 @@ class BillSplitterItemsViewController: UIViewController, UITableViewDelegate, UI
         if segue.identifier == "segueToSplitterPayment" {
             let destinationVC = segue.destination as! SplitterPaymentViewController
             
-            destinationVC.total = splitter.total as! Double
+            destinationVC.total = splitter.total
         }
     }
     
@@ -56,10 +56,10 @@ class BillSplitterItemsViewController: UIViewController, UITableViewDelegate, UI
         let count = item.billSplitters?.count
         if count! > 1 {
             cell.name!.text = "\(item.name!) split \(count!) ways"
-            cell.price!.text = "£\(Double(item.price!)/Double(count!))"
+            cell.price!.text = "£\(Double(item.price)/Double(count!))"
         } else {
             cell.name!.text = item.name!
-            cell.price!.text = "£\(item.price!)"
+            cell.price!.text = "£\(item.price)"
         }
         
         return cell

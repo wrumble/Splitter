@@ -16,12 +16,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var imageStore = ImageStore()
+    var allBillSplitters = [BillSplitter]()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        Thread.sleep(forTimeInterval: 2.0)
+        
         GMSPlacesClient.provideAPIKey("AIzaSyAf5JUVLvrHcbMOz8pFlr2HfMD1D00YTxg")
         STPPaymentConfiguration.shared().publishableKey = "pk_test_bht7OWsPB2c1zD1vY8qkDVwa"
-        // Override point for customization after application launch.
+        
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let managedContext = self.managedObjectContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BillSplitter")
+        do {
+            let results =
+                try managedContext.fetch(fetchRequest)
+            allBillSplitters = results as! [BillSplitter]
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        
+        if allBillSplitters.count > 1000 {
+            let myBillsViewController: MyBillsViewController = mainStoryboard.instantiateViewController(withIdentifier: "MyBillsViewController") as! MyBillsViewController
+            
+            self.window?.rootViewController = myBillsViewController
+        } else {
+            let welcomeViewController: WelcomeViewController = mainStoryboard.instantiateViewController(withIdentifier: "WelcomeViewController") as! WelcomeViewController
+            
+            self.window?.rootViewController = welcomeViewController
+        }
+        
+        self.window?.makeKeyAndVisible()
+        
         return true
     }
 

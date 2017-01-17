@@ -9,26 +9,54 @@
 import UIKit
 import Stripe
 import AFNetworking
+import CoreData
 
 class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControllerDelegate {
     
+    let manager = AFHTTPSessionManager()
+    
     var total = Double()
     var stripeCard: STPCardParams!
+    var expMonth: UInt!
+    var expYear: UInt!
+    var requestIP: String!
+    var stripeAccountID = String()
     
     @IBOutlet var cardNumberTextField: UITextField!
     @IBOutlet var cardExpiryTextField: UITextField!
     @IBOutlet var cardCVVTextField: UITextField!
     @IBOutlet var payButton: UIButton!
+    @IBOutlet var loginWithStripeButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        getAccountID()
         CardIOUtilities.preload()
         
         payButton.setTitle("Pay £\(total)", for: UIControlState())
         
         cardNumberTextField!.addTarget(self, action: #selector(SplitterPaymentViewController.cardNumberTextFieldWasTapped(_:)), for: UIControlEvents.touchDown)
         
+    }
+    
+    func getAccountID() {
+        var allBillSplitters = [BillSplitter]()
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BillSplitter")
+        do {
+            let results =
+                try managedContext.fetch(fetchRequest)
+            allBillSplitters = results as! [BillSplitter]
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        allBillSplitters.forEach { billSplitter in
+            if billSplitter.isMainBillSplitter {
+                stripeAccountID = billSplitter.accountID!
+            }
+        }
     }
     
     func cardNumberTextFieldWasTapped(_ textField: UITextField) {
@@ -65,13 +93,11 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
         stripeCard.expYear = expYear!
         
         STPAPIClient.shared().createToken(withCard: stripeCard, completion: { (token, error) -> Void in
-            
             if error != nil {
                 self.handleError(error! as NSError)
                 return
-            } 
-            
-            self.postStripeToken(token!)
+            }
+            self.chargeBillSplittersCard(token!)
         })
     }
 
@@ -83,25 +109,25 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
         
     }
     
-    func postStripeToken(_ token: STPToken) {
+    func chargeBillSplittersCard(_ token: STPToken) {
         
-        let URL = "https://splitterstripeserver.herokuapp.com/charge"
+        let URL = "https://splitterstripeservertest.herokuapp.com/charge"
         let params = ["source": token.tokenId,
-                      "amount": total] as [String : Any]
-        
-        let manager = AFHTTPSessionManager()
-        manager.post(URL, parameters: params, success: { (operation, responseObject) -> Void in
-            
-            if let response = responseObject as? [String: String] {
-                UIAlertView(title: response["status"],
-                    message: response["message"],
-                    delegate: nil,
-                    cancelButtonTitle: "OK").show()
+                      "stripe_accountID": stripeAccountID,
+                      "amount": total,
+                      "currency": "gbp",
+                      "description": "Splitter Payment"] as [String : Any]
+        manager.requestSerializer = AFHTTPRequestSerializer()
+        manager.responseSerializer = AFHTTPResponseSerializer()
+        manager.post(URL, parameters: params, progress: nil, success: {(_ task: URLSessionDataTask, _ responseObject: Any) -> Void in
+            do {
+                let response = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
+                print("paid?")
+            } catch {
+                print("Serialising new account json object went wrong.")
             }
-            
-        }) { (operation, error) -> Void in
+        }, failure: { (operation, error) -> Void in
             self.handleError(error as NSError)
-        }
+        })
     }
-    
 }

@@ -79,7 +79,7 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
         }
         
         cell.name.text = item.name
-        cell.price.text = "£\(item.price!)"
+        cell.price.text = "£\(item.price)"
         
         if !checked[indexPath.row] {
             cell.accessoryType = .none

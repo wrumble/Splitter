@@ -25,9 +25,10 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
     var placesClient = GMSPlacesClient()
     var nearestPlaceName = String()
     
-    @IBOutlet var billName: UITextField?
-    @IBOutlet var billLocation: UITextField?
-    @IBOutlet var imageView: UIImageView?
+    @IBOutlet weak var imageTakingInfoLabel: UILabel!
+    @IBOutlet weak var billName: UITextField?
+    @IBOutlet weak var billLocation: UITextField?
+    @IBOutlet weak var imageView: UIImageView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +38,6 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         
         self.navigationItem.title = "Splitter"
         self.navigationItem.hidesBackButton = true
-        
         
         billLocation!.addTarget(self, action: #selector(NewBillViewController.locationFieldWasTapped(_:)), for: UIControlEvents.touchDown)
         
@@ -124,10 +124,12 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [AnyHashable: Any]!) {
         
         self.imageView!.image = image
-        
+//        imageTakingInfoLabel.isHidden = true
+//        view.setNeedsDisplay()
         if UIDevice.current.userInterfaceIdiom == .pad {
             self.popoverController.dismiss(animated: true)
         } else {
+            
             picker.dismiss(animated: true, completion: nil)
         }
     }

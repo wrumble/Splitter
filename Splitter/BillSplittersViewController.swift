@@ -85,7 +85,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         if billSplitter.total == 0 || billSplitter.total == nil {
             cell.total.text = "£0.00"
         } else {
-            cell.total.text = "£\(billSplitter.total!)"
+            cell.total.text = "£\(billSplitter.total)"
         }
         return cell
     }
@@ -133,7 +133,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
             let billSplitterObject = billSplitter as NSManagedObject
             var total = Double()
             items.forEach { item in
-                total += Double(item.price!)/Double((item.billSplitters?.count)!)
+                total += Double(item.price)/Double((item.billSplitters?.count)!)
             }
             total = Double(round(100*total)/100)
             

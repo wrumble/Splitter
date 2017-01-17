@@ -84,7 +84,7 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.name.text = bill.name
         cell.date.text = date
         cell.location.text = bill.location
-        cell.total!.text = "£\(Double(bill.total!))"
+        cell.total!.text = "£\(Double(bill.total))"
         
         return cell
     }
@@ -93,9 +93,8 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         if editingStyle == .delete {
             let bill = allBills[indexPath.row]
             let managedContext = bill.managedObjectContext
-            let billObject = (managedContext?.object(with: bill.objectID))! as NSManagedObject
             
-            managedContext?.delete(billObject)
+            managedContext?.delete(bill)
             removeBill(bill)
             
             do {
@@ -119,7 +118,7 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
             var total = Double()
             let items = bill.items?.allObjects as! [Item]
             items.forEach { item in
-                total += Double(item.price!)
+                total += Double(item.price)
             }
             total = Double(round(100*total)/100)
             bill.setValue(total, forKey: "total")

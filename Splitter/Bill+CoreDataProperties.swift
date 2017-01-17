@@ -2,24 +2,60 @@
 //  Bill+CoreDataProperties.swift
 //  Splitter
 //
-//  Created by Wayne Rumble on 21/12/2016.
-//  Copyright © 2016 Wayne Rumble. All rights reserved.
-//
-//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
-//  to delete and recreate this implementation file for your updated model.
+//  Created by Wayne Rumble on 12/01/2017.
+//  Copyright © 2017 Wayne Rumble. All rights reserved.
 //
 
 import Foundation
 import CoreData
 
+
 extension Bill {
 
-    @NSManaged var date: Date?
-    @NSManaged var id: String?
-    @NSManaged var location: String?
-    @NSManaged var name: String?
-    @NSManaged var total: NSNumber?
-    @NSManaged var billSplitters: NSSet?
-    @NSManaged var items: NSSet?
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Bill> {
+        return NSFetchRequest<Bill>(entityName: "Bill");
+    }
+
+    @NSManaged public var date: NSDate?
+    @NSManaged public var id: String?
+    @NSManaged public var location: String?
+    @NSManaged public var name: String?
+    @NSManaged public var total: Double
+    @NSManaged public var billSplitters: NSSet?
+    @NSManaged public var items: NSSet?
+
+}
+
+// MARK: Generated accessors for billSplitters
+extension Bill {
+
+    @objc(addBillSplittersObject:)
+    @NSManaged public func addToBillSplitters(_ value: BillSplitter)
+
+    @objc(removeBillSplittersObject:)
+    @NSManaged public func removeFromBillSplitters(_ value: BillSplitter)
+
+    @objc(addBillSplitters:)
+    @NSManaged public func addToBillSplitters(_ values: NSSet)
+
+    @objc(removeBillSplitters:)
+    @NSManaged public func removeFromBillSplitters(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for items
+extension Bill {
+
+    @objc(addItemsObject:)
+    @NSManaged public func addToItems(_ value: Item)
+
+    @objc(removeItemsObject:)
+    @NSManaged public func removeFromItems(_ value: Item)
+
+    @objc(addItems:)
+    @NSManaged public func addToItems(_ values: NSSet)
+
+    @objc(removeItems:)
+    @NSManaged public func removeFromItems(_ values: NSSet)
 
 }

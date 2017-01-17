@@ -107,7 +107,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let item = allItems[indexPath.row]
         
         cell.name.text = item.name
-        cell.price.text = "£\(item.price!)"
+        cell.price.text = "£\(item.price)"
         
         return cell
     }
@@ -115,11 +115,10 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let item = allItems[indexPath.row]
-            let currentItems = self.bill.mutableSetValue(forKey: "items")
             let managedContext = self.bill.managedObjectContext
             
             removeItem(item)
-            currentItems.remove(item)
+            managedContext?.delete(item)
             
             do {
                 try managedContext!.save()
@@ -236,7 +235,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         var total = Double()
         items.forEach { item in
-            total += Double(item.price!)
+            total += Double(item.price)
         }
         total = Double(round(100*total)/100)
         bill.setValue(total, forKey: "total")

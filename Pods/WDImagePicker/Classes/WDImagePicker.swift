@@ -30,7 +30,11 @@ import UIKit
         self.cropSize = CGSize(width: 320, height: 320)
         _imagePickerController = UIImagePickerController()
         _imagePickerController.delegate = self
-        _imagePickerController.sourceType = .camera
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            _imagePickerController.sourceType = .camera
+        } else {
+            _imagePickerController.sourceType = .photoLibrary
+        }
     }
 
     fileprivate func hideController() {
