@@ -3,10 +3,11 @@
     <entity name="Bill" representedClassName="Bill" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="total" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="billSplitters" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="BillSplitter" inverseName="bill" inverseEntity="BillSplitter" syncable="YES"/>
+        <relationship name="billSplitters" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BillSplitter" inverseName="bills" inverseEntity="BillSplitter" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="bill" inverseEntity="Item" syncable="YES"/>
     </entity>
     <entity name="BillSplitter" representedClassName="BillSplitter" syncable="YES">
@@ -17,7 +18,7 @@
         <attribute name="isMainBillSplitter" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="total" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="bill" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Bill" inverseName="billSplitters" inverseEntity="Bill" syncable="YES"/>
+        <relationship name="bills" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Bill" inverseName="billSplitters" inverseEntity="Bill" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="billSplitters" inverseEntity="Item" syncable="YES"/>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES">
@@ -29,7 +30,7 @@
         <relationship name="billSplitters" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BillSplitter" inverseName="items" inverseEntity="BillSplitter" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Bill" positionX="-36" positionY="9" width="128" height="150"/>
+        <element name="Bill" positionX="-36" positionY="9" width="128" height="165"/>
         <element name="BillSplitter" positionX="0" positionY="45" width="128" height="180"/>
         <element name="Item" positionX="27" positionY="72" width="128" height="135"/>
     </elements>

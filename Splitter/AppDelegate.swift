@@ -15,7 +15,6 @@ import Stripe
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var imageStore = ImageStore()
     var allBillSplitters = [BillSplitter]()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -36,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Could not fetch \(error), \(error.userInfo)")
         }
         
-        if allBillSplitters.count > 1000 {
+        if allBillSplitters.count > 0 {
             let myBillsViewController: MyBillsViewController = mainStoryboard.instantiateViewController(withIdentifier: "MyBillsViewController") as! MyBillsViewController
             
             self.window?.rootViewController = myBillsViewController

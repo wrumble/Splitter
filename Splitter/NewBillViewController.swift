@@ -12,46 +12,51 @@ import CoreData
 import WDImagePicker
 import GooglePlaces
 import CoreLocation
+import NVActivityIndicatorView
 
-class NewBillViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, WDImagePickerDelegate {
+class NewBillViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, WDImagePickerDelegate, NVActivityIndicatorViewable {
     
     let locationManager = CLLocationManager()
     
     var newBill: NSManagedObject?
     var itemConverter = TextToItemConverter()
     var imagePicker: WDImagePicker!
-    var popoverController: UIPopoverController!
     var imagePickerController: UIImagePickerController!
     var placesClient = GMSPlacesClient()
     var nearestPlaceName = String()
+    var instructionLabel: UILabel!
     
-    @IBOutlet weak var imageTakingInfoLabel: UILabel!
-    @IBOutlet weak var billName: UITextField?
+    @IBOutlet weak var billName: UITextField!
     @IBOutlet weak var billLocation: UITextField?
-    @IBOutlet weak var imageView: UIImageView?
+    @IBOutlet weak var imageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         locationManager.requestWhenInUseAuthorization()
-        getNearestPlaceName()
         
-        self.navigationItem.title = "Splitter"
-        self.navigationItem.hidesBackButton = true
+        getNearestPlaceName()
+        createInstructionLabel()
         
         billLocation!.addTarget(self, action: #selector(NewBillViewController.locationFieldWasTapped(_:)), for: UIControlEvents.touchDown)
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(NewBillViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
-
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        self.navigationItem.backBarButtonItem?.tintColor = UIColor.black
     }
     
     func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    func createInstructionLabel() {
+        let height = 200
+        let width = Int(UIScreen.main.bounds.width)
+        instructionLabel = UILabel(frame: CGRect(x:0, y:0, width: width, height: height))
+        instructionLabel.textColor = UIColor.black
+        instructionLabel.numberOfLines = 0
+        instructionLabel.textAlignment = .center
+        instructionLabel.text = "Once you have taken a clear, straight photo of your receipt. Crop the image so it contains only a list of each items name, price and quantity. You do not need to include the bill total in the cropped image."
+        imageView?.addSubview(instructionLabel)
     }
     
     func performImageRecognition(_ image: UIImage) {
@@ -67,71 +72,66 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
     }
     
     @IBAction func saveButtonWasPressed() {
-        
-        let image = imageView!.image!
-        let id = UUID().uuidString
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
-        let entity =  NSEntityDescription.entity(forEntityName: "Bill", in: managedContext)
-        let newBill = NSManagedObject(entity: entity!, insertInto: managedContext)
-        
-        newBill.setValue(billName?.text, forKey: "name")
-        newBill.setValue(billLocation?.text, forKey: "location")
-        newBill.setValue(id, forKey: "id")
-        
-        appDelegate.imageStore.setImage(image, forKey: id)
-        
-        do {
-            try managedContext.save()
-        } catch let error as NSError  {
-            print("Could not save \(error), \(error.userInfo)")
+        if imageView.image != nil {
+            let image = self.imageView!.image!
+            let id = UUID().uuidString
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let managedContext = appDelegate.managedObjectContext
+            let entity =  NSEntityDescription.entity(forEntityName: "Bill", in: managedContext)
+            let newBill = NSManagedObject(entity: entity!, insertInto: managedContext)
+            let newBillSplittersArray = newBill.mutableSetValue(forKey: "billSplitters")
+            let imageData = UIImageJPEGRepresentation(image, 0.5)
+            
+            newBill.setValue(self.billName?.text, forKey: "name")
+            newBill.setValue(self.billLocation?.text, forKey: "location")
+            newBill.setValue(id, forKey: "id")
+            newBill.setValue(imageData, forKey: "image")
+            
+            newBillSplittersArray.add(getMainBillSplitter())
+            
+            do {
+                try managedContext.save()
+            } catch let error as NSError  {
+                print("Could not save \(error), \(error.userInfo)")
+            }
+            
+            let bill: NSManagedObject = newBill as NSManagedObject
+            self.itemConverter.bill = bill
+            
+            self.performImageRecognition(image)
+            self.performSegue(withIdentifier: "segueToMyBills", sender: self)
+        } else {
+            let alert = UIAlertController(title: "No receipt image", message: "You need to take a photo of your receipt before you can save the bill.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
-        
-        let bill: NSManagedObject = newBill as NSManagedObject
-        itemConverter.bill = bill
-        
-        self.performImageRecognition(image)
-        self.performSegue(withIdentifier: "segueToMyBills", sender: self)
     }
+    
     
     @IBAction func takeBillPicture(_ button: UIButton) {
         self.imagePicker = WDImagePicker()
         self.imagePicker.cropSize = CGSize(width: 280, height: 280)
         self.imagePicker.delegate = self
         self.imagePicker.resizableCropArea = true
-        
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            self.popoverController = UIPopoverController(contentViewController: self.imagePicker.imagePickerController)
-            self.popoverController.present(from: button.frame, in: self.view, permittedArrowDirections: .any, animated: true)
-        } else {
-            self.present(self.imagePicker.imagePickerController, animated: true, completion: nil)
-        }
+
+        self.present(self.imagePicker.imagePickerController, animated: true, completion: nil)
     }
     
     func imagePicker(_ imagePicker: WDImagePicker, pickedImage: UIImage) {
+        self.instructionLabel.removeFromSuperview()
         self.imageView!.image = pickedImage
         self.hideImagePicker()
     }
     
     func hideImagePicker() {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            self.popoverController.dismiss(animated: true)
-        } else {
-            self.imagePicker.imagePickerController.dismiss(animated: true, completion: nil)
-        }
+        self.imagePicker.imagePickerController.dismiss(animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [AnyHashable: Any]!) {
         
         self.imageView!.image = image
-//        imageTakingInfoLabel.isHidden = true
-//        view.setNeedsDisplay()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            self.popoverController.dismiss(animated: true)
-        } else {
             
-            picker.dismiss(animated: true, completion: nil)
-        }
+        picker.dismiss(animated: true, completion: nil)
     }
     
     func locationFieldWasTapped(_ textField: UITextField) {
@@ -170,5 +170,30 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
                 self.nearestPlaceName = places[0].place.name
             }
         })
+    }
+    
+    func getMainBillSplitter() -> BillSplitter {
+        
+        var mainBillSplitter: BillSplitter!
+        var allBillSplitters = [BillSplitter]()
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BillSplitter")
+        
+        do {
+            let results =
+                try managedContext.fetch(fetchRequest)
+            allBillSplitters = results as! [BillSplitter]
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        
+        allBillSplitters.forEach { billSplitter in
+            if billSplitter.isMainBillSplitter {
+                mainBillSplitter = billSplitter
+            }
+        }
+        return mainBillSplitter
     }
 }

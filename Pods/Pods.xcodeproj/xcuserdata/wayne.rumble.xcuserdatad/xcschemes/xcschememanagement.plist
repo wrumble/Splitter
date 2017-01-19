@@ -9,6 +9,16 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>DeviceKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>NVActivityIndicatorView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Splitter.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -37,32 +47,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>208C2F48D12D652B94A68A9A7982E712</key>
+		<key>2D9D1E5342098253A59BAC2578FA1706</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>71C83775FECBA5F5222B425EBAB33D01</key>
+		<key>2DBB9B321551B0A80EA17B3F030A2ABA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BA33048AB591C26836A5A99E9A4FA5D8</key>
+		<key>3EDFE4052B5DE7D509935AC0774CB135</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A85A0D1FEE0C88955C4C6F4AD4555DE9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B68B40B7F8A1E8621B37EEBEEB4CD614</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B74671AC4AD442223B677430EE6BBBF5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C998A915D7FDC073A3EBE6D82E108817</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>CF671F7E57B92905F1CC91D036D6B4A7</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>DCFC12EB56EBFD245BED7E125060E35C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EDB82B1C88760A7264F757ABFF0DCD8F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -30,12 +30,10 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
             checked.append(false)
         }
         
-        self.navigationItem.title = "New \(billName!) Splitter"
-        self.navigationItem.hidesBackButton = true
-        
         self.tableView.allowsMultipleSelection = true
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(NewBillSplitterViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
     

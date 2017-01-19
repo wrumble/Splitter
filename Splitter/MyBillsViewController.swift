@@ -45,7 +45,6 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
                 print("Could not save \(error), \(error.userInfo)")
             }
         }
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -95,6 +94,7 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
             let managedContext = bill.managedObjectContext
             
             managedContext?.delete(bill)
+            keepMainBillSplitter(bill: bill)
             removeBill(bill)
             
             do {
@@ -104,6 +104,29 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
                 print("Core Data save failed: \(error)")
             }
             tableView.reloadData()
+        }
+    }
+    
+    func keepMainBillSplitter(bill: Bill) {
+        let managedContext = bill.managedObjectContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BillSplitter")
+        let predicate = NSPredicate(format: "ANY bills == %@", bill)
+
+        fetchRequest.predicate = predicate
+        
+        do {
+            let results =
+                try managedContext!.fetch(fetchRequest)
+            var count = 0
+            results.forEach { result in
+                if count > 0 {
+                    managedContext?.delete(result as! NSManagedObject)
+                }
+                
+                count += 1
+            }
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
         }
     }
     

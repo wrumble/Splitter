@@ -18,6 +18,7 @@ public class BillSplitter: NSManagedObject {
         name = ""
         email = ""
         id = ""
+        total = 0
         isMainBillSplitter = false
         hasPaid = false
         accountID = ""

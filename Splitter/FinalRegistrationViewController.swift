@@ -9,8 +9,9 @@
 import UIKit
 import AFNetworking
 import Stripe
+import NVActivityIndicatorView
 
-class FinalRegistrationViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class FinalRegistrationViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, NVActivityIndicatorViewable {
     
     var photoID = UIImage()
     var imagePicker: UIImagePickerController!
@@ -32,7 +33,30 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
     
     func addTextFieldTargets() {
         accountNumberTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
+        accountNumberTextField.addTarget(self, action: #selector(checkAccountNumber), for: .editingDidEnd)
+        sortCodeTextField.addTarget(self, action: #selector(checkSortCode), for: .editingDidEnd)
         sortCodeTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
+    }
+    
+    func checkSortCode(sender: UITextField) {
+        
+        let sortCodeReg = "^[0-9]{1,6}$"
+        let sortCodeTest = NSPredicate(format: "SELF MATCHES %@", sortCodeReg)
+        if sortCodeTest.evaluate(with: sender.text) == false {
+            let alert = UIAlertController(title: "Please enter a valid Sort Code", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func checkAccountNumber(sender: UITextField) {
+        let accountNumberReg = "^[0-9]{1,8}$"
+        let accountNumberTest = NSPredicate(format: "SELF MATCHES %@", accountNumberReg)
+        if accountNumberTest.evaluate(with: sender.text) == false {
+            let alert = UIAlertController(title: "Please enter a valid Account Number", message: "If your account number is 7 digits long please add a 0 to the beginning.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     func checkFields(sender: UITextField) {
@@ -82,7 +106,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         manager.responseSerializer = AFHTTPResponseSerializer()
         manager.post(URL, parameters: params, progress: nil, success: {(_ task: URLSessionDataTask, _ responseObject: Any) -> Void in
             do {
-                let response = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
+                _ = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
             } catch {
                 print("Serialising new account json object went wrong.")
             }
@@ -106,11 +130,13 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
             do {
                 let response = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
                 self.fileID = response?["id"] as! String
+                self.stopAnimating()
             } catch {
                 print("Serialising account id json object went wrong.")
             }
         }, failure: { (operation, error) -> Void in
             self.handleError(error as NSError)
+            self.stopAnimating()
         })
     }
     
@@ -123,20 +149,21 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         manager.responseSerializer = AFHTTPResponseSerializer()
         manager.post(URL, parameters: params, progress: nil, success: {(_ task: URLSessionDataTask, _ responseObject: Any) -> Void in
             do {
-                let response = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
+                _ = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
+                self.stopAnimating()
             } catch {
                 print("Serialising account with verification id json object went wrong.")
             }
         }, failure: { (operation, error) -> Void in
             self.handleError(error as NSError)
+            self.stopAnimating()
         })
     }
     
     func handleError(_ error: NSError) {
-        UIAlertView(title: "Please Try Again",
-                    message: error.localizedDescription,
-                    delegate: nil,
-                    cancelButtonTitle: "OK").show()
+        let alert = UIAlertController(title: "Please Try Again", message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func takePhotoButtonWasPressed(_sender: UIButton) {
@@ -160,6 +187,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         self.photoID = image
         uploadPhotoID()
         picker.dismiss(animated: true, completion: nil)
+        startAnimating()
     }
     
     func createAgreementTextView() {
@@ -186,6 +214,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
     }
     
     func registerButtonWasTapped() {
+        startAnimating()
         savePhotoIDToAccount()
         performSegue(withIdentifier: "segueToMyBillsViewController", sender: self)
     }

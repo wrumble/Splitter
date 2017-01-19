@@ -135,9 +135,8 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let managedContext = bill.managedObjectContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
-        let predicate = NSPredicate(format: "bill == %@", bill)
         
-        fetchRequest.predicate = predicate
+        fetchRequest.predicate = NSPredicate(format: "bill == %@", bill)
         
         do {
             let results =

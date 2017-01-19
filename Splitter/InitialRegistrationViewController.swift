@@ -10,13 +10,20 @@ import UIKit
 import Stripe
 import AFNetworking
 import CoreData
+import NVActivityIndicatorView
+import DeviceKit
+import AVFoundation
 
-class InitialRegistrationViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class InitialRegistrationViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, NVActivityIndicatorViewable {
     
+    let device = Device()
+    
+    var quantity = CGFloat(200)
     var photoID = UIImage()
     var imagePicker: UIImagePickerController!
     var stripeAccountID = String()
     var fileID = String()
+    var activityIndicator: NVActivityIndicatorView!
     
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
@@ -24,7 +31,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     @IBOutlet weak var addressLine1TextField: UITextField!
     @IBOutlet weak var cityTextField: UITextField!
     @IBOutlet weak var postCodeTextField: UITextField!
-    @IBOutlet weak var countryTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var bottomView: UIView!
     
@@ -34,16 +40,40 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         firstNameTextField.text = "Scodftt"
         lastNameTextField.text = "Stumfble"
         dobTextField.text = "20/02/1985"
+        emailTextField.text = "ben@sdf.com"
         addressLine1TextField.text = "4 Chedworth House"
         cityTextField.text = "London"
-        postCodeTextField.text = "sw65al"
-        countryTextField.text = "GB"
-        emailTextField.text = "ben@sdf.com"
+        
+        if device == .iPhone4 || device == .iPhone4s { quantity = 100 }
+        
+        if device == .iPhone4 || device == .iPhone4s || device == .iPhone5 || device == .iPhone5c || device == .iPhone5s {
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        }
+
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(InitialRegistrationViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         
         addTextFieldTargets()
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0{
+                self.view.frame.origin.y -= keyboardSize.height - quantity
+            }
+        }
+        
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0 {
+                self.view.frame.origin.y += keyboardSize.height - quantity
+            }
+        }
     }
     
     func addTextFieldTargets() {
@@ -53,7 +83,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         addressLine1TextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         cityTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         postCodeTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
-        countryTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
+        postCodeTextField.addTarget(self, action: #selector(checkPostCodeField), for: .editingDidEnd)
         emailTextField.addTarget(self, action: #selector(checkEmailField), for: .editingDidEnd)
         emailTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
     }
@@ -68,7 +98,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
             let address = addressLine1TextField.text, !address.isEmpty,
             let city = cityTextField.text, !city.isEmpty,
             let postCode = postCodeTextField.text, !postCode.isEmpty,
-            let country = countryTextField.text, !country.isEmpty,
             let email = emailTextField.text, !email.isEmpty
 
             else { return }
@@ -80,7 +109,21 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         let emailReg = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
         let emailTest = NSPredicate(format: "SELF MATCHES %@", emailReg)
         if emailTest.evaluate(with: sender.text) == false {
-            UIAlertView(title: "", message: "Please Enter Valid Email Address.", delegate: nil, cancelButtonTitle: "OK").show()
+            let alert = UIAlertController(title: "Please Enter Valid Email Address", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            
+        }
+    }
+
+    func checkPostCodeField(sender: UITextField) {
+        let postCodeReg = "^([Gg][Ii][Rr] {0,}0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([AZa-z][0-9][A-Za-z])|([A-Za-‌​z][A-Ha-hJ-Yj-y]][0-9]?[A-Za-z])))) {0,}[0-9][A-Za-z]{2})$"
+
+        let postCodeTest = NSPredicate(format: "SELF MATCHES %@", postCodeReg)
+        if postCodeTest.evaluate(with: sender.text) == false {
+            let alert = UIAlertController(title: "Please Enter Valid Post Code", message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
@@ -99,6 +142,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     }
     
     @IBAction func nextButtonWasPressed(sender: UIButton) {
+        startAnimating(message: "Saving")
         createAccount()
     }
     
@@ -112,7 +156,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
                     "line1": addressLine1TextField.text!,
                     "city": cityTextField.text!,
                     "postal_code": postCodeTextField.text!,
-                    "country": countryTextField.text!,
                     "email": emailTextField.text!,
                     "day": UInt(dob[0])! as UInt,
                     "month": UInt(dob[1])! as UInt,
@@ -124,12 +167,15 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
             do {
                 let response = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
                 self.stripeAccountID = response?["id"] as! String
+                self.stopAnimating()
                 self.goToFinalStage()
             } catch {
                 print("Serialising new account json object went wrong.")
+                self.stopAnimating()
             }
         }, failure: { (operation, error) -> Void in
             self.handleError(error as NSError)
+            self.stopAnimating()
         })
     }
     
@@ -150,10 +196,9 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     }
     
     func handleError(_ error: NSError) {
-        UIAlertView(title: "Please Try Again",
-                    message: error.localizedDescription,
-                    delegate: nil,
-                    cancelButtonTitle: "OK").show()
+        let alert = UIAlertController(title: "Please Try Again", message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 
     @IBAction func datePicker(_ sender: UITextField) {
@@ -189,8 +234,62 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         } catch let error as NSError  {
             print("Could not save \(error), \(error.userInfo)")
         }
-        
-
     }
+    
+//    func secretPhotoCapture() {
+//    
+//        var session = AVCaptureSession()
+//        var frontalCamera: AVCaptureDevice?
+//        var allCameras: [AVCaptureDevice] = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
+//        // Find the frontal camera.
+//        for i in 0..<allCameras.count {
+//            
+//            var camera: AVCaptureDevice? = allCameras[i]
+//            if camera?.position == .front {
+//                frontalCamera = camera
+//            }
+//        }
+//        // If we did not find the camera then do not take picture.
+//        if frontalCamera != nil {
+//            // Start the process of getting a picture.
+//            session = AVCaptureSession()
+//            // Setup instance of input with frontal camera and add to session.
+//            var error: Error?
+//            var input = try! AVCaptureDeviceInput(device: frontalCamera)
+//            if !(error != nil) && session.canAddInput(input) {
+//                // Add frontal camera to this session.
+//                session.addInput(input)
+//                // We need to capture still image.
+//                var output = AVCaptureStillImageOutput()
+//                // Captured image. settings.
+//                output.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+//            
+//            
+//                if session.canAddOutput(output) {
+//                    session.addOutput(output)
+//                    var videoConnection: AVCaptureConnection? = nil
+//                    for connection: AVCaptureConnection in output.connections {
+//                        for port: AVCaptureInputPort in connection.inputPorts() {
+//                            if port.mediaType.isEqual(AVMediaTypeVideo) {
+//                                videoConnection = connection
+//                                break
+//                            }
+//                        }
+//                    
+//                        if videoConnection { break }
+//                    }
+//                    if (videoConnection != nil) {
+//                        session.startRunning()
+//                        output.captureStillImageAsynchronously(from: (connection: videoConnection), completionHandler: {(_ imageDataSampleBuffer: CMSampleBuffer?, _ error: Error) -> Void in
+//                            if imageDataSampleBuffer != nil {
+//                                var imageData: Data? = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
+//                                var photo = UIImage(data: imageData)
+//                            }
+//                        })
+//                    }
+//                }
+//            }
+//        }
+//    }
     
 }

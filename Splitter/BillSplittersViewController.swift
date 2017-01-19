@@ -25,7 +25,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         
         let managedContext = bill.managedObjectContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BillSplitter")
-        let predicate = NSPredicate(format: "bill == %@", bill)
+        let predicate = NSPredicate(format: "ANY bills == %@", bill)
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
         
         fetchRequest.sortDescriptors = [sortDescriptor]
@@ -82,7 +82,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         
         cell.name.text = billSplitter.name
         cell.email.text = billSplitter.email
-        if billSplitter.total == 0 || billSplitter.total == nil {
+        if billSplitter.total == 0 {
             cell.total.text = "£0.00"
         } else {
             cell.total.text = "£\(billSplitter.total)"
@@ -91,22 +91,28 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
+        if indexPath.row == 0 {
+            let alert = UIAlertController(title: "Sorry", message: "You're not allowed to delete the splitter who owns this device.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            if editingStyle == .delete {
 
-            let billSplitter = allBillSplitters[indexPath.row]
-            let managedContext = bill.managedObjectContext
-            
-            removeBillSplitter(billSplitter)
-            managedContext!.delete(billSplitter as NSManagedObject)
-            
-            do {
-                try managedContext!.save()
+                let billSplitter = allBillSplitters[indexPath.row]
+                let managedContext = bill.managedObjectContext
+                
+                removeBillSplitter(billSplitter)
+                managedContext!.delete(billSplitter as NSManagedObject)
+                
+                do {
+                    try managedContext!.save()
+                }
+                catch let error as NSError {
+                    print("Core Data save failed: \(error)")
+                }
+                self.setAllSplitterTotals()
+                tableView.reloadData()
             }
-            catch let error as NSError {
-                print("Core Data save failed: \(error)")
-            }
-            self.setAllSplitterTotals()
-            tableView.reloadData()
         }
     }
     

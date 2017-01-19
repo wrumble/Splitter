@@ -13,4 +13,6 @@ target 'Splitter' do
     pod 'Stripe'
     pod 'CardIO'
     pod 'AFNetworking', '~> 3.0'
+    pod 'NVActivityIndicatorView'
+    pod 'DeviceKit', '~> 1.0'
 end

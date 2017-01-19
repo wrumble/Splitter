@@ -102,11 +102,9 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
     }
 
     func handleError(_ error: NSError) {
-        UIAlertView(title: "Please Try Again",
-                    message: error.localizedDescription,
-                    delegate: nil,
-                    cancelButtonTitle: "OK").show()
-        
+        let alert = UIAlertController(title: "Please Try Again", message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func chargeBillSplittersCard(_ token: STPToken) {
@@ -121,8 +119,7 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
         manager.responseSerializer = AFHTTPResponseSerializer()
         manager.post(URL, parameters: params, progress: nil, success: {(_ task: URLSessionDataTask, _ responseObject: Any) -> Void in
             do {
-                let response = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
-                print("paid?")
+                _ = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
             } catch {
                 print("Serialising new account json object went wrong.")
             }

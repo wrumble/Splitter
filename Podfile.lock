@@ -15,6 +15,7 @@ PODS:
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
   - CardIO (5.4.1)
+  - DeviceKit (1.0.0)
   - GoogleMaps (2.1.1):
     - GoogleMaps/Maps (= 2.1.1)
   - GoogleMaps/Base (2.1.1)
@@ -25,6 +26,7 @@ PODS:
     - GooglePlaces (= 2.1.1)
   - GooglePlaces (2.1.1):
     - GoogleMaps/Base (= 2.1.1)
+  - NVActivityIndicatorView (3.0)
   - Stripe (9.2.0)
   - TesseractOCRiOS (4.0.0)
   - WDImagePicker (0.2.2)
@@ -32,9 +34,11 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 3.0)
   - CardIO
+  - DeviceKit (~> 1.0)
   - GoogleMaps
   - GooglePlacePicker
   - GooglePlaces
+  - NVActivityIndicatorView
   - Stripe
   - TesseractOCRiOS (= 4.0.0)
   - WDImagePicker (from `https://github.com/justwudi/WDImagePicker.git`, tag `0.2.2`)
@@ -52,13 +56,15 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
+  DeviceKit: ddead7f3a7c9603ba3a63cb748566428c38dd11f
   GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
   GooglePlacePicker: 665f39f931f2df32f9dd3fcc45f7e8abf71e535c
   GooglePlaces: 35636d86e5020cba3856eb988c09a5491de0a65a
+  NVActivityIndicatorView: 81953b5e65093ba79edf4fe7268e002039ca5268
   Stripe: a47770e82db059d0e7e160f9aabc2997055ee911
   TesseractOCRiOS: 90638afbe43d082433f2e76b384c7901d23956df
   WDImagePicker: 0014e231d67a63db9a97db74332a8a16723809bc
 
-PODFILE CHECKSUM: 90e5e37a3eacab43d33ae104a9e6052864fd2ec0
+PODFILE CHECKSUM: c3346bf01e101361e6f57bc94d9019c32f3fc287
 
 COCOAPODS: 1.1.1

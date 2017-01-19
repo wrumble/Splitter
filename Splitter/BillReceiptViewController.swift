@@ -30,7 +30,7 @@ class BillReceiptViewController: UIViewController {
             print("Could not fetch \(error), \(error.userInfo)")
         }
 
-        receiptImageView.image = appDelegate.imageStore.imageForKey(bill.id!)
+        receiptImageView.image = UIImage(data:bill.image as! Data, scale:1.0)
         
         self.navigationItem.title = "\(bill.name!) receipt image"
 
