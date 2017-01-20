@@ -306,6 +306,13 @@
                                                 <action selector="addNewItem:" destination="kMj-HN-lrS" eventType="touchUpInside" id="iF4-Uw-yiI"/>
                                             </connections>
                                         </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tap to Edit an Item" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fVN-EU-PHP">
+                                            <rect key="frame" x="116" y="12" width="143" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
@@ -1322,6 +1329,7 @@
                         <outlet property="firstNameTextField" destination="VFA-Ip-apC" id="qkn-uX-zsh"/>
                         <outlet property="lastNameTextField" destination="HI7-Ja-NLx" id="TeK-NW-Cgs"/>
                         <outlet property="postCodeTextField" destination="YIT-HV-8SQ" id="zHN-1F-W4p"/>
+                        <outlet property="previewView" destination="Unv-B5-JXP" id="fsr-eR-ce5"/>
                         <segue destination="Ym0-ZJ-QAW" kind="show" identifier="segueToFinalRegistrationViewController" id="7Y6-p2-HZl"/>
                     </connections>
                 </viewController>
@@ -1495,7 +1503,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Lq-l5-Z90">
                                 <rect key="frame" x="0.0" y="151" width="375" height="402"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7sv-CI-laF">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7sv-CI-laF">
                                         <rect key="frame" x="2" y="2" width="371" height="398"/>
                                         <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </imageView>
@@ -1703,7 +1711,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="IvF-Mo-46L"/>
+        <segue reference="fdD-V2-Mem"/>
         <segue reference="Jcw-qN-0N5"/>
     </inferredMetricsTieBreakers>
 </document>

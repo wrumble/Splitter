@@ -14,9 +14,11 @@ import NVActivityIndicatorView
 import DeviceKit
 import AVFoundation
 
-class InitialRegistrationViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, NVActivityIndicatorViewable {
+@available(iOS 10.0, *)
+class InitialRegistrationViewController: UIViewController, UINavigationControllerDelegate,  UIImagePickerControllerDelegate, NVActivityIndicatorViewable {
     
-    let device = Device()
+    var session: AVCaptureSession?
+    var stillImageOutput: AVCaptureStillImageOutput?
     
     var quantity = CGFloat(200)
     var photoID = UIImage()
@@ -24,7 +26,9 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     var stripeAccountID = String()
     var fileID = String()
     var activityIndicator: NVActivityIndicatorView!
+    var profileImage = UIImageView()
     
+    @IBOutlet weak var previewView: UIView!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var dobTextField: UITextField!
@@ -43,14 +47,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         emailTextField.text = "ben@sdf.com"
         addressLine1TextField.text = "4 Chedworth House"
         cityTextField.text = "London"
-        
-        if device == .iPhone4 || device == .iPhone4s { quantity = 100 }
-        
-        if device == .iPhone4 || device == .iPhone4s || device == .iPhone5 || device == .iPhone5c || device == .iPhone5s {
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        }
-
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(InitialRegistrationViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
@@ -78,14 +74,27 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     
     func addTextFieldTargets() {
         firstNameTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
+//        firstNameTextField.addTarget(self, action: #selector(capturePhoto), for: .editingDidEnd)
         lastNameTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         dobTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         addressLine1TextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         cityTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         postCodeTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
+        postCodeTextField.addTarget(self, action: #selector(moveScreen), for: .allEditingEvents)
         postCodeTextField.addTarget(self, action: #selector(checkPostCodeField), for: .editingDidEnd)
         emailTextField.addTarget(self, action: #selector(checkEmailField), for: .editingDidEnd)
         emailTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
+    }
+    
+    func moveScreen() {
+        let device = Device()
+
+        if device == .iPhone4 || device == .iPhone4s { quantity = 100 }
+        
+        if device == .iPhone4 || device == .iPhone4s || device == .iPhone5 || device == .iPhone5c || device == .iPhone5s {
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        }
     }
     
     
@@ -180,8 +189,8 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     }
     
     func goToFinalStage() {
-        performSegue(withIdentifier: "segueToFinalRegistrationViewController", sender: self)
         createMainBillSplitter()
+        performSegue(withIdentifier: "segueToFinalRegistrationViewController", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -189,9 +198,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         if segue.identifier == "segueToFinalRegistrationViewController" {
                 
             let destinationVC = segue.destination as! FinalRegistrationViewController
-            
             destinationVC.stripeAccountID = stripeAccountID
-            
         }
     }
     
@@ -222,12 +229,15 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         let entity =  NSEntityDescription.entity(forEntityName: "BillSplitter", in: managedContext)
         let mainBillSplitter = NSManagedObject(entity: entity!, insertInto: managedContext)
         let name = "\(firstNameTextField.text!) \(lastNameTextField.text!)"
+//        let imageData = UIImageJPEGRepresentation(profileImage.image!, 0.5)
 
         mainBillSplitter.setValue(name, forKey: "name")
         mainBillSplitter.setValue(emailTextField.text, forKey: "email")
         mainBillSplitter.setValue(stripeAccountID, forKey: "accountID")
         mainBillSplitter.setValue(true, forKey: "isMainBillSplitter")
         mainBillSplitter.setValue(true, forKey: "hasPaid")
+//        mainBillSplitter.setValue(imageData, forKey: "image")
+        
         
         do {
             try managedContext.save()
@@ -235,61 +245,55 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
             print("Could not save \(error), \(error.userInfo)")
         }
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        session = AVCaptureSession()
+        session!.sessionPreset = AVCaptureSessionPresetPhoto
+        
+        var frontCamera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        let availableCameraDevices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo)
+        for device in availableCameraDevices as! [AVCaptureDevice] {
+            if device.position == .front {
+                frontCamera = device
+            }
+        }
+        
+        var error: NSError?
+        var input: AVCaptureDeviceInput!
+        do {
+            input = try AVCaptureDeviceInput(device: frontCamera)
+        } catch let error1 as NSError {
+            error = error1
+            input = nil
+            print(error!.localizedDescription)
+        }
+        
+        if error == nil && session!.canAddInput(input) {
+            session!.addInput(input)
+            stillImageOutput = AVCaptureStillImageOutput()
+            stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+            
+            if session!.canAddOutput(stillImageOutput) {
+                session!.addOutput(stillImageOutput)
+                session!.startRunning()
+            }
+        }        
+    }
+
     
-//    func secretPhotoCapture() {
-//    
-//        var session = AVCaptureSession()
-//        var frontalCamera: AVCaptureDevice?
-//        var allCameras: [AVCaptureDevice] = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
-//        // Find the frontal camera.
-//        for i in 0..<allCameras.count {
-//            
-//            var camera: AVCaptureDevice? = allCameras[i]
-//            if camera?.position == .front {
-//                frontalCamera = camera
-//            }
-//        }
-//        // If we did not find the camera then do not take picture.
-//        if frontalCamera != nil {
-//            // Start the process of getting a picture.
-//            session = AVCaptureSession()
-//            // Setup instance of input with frontal camera and add to session.
-//            var error: Error?
-//            var input = try! AVCaptureDeviceInput(device: frontalCamera)
-//            if !(error != nil) && session.canAddInput(input) {
-//                // Add frontal camera to this session.
-//                session.addInput(input)
-//                // We need to capture still image.
-//                var output = AVCaptureStillImageOutput()
-//                // Captured image. settings.
-//                output.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-//            
-//            
-//                if session.canAddOutput(output) {
-//                    session.addOutput(output)
-//                    var videoConnection: AVCaptureConnection? = nil
-//                    for connection: AVCaptureConnection in output.connections {
-//                        for port: AVCaptureInputPort in connection.inputPorts() {
-//                            if port.mediaType.isEqual(AVMediaTypeVideo) {
-//                                videoConnection = connection
-//                                break
-//                            }
-//                        }
-//                    
-//                        if videoConnection { break }
-//                    }
-//                    if (videoConnection != nil) {
-//                        session.startRunning()
-//                        output.captureStillImageAsynchronously(from: (connection: videoConnection), completionHandler: {(_ imageDataSampleBuffer: CMSampleBuffer?, _ error: Error) -> Void in
-//                            if imageDataSampleBuffer != nil {
-//                                var imageData: Data? = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
-//                                var photo = UIImage(data: imageData)
-//                            }
-//                        })
-//                    }
+//    func capturePhoto() {
+//        if let videoConnection = stillImageOutput!.connection(withMediaType: AVMediaTypeVideo) {
+//            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { (sampleBuffer, error) -> Void in
+//                if sampleBuffer != nil {
+//                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
+//                    let dataProvider = CGDataProvider(data: imageData as! CFData)
+//                    let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
+//                    let image = UIImage(cgImage: cgImageRef!, scale: 1.0, orientation: UIImageOrientation.right)
+//                    self.profileImage.image = image
 //                }
-//            }
+//            })
 //        }
 //    }
-    
 }

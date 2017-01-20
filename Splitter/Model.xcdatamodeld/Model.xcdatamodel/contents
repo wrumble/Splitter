@@ -15,6 +15,7 @@
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="hasPaid" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="isMainBillSplitter" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="total" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
@@ -31,7 +32,7 @@
     </entity>
     <elements>
         <element name="Bill" positionX="-36" positionY="9" width="128" height="165"/>
-        <element name="BillSplitter" positionX="0" positionY="45" width="128" height="180"/>
+        <element name="BillSplitter" positionX="0" positionY="45" width="128" height="195"/>
         <element name="Item" positionX="27" positionY="72" width="128" height="135"/>
     </elements>
 </model>

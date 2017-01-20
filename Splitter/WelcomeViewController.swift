@@ -7,10 +7,24 @@
 //
 
 import UIKit
+import AVFoundation
+import CoreLocation
 
 class WelcomeViewController: UIViewController {
     
+    let locationManager = CLLocationManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        locationManager.requestWhenInUseAuthorization()
+        
+        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: {(_ granted: Bool) -> Void in
+            if granted {
+            }
+            else {
+            }
+        })
+        
     }
 }

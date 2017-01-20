@@ -20,9 +20,6 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = billName
-        self.navigationItem.hidesBackButton = true
-        
         fetchBillItems()
     }
     
@@ -44,7 +41,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @IBAction func addNewItem(_ sender: UIButton) {
         
-        let alertController = createAlertSubView()
+        let alertController = createAddItemAlertSubView()
         
         let alertControllerView = alertController.view.viewWithTag(0)
         
@@ -81,6 +78,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         present(alertController, animated: true, completion: nil)
     }
     
+    
     @IBAction func toggleEditingMode(_ sender: AnyObject) {
         
         if self.tableView.isEditing == true {
@@ -110,6 +108,35 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.price.text = "£\(item.price)"
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let item = allItems[indexPath.row]
+        
+        let alertController = createEditItemAlertSubView()
+        
+        let alertControllerView = alertController.view.viewWithTag(0)
+        
+        let itemName = alertControllerView?.viewWithTag(1) as! UITextField
+        let itemPrice = alertControllerView?.viewWithTag(2) as! UITextField
+        
+        itemName.text = item.name
+        itemPrice.text = String(item.price)
+        
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+            
+            self.updateEditedItem(indexPath: indexPath, itemName: itemName.text!, itemPrice: Double(itemPrice.text!)!)
+            self.fetchBillItems()
+            self.tableView.reloadData()
+        })
+        
+        alertController.addAction(okAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
+        
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -153,6 +180,25 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
+    func updateEditedItem(indexPath: IndexPath, itemName: String, itemPrice: Double){
+        let managedContext = self.bill.managedObjectContext
+        let currentItems = self.bill.mutableSetValue(forKey: "items")
+        currentItems.removeAllObjects()
+        
+        allItems[indexPath.row].name = itemName
+        allItems[indexPath.row].price = itemPrice
+        
+        currentItems.addObjects(from: allItems)
+        
+        do {
+            try managedContext!.save()
+        }
+        catch let error as NSError {
+            print("Core Data save failed: \(error)")
+        }
+        setBillTotal()
+    }
+    
     func createAlertViewItem(_ alertController: UIAlertController, itemName: String, itemStringPrice: String) {
 
         let managedContext = self.bill.managedObjectContext
@@ -174,7 +220,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         setBillTotal()
     }
     
-    func createAlertSubView() -> UIAlertController {
+    func createAddItemAlertSubView() -> UIAlertController {
         
         let view = UIView(frame: CGRect(x: CGFloat(0), y: CGFloat(50), width: CGFloat(250), height: CGFloat(100)))
         view.tag = 0
@@ -206,6 +252,35 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         view.addSubview(itemQuantity)
         
         let alertController = UIAlertController(title: "Add Item\n\n\n\n", message: nil, preferredStyle: .alert)
+        
+        alertController.view.addSubview(view)
+        
+        return alertController
+    }
+    
+    func createEditItemAlertSubView() -> UIAlertController {
+        
+        let view = UIView(frame: CGRect(x: CGFloat(0), y: CGFloat(50), width: CGFloat(250), height: CGFloat(100)))
+        view.tag = 0
+        
+        let itemName = UITextField(frame: CGRect(x: CGFloat(10), y: CGFloat(0), width: CGFloat(252), height: CGFloat(25)))
+        itemName.borderStyle = .roundedRect
+        itemName.placeholder = "Item Name"
+        itemName.keyboardAppearance = .alert
+        itemName.tag = 1
+        itemName.delegate = self
+        view.addSubview(itemName)
+        
+        let itemPrice = UITextField(frame: CGRect(x: CGFloat(10), y: CGFloat(30), width: CGFloat(252), height: CGFloat(25)))
+        itemPrice.placeholder = "Item Price"
+        itemPrice.borderStyle = .roundedRect
+        itemPrice.keyboardAppearance = .alert
+        itemPrice.keyboardType = UIKeyboardType.numberPad
+        itemPrice.tag = 2
+        itemPrice.delegate = self
+        view.addSubview(itemPrice)
+        
+        let alertController = UIAlertController(title: "Edit Item\n\n", message: nil, preferredStyle: .alert)
         
         alertController.view.addSubview(view)
         

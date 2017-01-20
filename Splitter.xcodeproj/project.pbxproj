@@ -36,6 +36,7 @@
 		6883545F1E085C6C00B343FB /* NewBillSplitterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6883545E1E085C6C00B343FB /* NewBillSplitterViewController.swift */; };
 		688354611E085C7800B343FB /* BillSplitterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688354601E085C7800B343FB /* BillSplitterCell.swift */; };
 		6887DB231E1D920C001362D5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6887DB221E1D920C001362D5 /* CoreLocation.framework */; };
+		6888AD311E31A3E100DB7FB1 /* CircularBillSplittersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6888AD301E31A3E100DB7FB1 /* CircularBillSplittersView.swift */; };
 		689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */; };
 		68B47FDB1E03173C00B0A6AC /* BillReceiptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B47FDA1E03173C00B0A6AC /* BillReceiptViewController.swift */; };
 		68BB52EB1E09A0440036DB40 /* NewBillSplitterItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BB52EA1E09A0440036DB40 /* NewBillSplitterItemCell.swift */; };
@@ -78,6 +79,7 @@
 		6883545E1E085C6C00B343FB /* NewBillSplitterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewBillSplitterViewController.swift; sourceTree = "<group>"; };
 		688354601E085C7800B343FB /* BillSplitterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillSplitterCell.swift; sourceTree = "<group>"; };
 		6887DB221E1D920C001362D5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		6888AD301E31A3E100DB7FB1 /* CircularBillSplittersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularBillSplittersView.swift; sourceTree = "<group>"; };
 		689B9A411DC27C8D00EEF40F /* NewBillViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewBillViewController.swift; sourceTree = "<group>"; };
 		68B47FDA1E03173C00B0A6AC /* BillReceiptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillReceiptViewController.swift; sourceTree = "<group>"; };
 		68BB52EA1E09A0440036DB40 /* NewBillSplitterItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewBillSplitterItemCell.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				6883545C1E085C5D00B343FB /* BillSplittersViewController.swift */,
+				6888AD301E31A3E100DB7FB1 /* CircularBillSplittersView.swift */,
 				6883545E1E085C6C00B343FB /* NewBillSplitterViewController.swift */,
 				685E97ED1E09EE480013F367 /* BillSplitterItemsViewController.swift */,
 				68EC0E081E1FFC6800DBF23F /* SplitterPaymentViewController.swift */,
@@ -401,6 +404,7 @@
 				680F528B1E27E2A6005786F1 /* Item+CoreDataProperties.swift in Sources */,
 				680F528D1E27E2A6005786F1 /* Bill+CoreDataProperties.swift in Sources */,
 				6845F19F1E2D3FA800138C66 /* WelcomeViewController.swift in Sources */,
+				6888AD311E31A3E100DB7FB1 /* CircularBillSplittersView.swift in Sources */,
 				68BB52EB1E09A0440036DB40 /* NewBillSplitterItemCell.swift in Sources */,
 				6845F19D1E2D212D00138C66 /* FinalRegistrationViewController.swift in Sources */,
 				688354611E085C7800B343FB /* BillSplitterCell.swift in Sources */,
@@ -517,7 +521,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Splitter-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -530,7 +534,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2D98CC496BE0BD3471363ADA /* Pods-Splitter.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -561,13 +565,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B9A6672F974ECB999FB0A4C7 /* Pods-Splitter.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Splitter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

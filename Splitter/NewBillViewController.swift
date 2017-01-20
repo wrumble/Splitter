@@ -32,9 +32,7 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        locationManager.requestWhenInUseAuthorization()
-        
+                
         getNearestPlaceName()
         createInstructionLabel()
         
@@ -136,7 +134,10 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
     
     func locationFieldWasTapped(_ textField: UITextField) {
         let alert = UIAlertController(title: "Are you here?", message: nearestPlaceName, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "No", style: .default, handler: { action in
+            textField.becomeFirstResponder()
+        }))
+            
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
             self.dismissKeyboard()
             textField.text = self.nearestPlaceName

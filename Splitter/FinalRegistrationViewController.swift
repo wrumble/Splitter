@@ -10,6 +10,7 @@ import UIKit
 import AFNetworking
 import Stripe
 import NVActivityIndicatorView
+import CoreData
 
 class FinalRegistrationViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, NVActivityIndicatorViewable {
     
@@ -26,7 +27,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         super.viewDidLoad()
 
         addTextFieldTargets()
-        
+                
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FinalRegistrationViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
     }
