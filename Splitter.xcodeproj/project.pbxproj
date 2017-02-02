@@ -49,6 +49,7 @@
 		68EC0E091E1FFC6800DBF23F /* SplitterPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68EC0E081E1FFC6800DBF23F /* SplitterPaymentViewController.swift */; };
 		68EE13ED1E4297B600744A1F /* MyBillsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68EE13EC1E4297B600744A1F /* MyBillsViewController.swift */; };
 		68EE13EF1E42A06400744A1F /* BillCarouselItemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68EE13EE1E42A06400744A1F /* BillCarouselItemTableView.swift */; };
+		68EE13F11E439DE500744A1F /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68EE13F01E439DE500744A1F /* DeviceHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,6 +98,7 @@
 		68EC0E081E1FFC6800DBF23F /* SplitterPaymentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitterPaymentViewController.swift; sourceTree = "<group>"; };
 		68EE13EC1E4297B600744A1F /* MyBillsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyBillsViewController.swift; sourceTree = "<group>"; };
 		68EE13EE1E42A06400744A1F /* BillCarouselItemTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BillCarouselItemTableView.swift; sourceTree = "<group>"; };
+		68EE13F01E439DE500744A1F /* DeviceHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
 		B9A6672F974ECB999FB0A4C7 /* Pods-Splitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Splitter.release.xcconfig"; path = "Pods/Target Support Files/Pods-Splitter/Pods-Splitter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,6 +123,7 @@
 			children = (
 				68D517F21DCBECCC00028759 /* TextToItemConverter.swift */,
 				680D8EAF1E0D996900809D8F /* TableViewHelper.swift */,
+				68EE13F01E439DE500744A1F /* DeviceHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -453,6 +456,7 @@
 				68BB52EB1E09A0440036DB40 /* BillSplitterItemCell.swift in Sources */,
 				6845F19D1E2D212D00138C66 /* FinalRegistrationViewController.swift in Sources */,
 				688354611E085C7800B343FB /* BillSplitterCell.swift in Sources */,
+				68EE13F11E439DE500744A1F /* DeviceHelper.swift in Sources */,
 				68EC0E091E1FFC6800DBF23F /* SplitterPaymentViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

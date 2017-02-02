@@ -55,7 +55,9 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     
     func addTextFieldTargets() {
         firstNameTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
-        firstNameTextField.addTarget(self, action: #selector(capturePhoto), for: .editingDidEnd)
+        if Platform.isPhone {
+            firstNameTextField.addTarget(self, action: #selector(capturePhoto), for: .editingDidEnd)
+        }
         lastNameTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         dobTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         addressLine1TextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
@@ -198,14 +200,17 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         let entity =  NSEntityDescription.entity(forEntityName: "BillSplitter", in: managedContext)
         let mainBillSplitter = NSManagedObject(entity: entity!, insertInto: managedContext)
         let name = "\(firstNameTextField.text!) \(lastNameTextField.text!)"
-        let imageData = UIImageJPEGRepresentation(profileImage.image!, 0.5)
+        
+        if Platform.isPhone {
+            let imageData = UIImageJPEGRepresentation(profileImage.image!, 0.5)
+            mainBillSplitter.setValue(imageData, forKey: "image")
+        }
 
         mainBillSplitter.setValue(name, forKey: "name")
         mainBillSplitter.setValue(emailTextField.text, forKey: "email")
         mainBillSplitter.setValue(stripeAccountID, forKey: "accountID")
         mainBillSplitter.setValue(true, forKey: "isMainBillSplitter")
         mainBillSplitter.setValue(true, forKey: "hasPaid")
-        mainBillSplitter.setValue(imageData, forKey: "image")
         
         
         do {
@@ -218,37 +223,39 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        session = AVCaptureSession()
-        session!.sessionPreset = AVCaptureSessionPresetPhoto
-        
-        var frontCamera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
-        let availableCameraDevices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo)
-        for device in availableCameraDevices as! [AVCaptureDevice] {
-            if device.position == .front {
-                frontCamera = device
-            }
-        }
-        
-        var error: NSError?
-        var input: AVCaptureDeviceInput!
-        do {
-            input = try AVCaptureDeviceInput(device: frontCamera)
-        } catch let error1 as NSError {
-            error = error1
-            input = nil
-            print(error!.localizedDescription)
-        }
-        
-        if error == nil && session!.canAddInput(input) {
-            session!.addInput(input)
-            stillImageOutput = AVCaptureStillImageOutput()
-            stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+        if Platform.isPhone {
+            session = AVCaptureSession()
+            session!.sessionPreset = AVCaptureSessionPresetPhoto
             
-            if session!.canAddOutput(stillImageOutput) {
-                session!.addOutput(stillImageOutput)
-                session!.startRunning()
+            var frontCamera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+            let availableCameraDevices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo)
+            for device in availableCameraDevices as! [AVCaptureDevice] {
+                if device.position == .front {
+                    frontCamera = device
+                }
             }
-        }        
+            
+            var error: NSError?
+            var input: AVCaptureDeviceInput!
+            do {
+                input = try AVCaptureDeviceInput(device: frontCamera)
+            } catch let error1 as NSError {
+                error = error1
+                input = nil
+                print(error!.localizedDescription)
+            }
+            
+            if error == nil && session!.canAddInput(input) {
+                session!.addInput(input)
+                stillImageOutput = AVCaptureStillImageOutput()
+                stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+                
+                if session!.canAddOutput(stillImageOutput) {
+                    session!.addOutput(stillImageOutput)
+                    session!.startRunning()
+                }
+            }
+        }
     }
 
     

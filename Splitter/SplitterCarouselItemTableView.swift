@@ -24,12 +24,14 @@ class SplitterCarouselItemTableView: UITableView {
     
     func setupView() {
         
-        let tableViewBackground = UIImageView(image: UIImage(data: splitter?.image as! Data, scale:1.0))
-        tableViewBackground.contentMode = .scaleAspectFit
-        tableViewBackground.frame = self.frame
+        if Platform.isPhone {
+            let tableViewBackground = UIImageView(image: UIImage(data: splitter?.image as! Data, scale:1.0))
+            self.backgroundView = tableViewBackground
+            tableViewBackground.contentMode = .scaleAspectFit
+            tableViewBackground.frame = self.frame
+        }
         
         self.backgroundColor = .clear
-        self.backgroundView = tableViewBackground
         self.separatorStyle = .none
     }
 }

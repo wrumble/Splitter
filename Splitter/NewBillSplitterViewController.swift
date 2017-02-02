@@ -46,7 +46,9 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
         } else {
             for _ in 0...allItems.count {
                 checked.append(false)
-                billSplitterName?.addTarget(self, action: #selector(capturePhoto), for: .editingDidEnd)
+                if Platform.isPhone {
+                    billSplitterName?.addTarget(self, action: #selector(capturePhoto), for: .editingDidEnd)
+                }
             }
         }
         
@@ -61,7 +63,7 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if splitter == nil {
+        if splitter == nil && Platform.isPhone {
             session = AVCaptureSession()
             session!.sessionPreset = AVCaptureSessionPresetPhoto
             
@@ -250,8 +252,10 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
         
         if splitter == nil {
             let currentBillSplitters = self.bill.mutableSetValue(forKey: "billSplitters")
-            let imageData = UIImageJPEGRepresentation(profileImage.image!, 1)
-            splitterObject.setValue(imageData, forKey: "image")
+            if Platform.isPhone {
+                let imageData = UIImageJPEGRepresentation(profileImage.image!, 1)
+                splitterObject.setValue(imageData, forKey: "image")
+            }
             currentBillSplitters.add(splitterObject)
         }
         }
