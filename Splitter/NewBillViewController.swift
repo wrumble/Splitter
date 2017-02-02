@@ -11,12 +11,9 @@ import TesseractOCR
 import CoreData
 import WDImagePicker
 import GooglePlaces
-import CoreLocation
 import NVActivityIndicatorView
 
 class NewBillViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, WDImagePickerDelegate, NVActivityIndicatorViewable {
-    
-    let locationManager = CLLocationManager()
     
     var newBill: NSManagedObject?
     var itemConverter = TextToItemConverter()
@@ -49,7 +46,7 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
     func createInstructionLabel() {
         let height = 200
         let width = Int(UIScreen.main.bounds.width)
-        instructionLabel = UILabel(frame: CGRect(x:0, y:0, width: width, height: height))
+        instructionLabel = UILabel(frame: CGRect(x:5, y:0, width: width - 5, height: height))
         instructionLabel.textColor = UIColor.black
         instructionLabel.numberOfLines = 0
         instructionLabel.textAlignment = .center
@@ -70,8 +67,9 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
     }
     
     @IBAction func saveButtonWasPressed() {
-        if imageView.image != nil {
-            let image = self.imageView!.image!
+        
+        if let image = imageView.image {
+            startAnimating()
             let id = UUID().uuidString
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let managedContext = appDelegate.managedObjectContext
@@ -96,8 +94,17 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
             let bill: NSManagedObject = newBill as NSManagedObject
             self.itemConverter.bill = bill
             
-            self.performImageRecognition(image)
-            self.performSegue(withIdentifier: "segueToMyBills", sender: self)
+            DispatchQueue.global(qos: .background).async { [weak weakSelf = self] in
+                
+                weakSelf?.performImageRecognition(image)
+                
+                DispatchQueue.main.async {
+                    
+                    guard let weakSelf = weakSelf else { return }
+                    weakSelf.stopAnimating()
+                    weakSelf.performSegue(withIdentifier: "segueToBills", sender: weakSelf)
+                }
+            }
         } else {
             let alert = UIAlertController(title: "No receipt image", message: "You need to take a photo of your receipt before you can save the bill.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -139,16 +146,13 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         }))
             
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+            self.billName?.resignFirstResponder()
+            self.billLocation?.resignFirstResponder()
             self.dismissKeyboard()
             textField.text = self.nearestPlaceName
         }))
-        
-        let subview = alert.view.subviews.first! as UIView
-        let alertContentView = subview.subviews.first! as UIView
-        alertContentView.backgroundColor = UIColor.darkGray
-        alertContentView.layer.cornerRadius = 13
+
         self.present(alert, animated: true, completion: nil)
-        alert.view.tintColor = UIColor.black;
     }
     
     func getNearestPlaceName() {

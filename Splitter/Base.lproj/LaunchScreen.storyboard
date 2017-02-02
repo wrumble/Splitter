@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,53 +15,52 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Llm-lL-Icb"/>
-                        <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
+                        <viewControllerLayoutGuide type="top" id="7HD-R2-xSa"/>
+                        <viewControllerLayoutGuide type="bottom" id="CQJ-UF-fiR"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                    <view key="view" contentMode="scaleToFill" id="3JE-Or-aUf">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SplitterLaunchScreenBackground" translatesAutoresizingMaskIntoConstraints="NO" id="Arg-Nl-Kvn">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenTitleText" translatesAutoresizingMaskIntoConstraints="NO" id="Ejm-hW-rvR">
-                                <rect key="frame" x="0.0" y="96" width="320" height="150"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splitter" translatesAutoresizingMaskIntoConstraints="NO" id="GRF-4Z-6YH">
+                                <rect key="frame" x="0.0" y="106" width="320" height="100"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="v41-yh-GGN"/>
+                                    <constraint firstAttribute="height" constant="100" id="KkK-Tz-foa"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenDescriptionText" translatesAutoresizingMaskIntoConstraints="NO" id="c8w-ce-x0Y">
-                                <rect key="frame" x="0.0" y="186" width="320" height="100"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Simplify, speed up and pay for restaurant bills comfortably between friends" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TT8-5H-qKm">
+                                <rect key="frame" x="0.0" y="206" width="320" height="80"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="qsG-ot-oot"/>
+                                    <constraint firstAttribute="height" constant="80" id="Veh-tZ-AEG"/>
                                 </constraints>
-                            </imageView>
-                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenNameText" translatesAutoresizingMaskIntoConstraints="NO" id="5Op-1X-bje">
-                                <rect key="frame" x="0.0" y="538" width="320" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.062745098040000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wayne Rumble" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iB7-52-yHb">
+                                <rect key="frame" x="0.0" y="543" width="320" height="25"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="cDR-iK-gfb"/>
+                                    <constraint firstAttribute="height" constant="25" id="JSm-6G-raR"/>
                                 </constraints>
-                            </imageView>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.1529411765" green="0.36862745099999999" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="5Op-1X-bje" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="73K-za-UYs"/>
-                            <constraint firstAttribute="trailing" secondItem="Ejm-hW-rvR" secondAttribute="trailing" id="82y-r5-rIE"/>
-                            <constraint firstItem="c8w-ce-x0Y" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="8xX-Vj-AvL"/>
-                            <constraint firstItem="Ejm-hW-rvR" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="0.6" id="EKQ-Eh-JDD"/>
-                            <constraint firstItem="Ejm-hW-rvR" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="MOW-hH-uMU"/>
-                            <constraint firstItem="Arg-Nl-Kvn" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="NWs-fY-xcQ"/>
-                            <constraint firstAttribute="trailing" secondItem="c8w-ce-x0Y" secondAttribute="trailing" id="YEi-sN-3ST"/>
-                            <constraint firstItem="c8w-ce-x0Y" firstAttribute="top" secondItem="Ejm-hW-rvR" secondAttribute="bottom" constant="-60" id="YPY-49-iza"/>
-                            <constraint firstAttribute="trailing" secondItem="Arg-Nl-Kvn" secondAttribute="trailing" id="ZfZ-cc-XeJ"/>
-                            <constraint firstAttribute="trailing" secondItem="5Op-1X-bje" secondAttribute="trailing" id="bfw-xd-fO7"/>
-                            <constraint firstItem="Arg-Nl-Kvn" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-20" id="ka9-fl-vig"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="5Op-1X-bje" secondAttribute="bottom" id="spz-uu-LJK"/>
-                            <constraint firstItem="Arg-Nl-Kvn" firstAttribute="bottom" secondItem="xb3-aO-Qok" secondAttribute="top" id="xFD-Ur-oJz"/>
+                            <constraint firstItem="TT8-5H-qKm" firstAttribute="top" secondItem="GRF-4Z-6YH" secondAttribute="bottom" id="OGB-1d-5xM"/>
+                            <constraint firstItem="GRF-4Z-6YH" firstAttribute="leading" secondItem="3JE-Or-aUf" secondAttribute="leading" id="ROm-fL-82C"/>
+                            <constraint firstItem="iB7-52-yHb" firstAttribute="leading" secondItem="3JE-Or-aUf" secondAttribute="leading" id="S39-XV-CFI"/>
+                            <constraint firstAttribute="trailing" secondItem="GRF-4Z-6YH" secondAttribute="trailing" id="U8E-dF-mIc"/>
+                            <constraint firstItem="GRF-4Z-6YH" firstAttribute="centerY" secondItem="3JE-Or-aUf" secondAttribute="centerY" multiplier="0.55" id="Wma-cw-JUP"/>
+                            <constraint firstAttribute="trailing" secondItem="iB7-52-yHb" secondAttribute="trailing" id="fKw-63-tfm"/>
+                            <constraint firstItem="TT8-5H-qKm" firstAttribute="leading" secondItem="3JE-Or-aUf" secondAttribute="leading" id="gEk-IH-BCZ"/>
+                            <constraint firstItem="CQJ-UF-fiR" firstAttribute="top" secondItem="iB7-52-yHb" secondAttribute="bottom" id="gma-RJ-dd9"/>
+                            <constraint firstAttribute="trailing" secondItem="TT8-5H-qKm" secondAttribute="trailing" id="xhE-do-5zU"/>
                         </constraints>
                     </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -69,9 +68,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchScreenDescriptionText" width="207" height="22"/>
-        <image name="LaunchScreenNameText" width="207" height="12"/>
-        <image name="LaunchScreenTitleText" width="207" height="83"/>
-        <image name="SplitterLaunchScreenBackground" width="512" height="683"/>
+        <image name="splitter" width="1322" height="444"/>
     </resources>
 </document>

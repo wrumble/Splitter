@@ -10,14 +10,21 @@ import UIKit
 
 class TableViewHelper {
     
-    class func EmptyMessage(_ message:String, tableView: UITableView) {
-        let messageLabel = UILabel(frame: CGRect(x: 0,y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
+    class func EmptyMessage(_ message: String, tableView: UITableView) {
+        let messageLabel = UILabel(frame: CGRect(x: 5,y: 0, width: tableView.bounds.size.width - 10, height: 30))
+        
         messageLabel.text = message
         messageLabel.textColor = UIColor.black
-        messageLabel.numberOfLines = 0;
-        messageLabel.textAlignment = .center;
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
         messageLabel.sizeToFit()
         
-        tableView.backgroundView = messageLabel;
+        
+        let messageView = UIView(frame: CGRect(x: 0,y: 0, width: tableView.bounds.size.width, height: messageLabel.bounds.height))
+        messageView.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.3)
+        messageView.center = tableView.center
+        messageView.addSubview(messageLabel)
+        
+        tableView.backgroundView?.addSubview(messageView)
     }
 }

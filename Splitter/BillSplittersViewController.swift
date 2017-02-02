@@ -8,27 +8,59 @@
 
 import UIKit
 import CoreData
+import iCarousel
 
-class BillSplittersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class BillSplittersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, iCarouselDataSource, iCarouselDelegate {
     
     var bill: NSManagedObject!
     var billName: String!
     var allBillSplitters: [BillSplitter]!
-    
-    @IBOutlet var tableView: UITableView!
+    var height: Double!
+    var width: Double!
+    var carouselIndex: Int!
+    var isEditingSplitter = false
+    var itemIndex: Int?
+
+    @IBOutlet weak var billNameLabel: UILabel!
+    @IBOutlet var carousel: iCarousel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "\(billName!) Splitters"
-        self.navigationItem.hidesBackButton = true
+        getAllSplitters()
+        
+        height = Double(UIScreen.main.bounds.height) * 0.75
+        width = Double(UIScreen.main.bounds.width) * 0.88
+        
+        billNameLabel.text = "\(billName!)"
+        billNameLabel.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.75)
+        
+        if allBillSplitters.count < 3 {
+            carousel.type = .coverFlow
+        } else {
+            carousel.type = .cylinder
+            carousel.contentOffset = CGSize(width: 0, height: height * -0.67)
+            carousel.viewpointOffset = CGSize(width: 0, height: height * -0.7)
+        }
+        
+        carousel.bounces = true
+        carousel.isPagingEnabled = true
+        carousel.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        carousel.scroll(byNumberOfItems: allBillSplitters.count, duration: 1.5)
+    }
+    
+    func getAllSplitters() {
+        
+        allBillSplitters = [BillSplitter]()
         
         let managedContext = bill.managedObjectContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BillSplitter")
         let predicate = NSPredicate(format: "ANY bills == %@", bill)
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
         
-        fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.predicate = predicate
         
         do {
@@ -38,8 +70,86 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
-        
         setAllSplitterTotals()
+    }
+    
+    func numberOfItems(in carousel: iCarousel) -> Int {
+
+        return allBillSplitters.count
+    }
+    
+
+    func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: UIView?) -> UIView {
+        
+        let splitter = allBillSplitters[index]
+
+        carouselIndex = index
+
+        let splitterView = SplitterCarouselItemView(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        let viewWidth = Int(splitterView.frame.width)
+    
+        let nameLabel = SplitterCarouselItemNameLabel(frame: CGRect(x: 5, y: 10, width: viewWidth - 48, height: 40))
+        let emailLabel = SplitterCarouselItemEmailLabel(frame: CGRect(x: 5, y: 50, width: viewWidth, height: 20))
+        let editItemButton = SplitterCarouselEditButton(frame: CGRect(x: viewWidth - 48, y: 5, width: 45, height: 45))
+        editItemButton.tag = index
+        if !splitter.hasPaid || splitter.isMainBillSplitter {
+            editItemButton.addTarget(self, action: #selector(editButtonWasPressed), for: .touchUpInside)
+        }
+        
+        let itemHeight = Int(splitterView.frame.height)
+        let payButton = SplitterCarouselItemPayButton(frame: CGRect(x: 0, y: itemHeight - 50, width: viewWidth + 1, height: 50))
+        payButton.tag = index
+        payButton.titleLabel?.numberOfLines = 0
+        
+        if !splitter.hasPaid {
+            payButton.addTarget(self, action: #selector(payButtonWasPressed), for: .touchUpInside)
+        }
+
+        let tableViewHeight = Int(height - 125)
+        let frame = CGRect(x: 0, y: 75, width: viewWidth, height: tableViewHeight)
+        
+        let tableView = SplitterCarouselItemTableView(frame: frame, style: .plain, splitter: splitter)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tag = index
+        
+        splitterView.addSubview(nameLabel)
+        splitterView.addSubview(emailLabel)
+        if !splitter.hasPaid { splitterView.addSubview(editItemButton) }
+        if splitter.isMainBillSplitter { splitterView.addSubview(editItemButton) }
+        splitterView.addSubview(tableView)
+        splitterView.addSubview(payButton)
+
+        nameLabel.text = "\(allBillSplitters[index].name!)"
+        emailLabel.text = "\(allBillSplitters[index].email!)"
+        
+        payButton.setTitle("Pay £\(allBillSplitters[index].total)", for: .normal)
+        
+        if splitter.hasPaid && !splitter.isMainBillSplitter{
+            payButton.setTitle("\(allBillSplitters[index].name!) has paid", for: .normal)
+        } else if splitter.isMainBillSplitter {
+            payButton.setTitle("\(allBillSplitters[index].name!) pays the server", for: .normal)
+        }
+        
+        return splitterView
+    }
+    
+    func carousel(_ carousel: iCarousel, valueFor option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
+        if allBillSplitters.count > 2 {
+            switch option {
+            case .spacing:
+                return value * 1.05
+            case .fadeMin:
+                return 0.0
+            case .fadeMinAlpha:
+                return 0.3
+            case .fadeMax:
+                return 0.0
+            default:
+                return value
+            }
+        }
+        return value
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -48,91 +158,108 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
             
             let destinationVC = segue.destination as! NewBillSplitterViewController
             let passedBill: NSManagedObject = bill as NSManagedObject
-                
+            
             destinationVC.bill = passedBill
             destinationVC.billName = billName
+            
+            if isEditingSplitter { destinationVC.splitter = allBillSplitters[itemIndex!] }
         }
         
-        if segue.identifier == "segueToBillSplitterItems" {
-            if let selectedIndexPath = tableView.indexPathForSelectedRow {
-                
-                let destinationVC = segue.destination as! BillSplitterItemsViewController
-                let splitter: BillSplitter = allBillSplitters[selectedIndexPath.row]
-                let bill = self.bill as! Bill
-                
-                destinationVC.splitter = splitter
-                destinationVC.bill = bill
-            }
+        if segue.identifier == "segueToSplitterPaymentViewController" {
+            
+            let destinationVC = segue.destination as! SplitterPaymentViewController
+            let passedBill: NSManagedObject = bill as NSManagedObject
+            
+            destinationVC.bill = passedBill
+            destinationVC.splitter = allBillSplitters[itemIndex!]
+            destinationVC.total = allBillSplitters[itemIndex!].total
         }
     }
     
+    func payButtonWasPressed(_ sender: UIButton) {
+        itemIndex = sender.tag
+        super.performSegue(withIdentifier: "segueToSplitterPaymentViewController", sender: nil)
+    }
+    
+    func editButtonWasPressed(_ sender: UIButton) {
+        isEditingSplitter = true
+        itemIndex = sender.tag
+        super.performSegue(withIdentifier: "segueToNewBillSplitter", sender: nil)
+    }
+    
+    @IBAction func addButtonWasPressed(_ sender: UIButton) {
+        super.performSegue(withIdentifier: "segueToNewBillSplitter", sender: nil)
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if allBillSplitters.count > 0 {
-            return allBillSplitters.count
+        let splitter = allBillSplitters[carouselIndex]
+        if (splitter.items?.count)! > 0 {
+            return (splitter.items?.count)!
         } else {
-            TableViewHelper.EmptyMessage("\(billName!) has no bill splitters assigned to it yet.\nTap New Bill Splitter to add and assign items to a person.", tableView: tableView)
+            TableViewHelper.EmptyMessage("\(splitter.name!) has no items to pay for.", tableView: tableView)
             return 0
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        tableView.register(SplitterCarouselItemTableViewCell.classForCoder(), forCellReuseIdentifier: "splitterCarouselItemTableViewCell")
         
-        let cell: BillSplitterCell = tableView.dequeueReusableCell(withIdentifier: "BillSplitterCell") as! BillSplitterCell
-        let billSplitter = allBillSplitters[indexPath.row]
+        let cell: SplitterCarouselItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: "splitterCarouselItemTableViewCell") as! SplitterCarouselItemTableViewCell
+        let itemsSet = allBillSplitters[tableView.tag].items
+        let items = itemsSet?.allObjects as! [Item]
+        let item = items[indexPath.row]
+        let count = item.billSplitters?.count
         
-        cell.name.text = billSplitter.name
-        cell.email.text = billSplitter.email
-        if billSplitter.total == 0 {
-            cell.total.text = "£0.00"
+        cell.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.3)
+        
+        if count! > 1 {
+            cell.name!.text = "\(item.name!)\nsplit \(count!) ways"
+            cell.price!.text = "£\(Double(item.price)/Double(count!))"
+            
         } else {
-            cell.total.text = "£\(billSplitter.total)"
+            cell.name!.text = item.name!
+            cell.price!.text = "£\(item.price)"
         }
         return cell
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            let alert = UIAlertController(title: "Sorry", message: "You're not allowed to delete the splitter who owns this device.", preferredStyle: .alert)
+    @IBAction func minusButtonWasTapped(_ sender: UIButton) {
+        
+        let index = carousel.currentItemIndex
+        if index == 0 {
+            
+            let alert = UIAlertController(title: "Sorry", message: "You're not allowed to delete the person who owns this device.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         } else {
-            if editingStyle == .delete {
-
-                let billSplitter = allBillSplitters[indexPath.row]
-                let managedContext = bill.managedObjectContext
+            
+            let splitter = allBillSplitters[index]
+            let alert = UIAlertController(title: "Delete \(splitter.name!)?", message: nil, preferredStyle: .alert)
+            let noAction = UIAlertAction(title: "No", style: .cancel, handler: nil)
+            let yesAction = UIAlertAction(title: "Yes", style: .default, handler: { (action) -> Void in
+                let managedContext = self.bill.managedObjectContext
                 
-                removeBillSplitter(billSplitter)
-                managedContext!.delete(billSplitter as NSManagedObject)
+                self.allBillSplitters.remove(at: index)
+                managedContext!.delete(splitter as NSManagedObject)
                 
                 do {
                     try managedContext!.save()
                 }
                 catch let error as NSError {
-                    print("Core Data save failed: \(error)")
+                    print("Core Data delete failed: \(error)")
                 }
                 self.setAllSplitterTotals()
-                tableView.reloadData()
-            }
+                if self.allBillSplitters.count < 3 { self.carousel.type = .coverFlow }
+                self.carousel.reloadData()
+                self.carousel.scroll(byNumberOfItems: self.allBillSplitters.count, duration: 1.5)
+            })
+            alert.addAction(noAction)
+            alert.addAction(yesAction)
+            self.present(alert, animated: true, completion: nil)
         }
     }
-    
-    func removeBillSplitter(_ billSplitter: BillSplitter) {
-        if let index = allBillSplitters.index(of: billSplitter) {
-            allBillSplitters.remove(at: index)
-        }
-    }
-    
-    @IBAction func toggleEditingMode(_ sender: AnyObject) {
-        
-        if self.tableView.isEditing == true {
-            self.tableView.isEditing = false
-            self.navigationItem.rightBarButtonItem?.title = "Done"
-        } else {
-            self.tableView.isEditing = true
-            self.navigationItem.rightBarButtonItem?.title = "Edit"
-        }
-    }
-    
+
     func setAllSplitterTotals() {
         allBillSplitters.forEach { billSplitter in
             let items = billSplitter.items?.allObjects as! [Item]
@@ -153,5 +280,19 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         catch let error as NSError {
             print("Core Data save failed: \(error)")
         }
+    }
+}
+
+extension UIColor {
+    convenience init(red: Int, green: Int, blue: Int) {
+        assert(red >= 0 && red <= 255, "Invalid red component")
+        assert(green >= 0 && green <= 255, "Invalid green component")
+        assert(blue >= 0 && blue <= 255, "Invalid blue component")
+        
+        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
+    }
+    
+    convenience init(netHex:Int) {
+        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
     }
 }

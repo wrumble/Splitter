@@ -41,22 +41,24 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
     
     func checkSortCode(sender: UITextField) {
         
-        let sortCodeReg = "^[0-9]{1,6}$"
+        let sortCodeReg = "^[0-9]{6,6}$"
         let sortCodeTest = NSPredicate(format: "SELF MATCHES %@", sortCodeReg)
         if sortCodeTest.evaluate(with: sender.text) == false {
             let alert = UIAlertController(title: "Please enter a valid Sort Code", message: nil, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
+            sortCodeTextField.becomeFirstResponder()
         }
     }
     
     func checkAccountNumber(sender: UITextField) {
-        let accountNumberReg = "^[0-9]{1,8}$"
+        let accountNumberReg = "^[0-9]{8,8}$"
         let accountNumberTest = NSPredicate(format: "SELF MATCHES %@", accountNumberReg)
         if accountNumberTest.evaluate(with: sender.text) == false {
             let alert = UIAlertController(title: "Please enter a valid Account Number", message: "If your account number is 7 digits long please add a 0 to the beginning.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
+            accountNumberTextField.becomeFirstResponder()
         }
     }
     
@@ -74,7 +76,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
     func createTakePhotoButton() {
         let width = UIScreen.main.bounds.width
         let button: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: width, height: 50))
-        button.backgroundColor = UIColor.black
+        button.backgroundColor = UIColor(netHex: 0x000010)
         let title = NSAttributedString(string: "Take Photo", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName : UIFont.systemFont(ofSize: 17.0)])
         button.setAttributedTitle(title, for: .normal)
         button.addTarget(self, action: #selector(takePhotoButtonWasPressed), for: .touchUpInside)
@@ -84,7 +86,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
     func createRegisterButton() {
         let width = UIScreen.main.bounds.width
         let button: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: width, height: 50))
-        button.backgroundColor = UIColor.black
+        button.backgroundColor = UIColor(netHex: 0x000010)
         let title = NSAttributedString(string: "Register", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName : UIFont.systemFont(ofSize: 17.0)])
         button.setAttributedTitle(title, for: .normal)
         button.addTarget(self, action: #selector(registerButtonWasTapped), for: .touchUpInside)
@@ -196,7 +198,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         let width = bottomView.frame.width
         let height = bottomView.frame.height
         let agreementTextView: UITextView = UITextView (frame:CGRect(x: 0, y: 50, width: width, height: height-50))
-        agreementTextView.backgroundColor = UIColor.black
+        agreementTextView.backgroundColor = .clear
         agreementTextView.isScrollEnabled = true
         agreementTextView.isUserInteractionEnabled = true
         agreementTextView.isEditable = false
@@ -204,8 +206,10 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         
         let text = NSMutableAttributedString(string: "By Tapping Register you agree that Payment processing services for you on Splitter are provided by Stripe and are subject to the Stripe Connected Account Agreement, which includes the Stripe Terms of Service. By agreeing to these terms or continuing to operate as a user on Splitter, you agree to be bound by the Stripe Services Agreement, as the same may be modified by Stripe from time to time. As a condition of Splitter enabling payment processing services through Stripe, you agree to provide Splitter accurate and complete information about you and your business, and you authorize Splitter to share it and transaction information related to your use of the payment processing services provided by Stripe.")
         text.addAttribute(NSLinkAttributeName, value: "https://stripe.com/gb/connect-account/legal", range: NSRange(location: 128, length: 35))
+        text.addAttribute(NSForegroundColorAttributeName, value: UIColor(netHex: 0xe9edef), range: NSRange(location: 128, length: 35))
         text.addAttribute(NSLinkAttributeName, value: "https://stripe.com/gb/legal", range: NSRange(location: 183, length: 24))
-        text.addAttribute(NSForegroundColorAttributeName, value: UIColor.white, range: NSMakeRange(0, text.length))
+        text.addAttribute(NSForegroundColorAttributeName, value: UIColor(netHex: 0xe9edef), range: NSRange(location: 183, length: 24))
+        text.addAttribute(NSForegroundColorAttributeName, value: UIColor(netHex: 0x000010), range: NSMakeRange(0, text.length))
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         text.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSRange(location: 0, length: text.length))

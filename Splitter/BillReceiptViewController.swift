@@ -9,31 +9,64 @@
 import UIKit
 import CoreData
 
-class BillReceiptViewController: UIViewController {
+class BillReceiptViewController: UIViewController, UIGestureRecognizerDelegate {
     
-    var billObject: NSManagedObject!
     var bill: Bill!
     
+    @IBOutlet weak var billName: UILabel!
     @IBOutlet var receiptImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
+        billName.text = "\(bill.name!)"
+        billName.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.75)
         
-        do {
-            let results =
-                try managedContext.existingObject(with: billObject.objectID)
-            bill = results as! Bill
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
-        }
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(self.panGestureDetected))
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(self.pinchGestureDetected))
+        
+        pan.delegate = self
+        pinch.delegate = self
 
+        receiptImageView.isUserInteractionEnabled = true
         receiptImageView.image = UIImage(data:bill.image as! Data, scale:1.0)
+        receiptImageView.addGestureRecognizer(pan)
+        receiptImageView.addGestureRecognizer(pinch)
         
-        self.navigationItem.title = "\(bill.name!) receipt image"
-
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let destinationVC = segue.destination as! BillViewController
+        
+        destinationVC.bill = bill
+        destinationVC.billName = bill.name
+    }
+    
+    @IBAction func backButtonWasPressed(_ sender: UIButton) {
+        
+        performSegue(withIdentifier: "segueBackToBill", sender: self)
+    }
+    
+    func panGestureDetected(_ recognizer: UIPanGestureRecognizer) {
+        let state: UIGestureRecognizerState = recognizer.state
+        if state == .began || state == .changed {
+            let translation: CGPoint = recognizer.translation(in: recognizer.view)
+            recognizer.view?.transform = (recognizer.view?.transform.translatedBy(x: translation.x, y: translation.y))!
+            recognizer.setTranslation(CGPoint.zero, in: recognizer.view)
+        }
+    }
+    
+    func pinchGestureDetected(_ recognizer: UIPinchGestureRecognizer) {
+        let state: UIGestureRecognizerState = recognizer.state
+        if state == .began || state == .changed {
+            let scale: CGFloat = recognizer.scale
+            recognizer.view?.transform = (recognizer.view?.transform.scaledBy(x: scale, y: scale))!
+            recognizer.scale = 1.0
+        }
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
 }

@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import GooglePlaces
 import Stripe
+import IQKeyboardManagerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         GMSPlacesClient.provideAPIKey("AIzaSyAf5JUVLvrHcbMOz8pFlr2HfMD1D00YTxg")
         STPPaymentConfiguration.shared().publishableKey = "pk_test_bht7OWsPB2c1zD1vY8qkDVwa"
+        IQKeyboardManager.sharedManager().enable = true
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)

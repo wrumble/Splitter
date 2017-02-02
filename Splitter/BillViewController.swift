@@ -15,27 +15,52 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var billName: String!
     var allItems: [Item]!
     
+
+    @IBOutlet weak var billNameLabel: UILabel!
     @IBOutlet var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        billNameLabel.text = "\(billName!)"
+        billNameLabel.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.75)
         fetchBillItems()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         if segue.identifier == "segueToReceiptImage" {
-            let destinationVC = segue.destination as! BillReceiptViewController
-            let passedBill: NSManagedObject = bill as NSManagedObject
             
-            destinationVC.billObject = passedBill
+            let destinationVC = segue.destination as! BillReceiptViewController
+            
+            destinationVC.bill = bill as! Bill
+            
         } else if segue.identifier == "segueToBillSplitters" {
+            
+            var allBillSplitters = [BillSplitter]()
+            
+            let managedContext = bill.managedObjectContext
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BillSplitter")
+            let predicate = NSPredicate(format: "ANY bills == %@", bill)
+            let sortDescriptor = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
+            
+            fetchRequest.sortDescriptors = [sortDescriptor]
+            fetchRequest.predicate = predicate
+            
+            do {
+                let results =
+                    try managedContext!.fetch(fetchRequest)
+                allBillSplitters = results as! [BillSplitter]
+            } catch let error as NSError {
+                print("Could not fetch \(error), \(error.userInfo)")
+            }
+            
             let destinationVC = segue.destination as! BillSplittersViewController
             let passedBill: NSManagedObject = bill as NSManagedObject
             
             destinationVC.billName = billName
             destinationVC.bill = passedBill
+            destinationVC.allBillSplitters = allBillSplitters
         }
     }
     
@@ -49,6 +74,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let itemPrice = alertControllerView?.viewWithTag(2) as! UITextField
         let itemQuantityText = alertControllerView?.viewWithTag(3) as! UITextField
         
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
             let itemQuantity: Int
             
@@ -69,11 +95,8 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.tableView.reloadData()
         })
         
-        
-        alertController.addAction(okAction)
-            
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
         
         present(alertController, animated: true, completion: nil)
     }
@@ -111,10 +134,9 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         let item = allItems[indexPath.row]
-        
         let alertController = createEditItemAlertSubView()
-        
         let alertControllerView = alertController.view.viewWithTag(0)
         
         let itemName = alertControllerView?.viewWithTag(1) as! UITextField
@@ -123,6 +145,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         itemName.text = item.name
         itemPrice.text = String(item.price)
         
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
             
             self.updateEditedItem(indexPath: indexPath, itemName: itemName.text!, itemPrice: Double(itemPrice.text!)!)
@@ -130,13 +153,10 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.tableView.reloadData()
         })
         
+        alertController.addAction(cancelAction)
         alertController.addAction(okAction)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        
         present(alertController, animated: true, completion: nil)
-        
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {

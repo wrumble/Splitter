@@ -14,7 +14,6 @@ import NVActivityIndicatorView
 import DeviceKit
 import AVFoundation
 
-@available(iOS 10.0, *)
 class InitialRegistrationViewController: UIViewController, UINavigationControllerDelegate,  UIImagePickerControllerDelegate, NVActivityIndicatorViewable {
     
     var session: AVCaptureSession?
@@ -41,7 +40,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        firstNameTextField.text = "Scodftt"
         lastNameTextField.text = "Stumfble"
         dobTextField.text = "20/02/1985"
         emailTextField.text = "ben@sdf.com"
@@ -54,49 +52,19 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         addTextFieldTargets()
     }
     
-    func keyboardWillShow(notification: NSNotification) {
-        
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0{
-                self.view.frame.origin.y -= keyboardSize.height - quantity
-            }
-        }
-        
-    }
-    
-    func keyboardWillHide(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y != 0 {
-                self.view.frame.origin.y += keyboardSize.height - quantity
-            }
-        }
-    }
     
     func addTextFieldTargets() {
         firstNameTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
-//        firstNameTextField.addTarget(self, action: #selector(capturePhoto), for: .editingDidEnd)
+        firstNameTextField.addTarget(self, action: #selector(capturePhoto), for: .editingDidEnd)
         lastNameTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         dobTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         addressLine1TextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         cityTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
         postCodeTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
-        postCodeTextField.addTarget(self, action: #selector(moveScreen), for: .allEditingEvents)
         postCodeTextField.addTarget(self, action: #selector(checkPostCodeField), for: .editingDidEnd)
         emailTextField.addTarget(self, action: #selector(checkEmailField), for: .editingDidEnd)
         emailTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
     }
-    
-    func moveScreen() {
-        let device = Device()
-
-        if device == .iPhone4 || device == .iPhone4s { quantity = 100 }
-        
-        if device == .iPhone4 || device == .iPhone4s || device == .iPhone5 || device == .iPhone5c || device == .iPhone5s {
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        }
-    }
-    
     
     func checkFields(sender: UITextField) {
         sender.text = sender.text?.trimmingCharacters(in: CharacterSet.whitespaces)
@@ -121,7 +89,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
             let alert = UIAlertController(title: "Please Enter Valid Email Address", message: nil, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
-            
+            emailTextField.becomeFirstResponder()
         }
     }
 
@@ -133,13 +101,14 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
             let alert = UIAlertController(title: "Please Enter Valid Post Code", message: nil, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
+            postCodeTextField.becomeFirstResponder()
         }
     }
     
     func createNextButton() {
         let width = UIScreen.main.bounds.width
         let button: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: width, height: 50))
-        button.backgroundColor = UIColor.black
+        button.backgroundColor = UIColor(netHex: 0x000010)
         let title = NSAttributedString(string: "Next", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName : UIFont.systemFont(ofSize: 17.0)])
         button.setAttributedTitle(title, for: .normal)
         button.addTarget(self, action: #selector(nextButtonWasPressed), for: .touchUpInside)
@@ -229,14 +198,14 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         let entity =  NSEntityDescription.entity(forEntityName: "BillSplitter", in: managedContext)
         let mainBillSplitter = NSManagedObject(entity: entity!, insertInto: managedContext)
         let name = "\(firstNameTextField.text!) \(lastNameTextField.text!)"
-//        let imageData = UIImageJPEGRepresentation(profileImage.image!, 0.5)
+        let imageData = UIImageJPEGRepresentation(profileImage.image!, 0.5)
 
         mainBillSplitter.setValue(name, forKey: "name")
         mainBillSplitter.setValue(emailTextField.text, forKey: "email")
         mainBillSplitter.setValue(stripeAccountID, forKey: "accountID")
         mainBillSplitter.setValue(true, forKey: "isMainBillSplitter")
         mainBillSplitter.setValue(true, forKey: "hasPaid")
-//        mainBillSplitter.setValue(imageData, forKey: "image")
+        mainBillSplitter.setValue(imageData, forKey: "image")
         
         
         do {
@@ -283,17 +252,17 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     }
 
     
-//    func capturePhoto() {
-//        if let videoConnection = stillImageOutput!.connection(withMediaType: AVMediaTypeVideo) {
-//            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { (sampleBuffer, error) -> Void in
-//                if sampleBuffer != nil {
-//                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
-//                    let dataProvider = CGDataProvider(data: imageData as! CFData)
-//                    let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
-//                    let image = UIImage(cgImage: cgImageRef!, scale: 1.0, orientation: UIImageOrientation.right)
-//                    self.profileImage.image = image
-//                }
-//            })
-//        }
-//    }
+    func capturePhoto() {
+        if let videoConnection = stillImageOutput!.connection(withMediaType: AVMediaTypeVideo) {
+            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { (sampleBuffer, error) -> Void in
+                if sampleBuffer != nil {
+                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
+                    let dataProvider = CGDataProvider(data: imageData as! CFData)
+                    let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
+                    let image = UIImage(cgImage: cgImageRef!, scale: 1.0, orientation: UIImageOrientation.right)
+                    self.profileImage.image = image
+                }
+            })
+        }
+    }
 }

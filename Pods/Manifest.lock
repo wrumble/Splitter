@@ -26,6 +26,8 @@ PODS:
     - GooglePlaces (= 2.1.1)
   - GooglePlaces (2.1.1):
     - GoogleMaps/Base (= 2.1.1)
+  - iCarousel (1.8.3)
+  - IQKeyboardManagerSwift (4.0.7)
   - NVActivityIndicatorView (3.0)
   - Stripe (9.2.0)
   - TesseractOCRiOS (4.0.0)
@@ -38,6 +40,8 @@ DEPENDENCIES:
   - GoogleMaps
   - GooglePlacePicker
   - GooglePlaces
+  - iCarousel
+  - IQKeyboardManagerSwift
   - NVActivityIndicatorView
   - Stripe
   - TesseractOCRiOS (= 4.0.0)
@@ -60,11 +64,13 @@ SPEC CHECKSUMS:
   GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
   GooglePlacePicker: 665f39f931f2df32f9dd3fcc45f7e8abf71e535c
   GooglePlaces: 35636d86e5020cba3856eb988c09a5491de0a65a
+  iCarousel: d782f635afac190c49bb8ee455882284cff8b85f
+  IQKeyboardManagerSwift: 58bbcf46b5cf9fd4ed625d28a60cb2fbae4ab0f4
   NVActivityIndicatorView: 81953b5e65093ba79edf4fe7268e002039ca5268
   Stripe: a47770e82db059d0e7e160f9aabc2997055ee911
   TesseractOCRiOS: 90638afbe43d082433f2e76b384c7901d23956df
   WDImagePicker: 0014e231d67a63db9a97db74332a8a16723809bc
 
-PODFILE CHECKSUM: c3346bf01e101361e6f57bc94d9019c32f3fc287
+PODFILE CHECKSUM: bf4faf006feeaa2becef1ed3be2b7aaafa769bc3
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.0
