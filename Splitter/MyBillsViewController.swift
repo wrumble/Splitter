@@ -31,9 +31,9 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         
         splitterTitleLabel.text = "Splitter"
         splitterTitleLabel.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.75)
-        
+
         if allBills.count < 3 {
-            carousel.type = .coverFlow
+            carousel.type = .linear
         } else {
             carousel.type = .cylinder
             carousel.contentOffset = CGSize(width: 0, height: height * -0.67)
@@ -47,6 +47,9 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
             let noBillsLabel = UILabel(frame: CGRect(x: 5, y: 0, width: carousel.frame.width - 5, height: carousel.frame.height))
             noBillsLabel.text = "You have no bills to split yet. Tap the plus icon to start splitting a new bill."
             noBillsLabel.textAlignment = .center
+            noBillsLabel.numberOfLines = 0
+            view.addSubview(noBillsLabel)
+            view.setNeedsDisplay()
         }
         
         carousel.reloadData()
@@ -220,6 +223,7 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
                 if self.allBills.count < 3 { self.carousel.type = .coverFlow }
                 self.carousel.reloadData()
+                self.view.setNeedsDisplay()
                 self.carousel.scroll(byNumberOfItems: self.allBills.count, duration: 1.5)
             })
             alert.addAction(noAction)
