@@ -33,14 +33,13 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         splitterTitleLabel.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.75)
 
         if allBills.count < 3 {
-            carousel.type = .linear
+            carousel.type = .coverFlow2
         } else {
             carousel.type = .cylinder
             carousel.contentOffset = CGSize(width: 0, height: height * -0.67)
             carousel.viewpointOffset = CGSize(width: 0, height: height * -0.7)
         }
         
-        carousel.bounces = true
         carousel.isPagingEnabled = true
         
         if allBills.count == 0 {

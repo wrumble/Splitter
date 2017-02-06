@@ -20,6 +20,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
     var carouselIndex: Int!
     var isEditingSplitter = false
     var itemIndex: Int?
+    var mainBillSplitterItems: [Item]!
 
     @IBOutlet weak var billNameLabel: UILabel!
     @IBOutlet var carousel: iCarousel!
@@ -43,7 +44,6 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
             carousel.viewpointOffset = CGSize(width: 0, height: height * -0.7)
         }
         
-        carousel.bounces = true
         carousel.isPagingEnabled = true
         carousel.reloadData()
     }
@@ -206,9 +206,11 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         tableView.register(SplitterCarouselItemTableViewCell.classForCoder(), forCellReuseIdentifier: "splitterCarouselItemTableViewCell")
         
         let cell: SplitterCarouselItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: "splitterCarouselItemTableViewCell") as! SplitterCarouselItemTableViewCell
-        let itemsSet = allBillSplitters[tableView.tag].items
-        let items = itemsSet?.allObjects as! [Item]
-        let item = items[indexPath.row]
+        var item = ((allBillSplitters[tableView.tag].items)?.allObjects as! [Item])[indexPath.row]
+        if allBillSplitters[tableView.tag].isMainBillSplitter {
+            getMainBillSplitterItems(splitter: allBillSplitters[tableView.tag])
+            item = mainBillSplitterItems[indexPath.row]
+        }
         let count = item.billSplitters?.count
         
         cell.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.3)
@@ -279,6 +281,22 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         }
         catch let error as NSError {
             print("Core Data save failed: \(error)")
+        }
+    }
+    
+    func getMainBillSplitterItems(splitter: BillSplitter) {
+     
+        let managedContext = splitter.managedObjectContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
+        
+        fetchRequest.predicate = NSPredicate(format: "bill == %@", bill)
+        
+        do {
+            let results =
+                try managedContext!.fetch(fetchRequest)
+            mainBillSplitterItems = results as! [Item]
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
         }
     }
 }

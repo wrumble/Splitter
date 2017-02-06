@@ -208,7 +208,11 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
     @IBAction func saveButtonWasPressed() {
         
         DispatchQueue.global(qos: .background).async { [weak weakSelf = self] in
+            
             let managedContext = weakSelf?.bill.managedObjectContext
+            let notificationCenter = NotificationCenter.default
+
+            notificationCenter.addObserver(self, selector: #selector(weakSelf?.managedContextDidSave), name: NSNotification.Name.NSManagedObjectContextDidSave, object: managedContext)
             
             if let splitter = weakSelf?.splitter {
                 splitter.mutableSetValue(forKey: "items").removeAllObjects()
@@ -229,12 +233,15 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
                 print("Core Data save failed: \(error)")
             }
             
-            DispatchQueue.main.async { [weak weakSelf = self] in
-                guard let weakSelf = weakSelf else { return }
-                weakSelf.performSegue(withIdentifier: "segueToBillSplitters", sender: self)
-            }
         }
         
+    }
+    
+    func managedContextDidSave() {
+        DispatchQueue.main.async { [weak weakSelf = self] in
+            guard let weakSelf = weakSelf else { return }
+            weakSelf.performSegue(withIdentifier: "segueToBillSplitters", sender: self)
+        }
     }
     
     func setSelectedItemsToBillSplitter(_ splitterObject: NSManagedObject) {

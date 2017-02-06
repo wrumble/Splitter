@@ -21,6 +21,8 @@ class SplitterCarouselItemTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: "splitterCarouselItemTableViewCell")
         
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
         let width = Int(contentView.bounds.width)
         let height = Int(contentView.bounds.height)
 
