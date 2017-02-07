@@ -29,6 +29,8 @@ PODS:
   - iCarousel (1.8.3)
   - IQKeyboardManagerSwift (4.0.7)
   - NVActivityIndicatorView (3.0)
+  - SCLAlertView (0.7.0)
+  - SnapKit (3.0.2)
   - Stripe (9.2.0)
   - TesseractOCRiOS (4.0.0)
   - WDImagePicker (0.2.2)
@@ -43,6 +45,8 @@ DEPENDENCIES:
   - iCarousel
   - IQKeyboardManagerSwift
   - NVActivityIndicatorView
+  - SCLAlertView
+  - SnapKit
   - Stripe
   - TesseractOCRiOS (= 4.0.0)
   - WDImagePicker (from `https://github.com/justwudi/WDImagePicker.git`, tag `0.2.2`)
@@ -67,10 +71,12 @@ SPEC CHECKSUMS:
   iCarousel: d782f635afac190c49bb8ee455882284cff8b85f
   IQKeyboardManagerSwift: 58bbcf46b5cf9fd4ed625d28a60cb2fbae4ab0f4
   NVActivityIndicatorView: 81953b5e65093ba79edf4fe7268e002039ca5268
+  SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
+  SnapKit: 2e456761aa92d4d4067a7a5594c18769d451a8ad
   Stripe: a47770e82db059d0e7e160f9aabc2997055ee911
   TesseractOCRiOS: 90638afbe43d082433f2e76b384c7901d23956df
   WDImagePicker: 0014e231d67a63db9a97db74332a8a16723809bc
 
-PODFILE CHECKSUM: bf4faf006feeaa2becef1ed3be2b7aaafa769bc3
+PODFILE CHECKSUM: d0190cc0cf31aa143a844b335298234cc09b1ed1
 
 COCOAPODS: 1.2.0

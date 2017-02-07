@@ -74,7 +74,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let itemPrice = alertControllerView?.viewWithTag(2) as! UITextField
         let itemQuantityText = alertControllerView?.viewWithTag(3) as! UITextField
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
             let itemQuantity: Int
             
@@ -128,7 +128,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let item = allItems[indexPath.row]
         
         cell.name.text = item.name
-        cell.price.text = "£\(item.price)"
+        cell.price.text = "\(item.price.asLocalCurrency)"
         
         return cell
     }
@@ -257,7 +257,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         itemPrice.placeholder = "Item Price"
         itemPrice.borderStyle = .roundedRect
         itemPrice.keyboardAppearance = .alert
-        itemPrice.keyboardType = UIKeyboardType.numberPad
+        itemPrice.keyboardType = .numbersAndPunctuation
         itemPrice.tag = 2
         itemPrice.delegate = self
         view.addSubview(itemPrice)
@@ -266,7 +266,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         itemQuantity.placeholder = "Item Quantity"
         itemQuantity.borderStyle = .roundedRect
         itemQuantity.keyboardAppearance = .alert
-        itemQuantity.keyboardType = UIKeyboardType.numberPad
+        itemQuantity.keyboardType = .numberPad
         itemQuantity.tag = 3
         itemQuantity.delegate = self
         view.addSubview(itemQuantity)
@@ -280,10 +280,10 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func createEditItemAlertSubView() -> UIAlertController {
         
-        let view = UIView(frame: CGRect(x: CGFloat(0), y: CGFloat(50), width: CGFloat(250), height: CGFloat(100)))
+        let view = UIView(frame: CGRect(x: CGFloat(0), y: CGFloat(45), width: CGFloat(250), height: CGFloat(60)))
         view.tag = 0
         
-        let itemName = UITextField(frame: CGRect(x: CGFloat(10), y: CGFloat(0), width: CGFloat(252), height: CGFloat(25)))
+        let itemName = UITextField(frame: CGRect(x: CGFloat(5), y: CGFloat(0), width: CGFloat(252), height: CGFloat(25)))
         itemName.borderStyle = .roundedRect
         itemName.placeholder = "Item Name"
         itemName.keyboardAppearance = .alert
@@ -291,7 +291,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         itemName.delegate = self
         view.addSubview(itemName)
         
-        let itemPrice = UITextField(frame: CGRect(x: CGFloat(10), y: CGFloat(30), width: CGFloat(252), height: CGFloat(25)))
+        let itemPrice = UITextField(frame: CGRect(x: CGFloat(5), y: CGFloat(30), width: CGFloat(252), height: CGFloat(25)))
         itemPrice.placeholder = "Item Price"
         itemPrice.borderStyle = .roundedRect
         itemPrice.keyboardAppearance = .alert

@@ -21,22 +21,26 @@ class SplitterCarouselItemTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: "splitterCarouselItemTableViewCell")
         
-        self.translatesAutoresizingMaskIntoConstraints = false
+        self.setupViews()
+    }
+    
+    func setupViews() {
         
-        let width = Int(contentView.bounds.width)
-        let height = Int(contentView.bounds.height)
-
+        let width = Int(UIScreen.main.bounds.width * 0.88)
+        let height = Int(self.bounds.height)
+        
+        self.selectionStyle = .none
+        self.backgroundColor = .clear
+        self.frame = CGRect(x: 0, y: 0, width: width, height: 45)
+        
         view = UIView(frame: CGRect(x: 0, y: 2, width: width, height: height - 4 ))
         view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         
-        let viewHeight = Int(view.bounds.height)
-        let viewWidth = Int(view.bounds.width)
-        
-        price = UILabel(frame: CGRect(x: viewWidth - 85, y: 0, width: 85, height: viewHeight))
+        price = UILabel()
         price.font = UIFont.systemFont(ofSize: 15.0)
-        price.textAlignment = .left
+        price.textAlignment = .right
         
-        name = UILabel(frame: CGRect(x: 5, y: 0, width: width, height: viewHeight))
+        name = UILabel()
         name.font = UIFont.systemFont(ofSize: 15.0)
         name.numberOfLines = 0
         

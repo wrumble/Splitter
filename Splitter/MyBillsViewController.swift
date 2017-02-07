@@ -99,8 +99,14 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         let billView = SplitterCarouselItemView(frame: CGRect(x: 0, y: 0, width: width, height: height))
         let viewWidth = Int(billView.frame.width)
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yy"
+        let dateText = dateFormatter.string(from: allBills[index].date! as Date)
+        let dateTextWidth = String(describing: dateText).widthWithConstrainedHeight(height: 20, font: UIFont.systemFont(ofSize: 15))
+        
         let nameLabel = SplitterCarouselItemNameLabel(frame: CGRect(x: 5, y: 10, width: viewWidth - 48, height: 40))
-        let locationLabel = SplitterCarouselItemEmailLabel(frame: CGRect(x: 5, y: 50, width: viewWidth, height: 20))
+        let locationLabel = SplitterCarouselItemEmailLabel(frame: CGRect(x: 5, y: 50, width: viewWidth - Int(dateTextWidth - 5), height: 20))
+        let dateLabel = CarouselItemDateLabel(frame: CGRect(x: CGFloat(viewWidth) - dateTextWidth - 5, y: 50, width: dateTextWidth, height: 20))
         let editButton = SplitterCarouselEditButton(frame: CGRect(x: viewWidth - 48, y: 5, width: 45, height: 45))
         editButton.tag = index
         editButton.addTarget(self, action: #selector(editButtonWasPressed), for: .touchUpInside)
@@ -120,14 +126,16 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         
         billView.addSubview(nameLabel)
         billView.addSubview(locationLabel)
+        billView.addSubview(dateLabel)
         billView.addSubview(editButton)
         billView.addSubview(tableView)
         billView.addSubview(splitButton)
         
         nameLabel.text = "\(allBills[index].name!)"
         locationLabel.text = "\(allBills[index].location!)"
+        dateLabel.text = "\(dateText)"
         
-        splitButton.setTitle("Split £\(allBills[index].total)", for: .normal)
+        splitButton.setTitle("Split \(allBills[index].total.asLocalCurrency)", for: .normal)
         
         return billView
     }
@@ -247,22 +255,20 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.register(SplitterCarouselItemTableViewCell.classForCoder(), forCellReuseIdentifier: "splitterCarouselItemTableViewCell")
         
         let cell: SplitterCarouselItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: "splitterCarouselItemTableViewCell") as! SplitterCarouselItemTableViewCell
-        let itemsSet = allBills[carouselIndex].items
-        let items = itemsSet?.allObjects as! [Item]
-        let item = items[indexPath.row]
-        let count = item.billSplitters?.count
+        let item = ((allBills[carouselIndex].items)?.allObjects as! [Item])[indexPath.row]
+                
+        cell.name!.text = item.name!
+        cell.price!.text = "\(item.price.asLocalCurrency)"
         
-        cell.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.3)
+        let cellWidth = cell.frame.width
+        let textWidth = cell.price.text?.widthWithConstrainedHeight(height: cell.view.frame.height, font: UIFont.systemFont(ofSize: 15))
+        let height = cell.view.frame.height - 4
+        let priceWidth = cellWidth - textWidth! - 5
+        let nameWidth = priceWidth - 5
         
-        if count! > 1 {
-            cell.name!.text = "\(item.name!)\nsplit \(count!) ways"
-            cell.price!.text = "£\(Double(item.price)/Double(count!))"
-            
-        } else {
-            cell.name!.text = item.name!
-            cell.price!.text = "£\(item.price)"
-        }
-        cell.sizeToFit()
+        cell.price.frame = CGRect(x: priceWidth, y: 2, width: textWidth!, height: height)
+        cell.name.frame = CGRect(x: 5, y: 2, width: nameWidth, height: height)
+        
         return cell
     }
     

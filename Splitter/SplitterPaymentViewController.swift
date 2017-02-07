@@ -36,7 +36,7 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
         getAccountID()
         CardIOUtilities.preload()
         
-        payButton.setTitle("Pay £\(total)", for: UIControlState())
+        payButton.setTitle("Pay \(total.asLocalCurrency)", for: UIControlState())
         
         cardNumberTextField!.addTarget(self, action: #selector(SplitterPaymentViewController.cardNumberTextFieldWasTapped(_:)), for: UIControlEvents.touchDown)
         
@@ -146,7 +146,7 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
     }
     
     func handleSuccess() {
-        let alert = UIAlertController(title: "Payment Received", message: "Thanks!", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Success!", message: "You succesfully paid \(splitter.total.asLocalCurrency) to \(getMainSplitterName())'s bank account", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
             
             self.performSegue(withIdentifier: "segueToBillSplitters", sender: self)
@@ -158,23 +158,7 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueToBillSplitters" {
             
-            var allBillSplitters = [BillSplitter]()
-            
-            let managedContext = bill.managedObjectContext
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BillSplitter")
-            let predicate = NSPredicate(format: "ANY bills == %@", bill)
-            let sortDescriptor = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
-            
-            fetchRequest.sortDescriptors = [sortDescriptor]
-            fetchRequest.predicate = predicate
-            
-            do {
-                let results =
-                    try managedContext!.fetch(fetchRequest)
-                allBillSplitters = results as! [BillSplitter]
-            } catch let error as NSError {
-                print("Could not fetch \(error), \(error.userInfo)")
-            }
+            var allBillSplitters = getAllSplitters()
             
             let destinationVC = segue.destination as! BillSplittersViewController
             let passedBill: NSManagedObject = bill as NSManagedObject
@@ -184,5 +168,35 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
             destinationVC.bill = passedBill
             destinationVC.allBillSplitters = allBillSplitters
         }
+    }
+    
+    func getAllSplitters() -> [BillSplitter] {
+        var allBillSplitters = [BillSplitter]()
+        
+        let managedContext = bill.managedObjectContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BillSplitter")
+        let predicate = NSPredicate(format: "ANY bills == %@", bill)
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
+        
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        fetchRequest.predicate = predicate
+        
+        do {
+            let results =
+                try managedContext!.fetch(fetchRequest)
+            allBillSplitters = results as! [BillSplitter]
+        } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+        }
+        return allBillSplitters
+    }
+    
+    func getMainSplitterName() -> String {
+        var name = String()
+        getAllSplitters().forEach { splitter in
+            if splitter.isMainBillSplitter { name = splitter.name! }
+        }
+        
+        return name
     }
 }

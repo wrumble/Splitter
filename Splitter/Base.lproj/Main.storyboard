@@ -11,7 +11,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="Soviet Style.ttf">
+        <array key="SovietStyle.ttf">
             <string>SovietStyle</string>
         </array>
     </customFonts>
@@ -42,9 +42,9 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Sd-Qi-xbP">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iXq-bQ-O75">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iXq-bQ-O75">
                                                 <rect key="frame" x="0.0" y="10" width="375" height="30"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                                <fontDescription key="fontDescription" name="SovietStyle" family="Soviet Style" pointSize="33"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -1402,8 +1402,8 @@
         <image name="scissorIconWhite" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dQC-F4-3d7"/>
+        <segue reference="Oz6-dd-x1Q"/>
+        <segue reference="hEp-Gc-gNG"/>
         <segue reference="fP8-O7-qcm"/>
-        <segue reference="959-yl-2K4"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -156,7 +156,7 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
         }
         
         cell.name.text = "\(item!.name!)\n\(sharedSplittersText)"
-        cell.price.text = "£\(item!.price)"
+        cell.price.text = "\(item!.price.asLocalCurrency)"
         cell.tintColor = .black
         
         if !checked[indexPath.row] {

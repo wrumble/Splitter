@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import iCarousel
+import SnapKit
 
 class BillSplittersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, iCarouselDataSource, iCarouselDelegate {
     
@@ -109,6 +110,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         let frame = CGRect(x: 0, y: 75, width: viewWidth, height: tableViewHeight)
         
         let tableView = SplitterCarouselItemTableView(frame: frame, style: .plain, splitter: splitter)
+        tableView.register(SplitterCarouselItemTableViewCell.classForCoder(), forCellReuseIdentifier: "splitterCarouselItemTableViewCell")
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tag = index
@@ -123,14 +125,14 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         nameLabel.text = "\(allBillSplitters[index].name!)"
         emailLabel.text = "\(allBillSplitters[index].email!)"
         
-        payButton.setTitle("Pay £\(allBillSplitters[index].total)", for: .normal)
+        payButton.setTitle("Pay \(allBillSplitters[index].total.asLocalCurrency)", for: .normal)
         
         if splitter.hasPaid && !splitter.isMainBillSplitter{
             payButton.setTitle("\(allBillSplitters[index].name!) has paid", for: .normal)
         } else if splitter.isMainBillSplitter {
             payButton.setTitle("\(allBillSplitters[index].name!) pays the server", for: .normal)
         }
-        
+
         return splitterView
     }
     
@@ -202,8 +204,6 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        tableView.register(SplitterCarouselItemTableViewCell.classForCoder(), forCellReuseIdentifier: "splitterCarouselItemTableViewCell")
         
         let cell: SplitterCarouselItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: "splitterCarouselItemTableViewCell") as! SplitterCarouselItemTableViewCell
         var item = ((allBillSplitters[tableView.tag].items)?.allObjects as! [Item])[indexPath.row]
@@ -211,18 +211,26 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
             getMainBillSplitterItems(splitter: allBillSplitters[tableView.tag])
             item = mainBillSplitterItems[indexPath.row]
         }
-        let count = item.billSplitters?.count
-        
-        cell.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.3)
-        
-        if count! > 1 {
-            cell.name!.text = "\(item.name!)\nsplit \(count!) ways"
-            cell.price!.text = "£\(Double(item.price)/Double(count!))"
+        let count = Double((item.billSplitters?.count)!)
+                        
+        if count > 1 {
+            cell.name!.text = "\(item.name!)\nsplit \(count) ways"
+            cell.price!.text = "\((item.price/count).asLocalCurrency)"
             
         } else {
             cell.name!.text = item.name!
-            cell.price!.text = "£\(item.price)"
+            cell.price!.text = "\(item.price.asLocalCurrency)"
         }
+        
+        let cellWidth = cell.frame.width
+        let textWidth = cell.price.text?.widthWithConstrainedHeight(height: cell.view.frame.height, font: UIFont.systemFont(ofSize: 15))
+        let height = cell.view.frame.height - 4
+        let priceWidth = cellWidth - textWidth! - 5
+        let nameWidth = priceWidth - 5
+        
+        cell.price.frame = CGRect(x: priceWidth, y: 2, width: textWidth!, height: height)
+        cell.name.frame = CGRect(x: 5, y: 2, width: nameWidth, height: height)
+        
         return cell
     }
     
@@ -298,19 +306,5 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
-    }
-}
-
-extension UIColor {
-    convenience init(red: Int, green: Int, blue: Int) {
-        assert(red >= 0 && red <= 255, "Invalid red component")
-        assert(green >= 0 && green <= 255, "Invalid green component")
-        assert(blue >= 0 && blue <= 255, "Invalid blue component")
-        
-        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
-    }
-    
-    convenience init(netHex:Int) {
-        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
     }
 }
