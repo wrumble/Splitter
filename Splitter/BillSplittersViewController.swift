@@ -9,7 +9,6 @@
 import UIKit
 import CoreData
 import iCarousel
-import SnapKit
 
 class BillSplittersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, iCarouselDataSource, iCarouselDelegate {
     
@@ -137,8 +136,8 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func carousel(_ carousel: iCarousel, valueFor option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
-        if allBillSplitters.count > 2 {
-            switch option {
+        
+        switch option {
             case .spacing:
                 return value * 1.05
             case .fadeMin:
@@ -149,9 +148,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
                 return 0.0
             default:
                 return value
-            }
         }
-        return value
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

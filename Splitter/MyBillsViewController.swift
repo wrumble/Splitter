@@ -33,7 +33,7 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         splitterTitleLabel.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.75)
 
         if allBills.count < 3 {
-            carousel.type = .coverFlow2
+            carousel.type = .coverFlow
         } else {
             carousel.type = .cylinder
             carousel.contentOffset = CGSize(width: 0, height: height * -0.67)
@@ -141,8 +141,8 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func carousel(_ carousel: iCarousel, valueFor option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
-        if allBills.count > 2 {
-            switch option {
+        
+        switch option {
             case .spacing:
                 return value * 1.05
             case .fadeMin:
@@ -153,9 +153,7 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
                 return 0.0
             default:
                 return value
-            }
         }
-        return value
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

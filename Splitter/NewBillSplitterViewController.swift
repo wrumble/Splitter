@@ -254,8 +254,8 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
         
     func setBillSplitterValues(_ splitterObject: NSManagedObject) {
         
-        splitterObject.setValue(billSplitterName?.text, forKey: "name")
-        splitterObject.setValue(billSplitterEmail?.text, forKey: "email")
+        splitterObject.setValue(billSplitterName?.text?.trim(), forKey: "name")
+        splitterObject.setValue(billSplitterEmail?.text?.trim(), forKey: "email")
         
         if splitter == nil {
             let currentBillSplitters = self.bill.mutableSetValue(forKey: "billSplitters")

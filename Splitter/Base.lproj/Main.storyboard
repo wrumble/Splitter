@@ -514,7 +514,7 @@
                                         <color key="backgroundColor" red="0.61960784310000006" green="0.81176470590000005" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.062745098040000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.062745098040000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -1212,7 +1212,7 @@
                                         <rect key="frame" x="0.0" y="2" width="375" height="46"/>
                                         <color key="backgroundColor" red="0.61960784310000006" green="0.81176470590000005" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.062745098040000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -1402,8 +1402,8 @@
         <image name="scissorIconWhite" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Oz6-dd-x1Q"/>
-        <segue reference="hEp-Gc-gNG"/>
+        <segue reference="959-yl-2K4"/>
         <segue reference="fP8-O7-qcm"/>
+        <segue reference="dQC-F4-3d7"/>
     </inferredMetricsTieBreakers>
 </document>

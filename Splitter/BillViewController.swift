@@ -205,7 +205,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let currentItems = self.bill.mutableSetValue(forKey: "items")
         currentItems.removeAllObjects()
         
-        allItems[indexPath.row].name = itemName
+        allItems[indexPath.row].name = itemName.trim()
         allItems[indexPath.row].price = itemPrice
         
         currentItems.addObjects(from: allItems)
@@ -227,7 +227,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let currentItems = self.bill.mutableSetValue(forKey: "items")
         let itemPriceNumber = priceFromString(itemStringPrice)
         
-        newItem.setValue(itemName, forKey: "name")
+        newItem.setValue(itemName.trim(), forKey: "name")
         newItem.setValue(itemPriceNumber, forKey: "price")
         currentItems.add(newItem)
         
@@ -249,6 +249,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         itemName.borderStyle = .roundedRect
         itemName.placeholder = "Item Name"
         itemName.keyboardAppearance = .alert
+        itemName.autocapitalizationType = .words
         itemName.tag = 1
         itemName.delegate = self
         view.addSubview(itemName)
@@ -287,6 +288,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         itemName.borderStyle = .roundedRect
         itemName.placeholder = "Item Name"
         itemName.keyboardAppearance = .alert
+        itemName.autocapitalizationType = .words
         itemName.tag = 1
         itemName.delegate = self
         view.addSubview(itemName)

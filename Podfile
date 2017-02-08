@@ -18,7 +18,6 @@ target 'Splitter' do
     pod 'iCarousel'
     pod 'IQKeyboardManagerSwift'
     pod 'SCLAlertView'
-    pod 'SnapKit'
 end
 
 post_install do |installer|

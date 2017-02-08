@@ -131,12 +131,12 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         let dob = self.dobTextField.text!.components(separatedBy: "/")
         let URL = "https://splitterstripeservertest.herokuapp.com/account"
         let params = [
-                    "first_name": firstNameTextField.text!,
-                    "last_name": lastNameTextField.text!,
-                    "line1": addressLine1TextField.text!,
-                    "city": cityTextField.text!,
-                    "postal_code": postCodeTextField.text!,
-                    "email": emailTextField.text!,
+                    "first_name": firstNameTextField.text!.trim(),
+                    "last_name": lastNameTextField.text!.trim(),
+                    "line1": addressLine1TextField.text!.trim(),
+                    "city": cityTextField.text!.trim(),
+                    "postal_code": postCodeTextField.text!.trim(),
+                    "email": emailTextField.text!.trim(),
                     "day": UInt(dob[0])! as UInt,
                     "month": UInt(dob[1])! as UInt,
                     "year": UInt(dob[2])! as UInt] as [String : Any]
@@ -206,8 +206,8 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
             mainBillSplitter.setValue(imageData, forKey: "image")
         }
 
-        mainBillSplitter.setValue(name, forKey: "name")
-        mainBillSplitter.setValue(emailTextField.text, forKey: "email")
+        mainBillSplitter.setValue(name.trim(), forKey: "name")
+        mainBillSplitter.setValue(emailTextField.text?.trim(), forKey: "email")
         mainBillSplitter.setValue(stripeAccountID, forKey: "accountID")
         mainBillSplitter.setValue(true, forKey: "isMainBillSplitter")
         mainBillSplitter.setValue(true, forKey: "hasPaid")

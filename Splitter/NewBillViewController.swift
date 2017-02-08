@@ -78,8 +78,8 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
             let newBillSplittersArray = newBill.mutableSetValue(forKey: "billSplitters")
             let imageData = UIImageJPEGRepresentation(image, 0.5)
             
-            newBill.setValue(self.billName?.text, forKey: "name")
-            newBill.setValue(self.billLocation?.text, forKey: "location")
+            newBill.setValue(self.billName?.text?.trim(), forKey: "name")
+            newBill.setValue(self.billLocation?.text?.trim(), forKey: "location")
             newBill.setValue(id, forKey: "id")
             newBill.setValue(imageData, forKey: "image")
             
