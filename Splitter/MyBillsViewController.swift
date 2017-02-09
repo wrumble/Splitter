@@ -12,6 +12,8 @@ import iCarousel
 
 class MyBillsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, iCarouselDataSource, iCarouselDelegate {
     
+    let coredataHelper = CoreDataHelper()
+    
     var allBills = [Bill]()
     var height: Double!
     var width: Double!
@@ -24,8 +26,8 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        getAllBills()
-        
+        allBills = coredataHelper.getAllBills()
+                
         height = Double(UIScreen.main.bounds.height) * 0.75
         width = Double(UIScreen.main.bounds.width) * 0.88
         
@@ -57,32 +59,6 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         carousel.scroll(byNumberOfItems: allBills.count, duration: 1.5)
-    }
-    
-    func getAllBills() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Bill")
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
-        
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        do {
-            let results =
-                try managedContext.fetch(fetchRequest)
-            allBills = results as! [Bill]
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
-        }
-        
-        if allBills.count > 0 {
-            setbillTotals()
-            do {
-                try managedContext.save()
-            } catch let error as NSError  {
-                print("Could not save \(error), \(error.userInfo)")
-            }
-        }
     }
     
     func numberOfItems(in carousel: iCarousel) -> Int {
@@ -296,18 +272,6 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
     func removeBill(_ bill: Bill) {
         if let index = allBills.index(of: bill) {
             allBills.remove(at: index)
-        }
-    }
-    
-    func setbillTotals() {
-        allBills.forEach { bill in
-            var total = Double()
-            let items = bill.items?.allObjects as! [Item]
-            items.forEach { item in
-                total += Double(item.price)
-            }
-            total = Double(round(100*total)/100)
-            bill.setValue(total, forKey: "total")
         }
     }
 }

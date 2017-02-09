@@ -21,6 +21,7 @@
 		680F528D1E27E2A6005786F1 /* Bill+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680F52871E27E2A6005786F1 /* Bill+CoreDataProperties.swift */; };
 		680F528E1E27E2A6005786F1 /* BillSplitter+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680F52881E27E2A6005786F1 /* BillSplitter+CoreDataClass.swift */; };
 		680F528F1E27E2A6005786F1 /* BillSplitter+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680F52891E27E2A6005786F1 /* BillSplitter+CoreDataProperties.swift */; };
+		68101FE11E4CB112002DA5CF /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FE01E4CB112002DA5CF /* CoreDataHelper.swift */; };
 		6845BDFB1E2426560099A2CD /* InitialRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6845BDFA1E2426560099A2CD /* InitialRegistrationViewController.swift */; };
 		6845F1971E2D000B00138C66 /* SovietStyle.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6845F1951E2CFE8400138C66 /* SovietStyle.ttf */; };
 		6845F19D1E2D212D00138C66 /* FinalRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6845F19C1E2D212D00138C66 /* FinalRegistrationViewController.swift */; };
@@ -73,6 +74,7 @@
 		680F52871E27E2A6005786F1 /* Bill+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bill+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		680F52881E27E2A6005786F1 /* BillSplitter+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BillSplitter+CoreDataClass.swift"; sourceTree = "<group>"; };
 		680F52891E27E2A6005786F1 /* BillSplitter+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BillSplitter+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		68101FE01E4CB112002DA5CF /* CoreDataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		6845BDFA1E2426560099A2CD /* InitialRegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialRegistrationViewController.swift; sourceTree = "<group>"; };
 		6845F1951E2CFE8400138C66 /* SovietStyle.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SovietStyle.ttf; path = ../SovietStyle.ttf; sourceTree = "<group>"; };
 		6845F19C1E2D212D00138C66 /* FinalRegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinalRegistrationViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				684C05D21E48ED4A0089D739 /* ColorHelper.swift */,
 				684C05D41E4A63F30089D739 /* StringWidthHelper.swift */,
 				684C05DA1E4A823C0089D739 /* CurrencyFormatHelper.swift */,
+				68101FE01E4CB112002DA5CF /* CoreDataHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -461,6 +464,7 @@
 				684C05DD1E4A908E0089D739 /* WhiteSpaceNewLineTrimmingHelper.swift in Sources */,
 				68C2819C1E37CB6500EA3848 /* SplitterCarouselItemEmailLabel.swift in Sources */,
 				68E29B321E008E5D001E887A /* ItemCell.swift in Sources */,
+				68101FE11E4CB112002DA5CF /* CoreDataHelper.swift in Sources */,
 				689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */,
 				680F528E1E27E2A6005786F1 /* BillSplitter+CoreDataClass.swift in Sources */,
 				684C05D51E4A63F30089D739 /* StringWidthHelper.swift in Sources */,
