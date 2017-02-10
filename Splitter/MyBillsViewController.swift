@@ -111,7 +111,7 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         locationLabel.text = "\(allBills[index].location!)"
         dateLabel.text = "\(dateText)"
         
-        splitButton.setTitle("Split \(allBills[index].total.asLocalCurrency)", for: .normal)
+        splitButton.setTitle("Split \(allBills[index].total())", for: .normal)
         
         return billView
     }

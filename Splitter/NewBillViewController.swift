@@ -70,7 +70,6 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         
         if let image = imageView.image {
             startAnimating()
-            let id = UUID().uuidString
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let managedContext = appDelegate.managedObjectContext
             let entity =  NSEntityDescription.entity(forEntityName: "Bill", in: managedContext)
@@ -80,7 +79,6 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
             
             newBill.setValue(self.billName?.text?.trim(), forKey: "name")
             newBill.setValue(self.billLocation?.text?.trim(), forKey: "location")
-            newBill.setValue(id, forKey: "id")
             newBill.setValue(imageData, forKey: "image")
             
             newBillSplittersArray.add(getMainBillSplitter())
