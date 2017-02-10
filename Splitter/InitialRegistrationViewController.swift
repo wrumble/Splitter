@@ -131,18 +131,17 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         showNextButton()
     }
     
-// MARK:
+// MARK: Check any fields if they contain a set format.
     func checkField(sender: UITextField) {
         
         var title:  String!
-        let message = ""
         
         // If textField is email then check it and present alertView if incorrect format entered.
         if sender.tag == 0 {
             
             if !checkTextField.email(sender: sender) {
                 title = "Please enter valid Email Address"
-                let alert = AlertHelper().warning(title: title, message: message, exit: false)
+                let alert = AlertHelper().warning(title: title, message: "", exit: false)
                 self.present(alert, animated: true, completion: nil)
             }
         // If textField is post code then check it and present alertView if incorrect format entered.
@@ -150,7 +149,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
             
             if !checkTextField.postCode(sender: sender) {
                 title = "Please enter valid Post Code"
-                let alert = AlertHelper().warning(title: title, message: message, exit: false)
+                let alert = AlertHelper().warning(title: title, message: "", exit: false)
                 self.present(alert, animated: true, completion: nil)
             }
         }

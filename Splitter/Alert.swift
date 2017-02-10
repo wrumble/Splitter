@@ -11,7 +11,7 @@ import UIKit
 class AlertHelper {
     
 // MARK: Create warning alert
-    func warning(title: String, message: String, exit: Bool) -> UIAlertController{
+    func warning(title: String, message: String?, exit: Bool) -> UIAlertController{
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction: UIAlertAction!
