@@ -16,7 +16,6 @@ import AVFoundation
 
 class InitialRegistrationViewController: UIViewController, UINavigationControllerDelegate, NVActivityIndicatorViewable {
     
-    let checkTextField = CheckTextField()
     let request = HttpRequest()
     let alert: AlertHelper! = nil
     
@@ -46,7 +45,8 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         addTextFieldTargets()
     }
 
-//MARK: Start profile photo session.
+//MARK: viewWillAppear
+//Start profile photo session.
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -63,7 +63,8 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         }
     }
     
-//MARK: Display a date picker for D.O.B textField.
+//MARK: datePicker
+//Display a date picker for D.O.B textField.
     @IBAction func datePicker(_ sender: UITextField) {
         let datePickerView  : UIDatePicker = UIDatePicker()
         datePickerView.datePickerMode = UIDatePickerMode.date
@@ -71,14 +72,16 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         datePickerView.addTarget(self, action: #selector(handleDatePicker), for: .valueChanged)
     }
     
-//MARK: Format datePicker selection
+//MARK: handleDatePicker
+//Format datePicker selection
     func handleDatePicker(sender: UIDatePicker) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
         dobTextField.text = dateFormatter.string(from: sender.date)
     }
     
-//MARK: Take sneaky profile photo after first name has been entered.
+//MARK: capturePhoto
+//Take sneaky profile photo after first name has been entered.
     func capturePhoto() {
         
         profilePhoto.capture(){(image: UIImage?) -> Void in
@@ -86,16 +89,18 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         }
     }
     
-// MARK: Add tags to textfields with consistencies that can be checked.
+// MARK: setTextFieldTags
+//Add tags to textfields with consistencies that can be checked.
     func setTextFieldTags() {
         emailTextField.tag = 0
         postCodeTextField.tag = 1
     }
     
-// MARK: Check if textfields are empy and have been filled in correctly.
+// MARK: addTextFieldTargets
+//Assign target functions to any textFields that need them.
     func addTextFieldTargets() {
         
-        // Check if each textField is emty.
+        // Check if each textField is empty.
         firstNameTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
         lastNameTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
         dobTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
@@ -113,7 +118,8 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     }
     
     
-// MARK: If textFields arent empty show the Next button.
+// MARK: isEmptyField
+//If textfields aren't empty and have been filled in correctly, show the Next button.
     func isEmptyField(sender: UITextField) {
         sender.text = sender.text?.trimmingCharacters(in: CharacterSet.whitespaces)
         guard
@@ -131,7 +137,8 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         showNextButton()
     }
     
-// MARK: Check any fields if they contain a set format.
+// MARK: checkField
+//Check any fields if they contain a set format.
     func checkField(sender: UITextField) {
         
         var title:  String!
@@ -139,7 +146,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         // If textField is email then check it and present alertView if incorrect format entered.
         if sender.tag == 0 {
             
-            if !checkTextField.email(sender: sender) {
+            if !CheckTextField().email(sender: sender) {
                 title = "Please enter valid Email Address"
                 let alert = AlertHelper().warning(title: title, message: "", exit: false)
                 self.present(alert, animated: true, completion: nil)
@@ -147,7 +154,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         // If textField is post code then check it and present alertView if incorrect format entered.
         } else if sender.tag == 1 {
             
-            if !checkTextField.postCode(sender: sender) {
+            if !CheckTextField().postCode(sender: sender) {
                 title = "Please enter valid Post Code"
                 let alert = AlertHelper().warning(title: title, message: "", exit: false)
                 self.present(alert, animated: true, completion: nil)
@@ -155,25 +162,29 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         }
     }
     
-//MARK: Show next button once all fields contain text.
+//MARK: showNextButton
+//Show next button once all fields contain text.
     func showNextButton() {
-        let button = NextButton()
+        let button = RegistrationButton(title: "Next")
         button.addTarget(self, action: #selector(nextButtonWasPressed), for: .touchUpInside)
         bottomView.addSubview(button)
     }
     
-//MARK: Hides keyboard when tapping anywhere other than a textfield.
+//MARK: dismissKeyboard
+//Hides keyboard when tapping anywhere other than a textfield.
     func dismissKeyboard() {
         view.endEditing(true)
     }
     
-//MARK: Starts a custom activity indicator(NVActivityIndicatorView) then calls create account request.
+//MARK: nextButtonWasPressed
+//Starts a custom activity indicator(NVActivityIndicatorView) then calls create account request.
     @IBAction func nextButtonWasPressed(sender: UIButton) {
         startAnimating(message: "Saving")
         createAccount()
     }
     
-//MARK: Create params to send with api request to Stripe.
+//MARK: setParams
+//Create params to send with api request to Stripe.
     func setParams() -> [String : Any] {
         
         // Seperate Date of birth into day month and year as Stripe requires this format.
@@ -192,7 +203,8 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         return params
     }
     
-//MARK: Make request to Stripe to create a connect account.
+//MARK: createAccount
+//Make request to Stripe to create a connect account.
     func createAccount() {
         
         request.post(params: self.setParams(), URLExtension: "account",
@@ -206,7 +218,8 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         })
     }
     
-//MARK: If api request is successful then save received account id, stop activity indicator and move onto next step in creating account.
+//MARK: successfulRequest
+//If api request is successful then save received account id, stop activity indicator and move onto next step in creating account.
     func successfulRequest(response: AnyObject) {
         self.stripeAccountID = response["id"] as! String
         createMainBillSplitter()
@@ -214,14 +227,16 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         performSegue(withIdentifier: "segueToFinalRegistrationViewController", sender: self)
     }
     
-//MARK: If api request fails, then create an alert view with reason why.
+//MARK: failedRequest
+//If api request fails, then create an alert view with reason why.
     func failedRequest(response: AnyObject) {
         self.stopAnimating()
         let alert = request.handleError(response["failed"] as! NSError)
         self.present(alert, animated: true, completion: nil)
     }
     
-//MARK: Prepare dictionary of splitter values to be saved.
+//MARK: setmainBillSplitterValues
+//Prepare dictionary of splitter values to be saved.
     func setmainBillSplitterValues() -> [String: Any] {
         
         let name = "\(firstNameTextField.text!) \(lastNameTextField.text!)"
@@ -238,7 +253,8 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         return values
     }
 
-//MARK: If the api call is succesful then create and save the main bill splitter for the rest of the app.
+//MARK: createMainBillSplitter
+//If the api call is succesful then create and save the main bill splitter for the rest of the app.
     func createMainBillSplitter() {
         
         let context = UIApplication.shared.delegate as! AppDelegate

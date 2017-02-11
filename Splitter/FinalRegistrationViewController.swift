@@ -26,43 +26,58 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setTextFieldTags()
         addTextFieldTargets()
-                
+        
+        // Hides keyboard when tapping anywhere other than a textfield.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FinalRegistrationViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
     }
     
+// MARK: setTextFieldTags
+//Add tags to textfields with consistencies that can be checked.
+    func setTextFieldTags() {
+        accountNumberTextField.tag = 0
+        sortCodeTextField.tag = 1
+    }
+// MARK: addTextFieldTargets
+//Assign target functions to any textFields that need them.
     func addTextFieldTargets() {
-        accountNumberTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
-        accountNumberTextField.addTarget(self, action: #selector(checkAccountNumber), for: .editingDidEnd)
-        sortCodeTextField.addTarget(self, action: #selector(checkSortCode), for: .editingDidEnd)
-        sortCodeTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
+        accountNumberTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
+        sortCodeTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
+        accountNumberTextField.addTarget(self, action: #selector(checkField), for: .editingDidEnd)
+        sortCodeTextField.addTarget(self, action: #selector(checkField), for: .editingDidEnd)
     }
     
-    func checkSortCode(sender: UITextField) {
+// MARK: checkField
+//Check any fields if they contain a set format.
+    func checkField(sender: UITextField) {
         
-        let sortCodeReg = "^[0-9]{6,6}$"
-        let sortCodeTest = NSPredicate(format: "SELF MATCHES %@", sortCodeReg)
-        if sortCodeTest.evaluate(with: sender.text) == false {
-            let alert = UIAlertController(title: "Please enter a valid Sort Code", message: nil, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-            sortCodeTextField.becomeFirstResponder()
+        var title:  String!
+        
+        // If textField is account number then check it and present alertView if incorrect format entered.
+        if sender.tag == 0 {
+            
+            if !CheckTextField().accountNumber(sender: sender) {
+                title = "Please enter a valid Account Number"
+                let message = "If your account number is 7 digits long please add a 0 to the beginning."
+                let alert = AlertHelper().warning(title: title, message: message, exit: false)
+                self.present(alert, animated: true, completion: nil)
+            }
+            // If textField is sort code then check it and present alertView if incorrect format entered.
+        } else if sender.tag == 1 {
+            
+            if !CheckTextField().sortCode(sender: sender) {
+                title = "Please enter a valid Sort Code"
+                let alert = AlertHelper().warning(title: title, message: "", exit: false)
+                self.present(alert, animated: true, completion: nil)
+            }
         }
     }
     
-    func checkAccountNumber(sender: UITextField) {
-        let accountNumberReg = "^[0-9]{8,8}$"
-        let accountNumberTest = NSPredicate(format: "SELF MATCHES %@", accountNumberReg)
-        if accountNumberTest.evaluate(with: sender.text) == false {
-            let alert = UIAlertController(title: "Please enter a valid Account Number", message: "If your account number is 7 digits long please add a 0 to the beginning.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-            accountNumberTextField.becomeFirstResponder()
-        }
-    }
-    
-    func checkFields(sender: UITextField) {
+// MARK: isEmptyField
+//If textFields arent empty show the Next button.
+    func isEmptyField(sender: UITextField) {
         sender.text = sender.text?.trimmingCharacters(in: CharacterSet.whitespaces)
         guard
             let accountNumber = accountNumberTextField.text, !accountNumber.isEmpty,
@@ -73,26 +88,24 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         createTakePhotoButton()
     }
     
+//MARK: createTakePhotoButton
+//Show Take Photo button once all fields contain text.
     func createTakePhotoButton() {
-        let width = UIScreen.main.bounds.width
-        let button: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: width, height: 50))
-        button.backgroundColor = UIColor(netHex: 0x000010)
-        let title = NSAttributedString(string: "Take Photo", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName : UIFont.systemFont(ofSize: 17.0)])
-        button.setAttributedTitle(title, for: .normal)
+        let button = RegistrationButton(title: "Take Photo")
         button.addTarget(self, action: #selector(takePhotoButtonWasPressed), for: .touchUpInside)
         bottomView.addSubview(button)
     }
     
+//MARK: createRegisterButton
+//Show register button once all fields contain text.
     func createRegisterButton() {
-        let width = UIScreen.main.bounds.width
-        let button: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: width, height: 50))
-        button.backgroundColor = UIColor(netHex: 0x000010)
-        let title = NSAttributedString(string: "Register", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName : UIFont.systemFont(ofSize: 17.0)])
-        button.setAttributedTitle(title, for: .normal)
-        button.addTarget(self, action: #selector(registerButtonWasTapped), for: .touchUpInside)
+        let button = RegistrationButton(title: "Register")
+        button.addTarget(self, action: #selector(registerButtonWasPressed), for: .touchUpInside)
         bottomView.addSubview(button)
     }
     
+//MARK: dismissKeyboard
+//Hides keyboard when tapping anywhere other than a textfield.
     func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -197,7 +210,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         
         let width = bottomView.frame.width
         let height = bottomView.frame.height
-        let agreementTextView: UITextView = UITextView (frame:CGRect(x: 0, y: 50, width: width, height: height-50))
+        let agreementTextView: UITextView = UITextView (frame:CGRect(x: 10, y: 50, width: width, height: height-50))
         agreementTextView.backgroundColor = .clear
         agreementTextView.isScrollEnabled = true
         agreementTextView.isUserInteractionEnabled = true
@@ -218,7 +231,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         bottomView.addSubview(agreementTextView)
     }
     
-    func registerButtonWasTapped() {
+    func registerButtonWasPressed() {
         startAnimating()
         savePhotoIDToAccount()
         performSegue(withIdentifier: "segueToMyBillsViewController", sender: self)

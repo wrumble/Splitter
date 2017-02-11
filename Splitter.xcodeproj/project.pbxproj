@@ -25,7 +25,7 @@
 		68101FE31E4CB6D0002DA5CF /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FE21E4CB6D0002DA5CF /* Alert.swift */; };
 		68101FE51E4CBFC4002DA5CF /* ProfilePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FE41E4CBFC4002DA5CF /* ProfilePhoto.swift */; };
 		68101FE71E4CCCAC002DA5CF /* CheckTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FE61E4CCCAC002DA5CF /* CheckTextField.swift */; };
-		68101FEB1E4CF9C6002DA5CF /* NextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FEA1E4CF9C6002DA5CF /* NextButton.swift */; };
+		68101FEB1E4CF9C6002DA5CF /* RegistrationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FEA1E4CF9C6002DA5CF /* RegistrationButton.swift */; };
 		68101FED1E4CFD41002DA5CF /* HttpRequestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FEC1E4CFD41002DA5CF /* HttpRequestHelper.swift */; };
 		6845BDFB1E2426560099A2CD /* InitialRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6845BDFA1E2426560099A2CD /* InitialRegistrationViewController.swift */; };
 		6845F1971E2D000B00138C66 /* SovietStyle.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6845F1951E2CFE8400138C66 /* SovietStyle.ttf */; };
@@ -83,7 +83,7 @@
 		68101FE21E4CB6D0002DA5CF /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		68101FE41E4CBFC4002DA5CF /* ProfilePhoto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePhoto.swift; sourceTree = "<group>"; };
 		68101FE61E4CCCAC002DA5CF /* CheckTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckTextField.swift; sourceTree = "<group>"; };
-		68101FEA1E4CF9C6002DA5CF /* NextButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NextButton.swift; sourceTree = "<group>"; };
+		68101FEA1E4CF9C6002DA5CF /* RegistrationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationButton.swift; sourceTree = "<group>"; };
 		68101FEC1E4CFD41002DA5CF /* HttpRequestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequestHelper.swift; sourceTree = "<group>"; };
 		6845BDFA1E2426560099A2CD /* InitialRegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialRegistrationViewController.swift; sourceTree = "<group>"; };
 		6845F1951E2CFE8400138C66 /* SovietStyle.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SovietStyle.ttf; path = ../SovietStyle.ttf; sourceTree = "<group>"; };
@@ -165,7 +165,7 @@
 		68101FE91E4CF994002DA5CF /* SignUpViews */ = {
 			isa = PBXGroup;
 			children = (
-				68101FEA1E4CF9C6002DA5CF /* NextButton.swift */,
+				68101FEA1E4CF9C6002DA5CF /* RegistrationButton.swift */,
 			);
 			name = SignUpViews;
 			sourceTree = "<group>";
@@ -513,7 +513,7 @@
 				68B47FDB1E03173C00B0A6AC /* BillReceiptViewController.swift in Sources */,
 				68101FE31E4CB6D0002DA5CF /* Alert.swift in Sources */,
 				680F528A1E27E2A6005786F1 /* Item+CoreDataClass.swift in Sources */,
-				68101FEB1E4CF9C6002DA5CF /* NextButton.swift in Sources */,
+				68101FEB1E4CF9C6002DA5CF /* RegistrationButton.swift in Sources */,
 				68EE13EF1E42A06400744A1F /* BillCarouselItemTableView.swift in Sources */,
 				68C2819E1E37CD1000EA3848 /* SplitterCarouselEditButton.swift in Sources */,
 				680F528B1E27E2A6005786F1 /* Item+CoreDataProperties.swift in Sources */,

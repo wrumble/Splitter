@@ -8,11 +8,15 @@
 
 import UIKit
 
-class NextButton: UIButton {
+class RegistrationButton: UIButton {
     
-    required override init(frame: CGRect) {
-        
+    var buttonTitle: String!
+    
+    required init(title: String) {
         super.init(frame: CGRect(x: 0, y: 10, width: UIScreen.main.bounds.width, height: 50))
+        
+        self.buttonTitle = title
+        
         setupView()
     }
     
@@ -22,9 +26,8 @@ class NextButton: UIButton {
     
     func setupView() {
         
-        let nextButtonTitle = "Next"
         self.backgroundColor = UIColor(netHex: 0x000010)
-        let title = NSAttributedString(string: nextButtonTitle, attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName : UIFont.systemFont(ofSize: 17.0)])
+        let title = NSAttributedString(string: buttonTitle, attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName : UIFont.systemFont(ofSize: 17.0)])
         self.setAttributedTitle(title, for: .normal)
     }
 }
