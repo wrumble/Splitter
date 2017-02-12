@@ -37,19 +37,17 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         view.addGestureRecognizer(tap)
     }
     
-//MARK: dismissKeyboard
 //Hides keyboard when tapping anywhere other than a textfield.
     func dismissKeyboard() {
         view.endEditing(true)
     }
     
-// MARK: setTextFieldTags
+// MARK: Filling out and checking textField
 //Add tags to textfields with consistencies that can be checked.
     func setTextFieldTags() {
         accountNumberTextField.tag = 0
         sortCodeTextField.tag = 1
     }
-// MARK: addTextFieldTargets
 //Assign target functions to any textFields that need them.
     func addTextFieldTargets() {
         accountNumberTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
@@ -58,7 +56,6 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         sortCodeTextField.addTarget(self, action: #selector(checkField), for: .editingDidEnd)
     }
     
-// MARK: checkField
 //Check any fields if they contain a set format.
     func checkField(sender: UITextField) {
         
@@ -84,7 +81,6 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         }
     }
     
-// MARK: isEmptyField
 //If textFields arent empty show the Next button.
     func isEmptyField(sender: UITextField) {
         sender.text = sender.text?.trimmingCharacters(in: CharacterSet.whitespaces)
@@ -97,7 +93,6 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         createTakePhotoButton()
     }
     
-//MARK: createTakePhotoButton
 //Show Take Photo button once all fields contain text.
     func createTakePhotoButton() {
         let button = RegistrationButton(title: "Take Photo")
@@ -105,32 +100,28 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         bottomView.addSubview(button)
     }
     
-//MARK: takePhotoButtonWasPressed
+//MARK: Uploading external account details to Connect account.
 //Starts a custom activity indicator(NVActivityIndicatorView) then calls api request to add external account details to Stripe account made in previous view controller.
     @IBAction func takePhotoButtonWasPressed(_sender: UIButton) {
         
         addExternalAccount()
     }
     
-//MARK: setParams
 //Create params to send with api request to Stripe.
-    func setParams() -> [String : Any] {
+    func setAccountParams() -> [String : Any] {
         
-        let params = [
+        return [
             "stripe_account": stripeAccountID,
             "account_number": accountNumberTextField.text!.trim(),
             "sort_code": sortCodeTextField.text!.trim()] as [String : Any]
-        
-        return params
     }
     
-//MARK: addExternalAccount
 //Make request to Stripe to create add account details to account made previously.
     func addExternalAccount() {
-        HttpRequest().post(params: self.setParams(), URLExtension: "account/external_account",
+        HttpRequest().post(params: self.setAccountParams(), URLExtension: "account/external_account",
                      success: { response in
                         
-                        self.successfulRequest() },
+                        self.successfulAccountRequest() },
                      
                      fail: { response in
                         
@@ -138,9 +129,8 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         })
     }
     
-//MARK: successfulRequest
 //If api request is successful then save received account id, stop activity indicator and move onto next step in creating account.
-    func successfulRequest() {
+    func successfulAccountRequest() {
         present(self.displayImagePicker(), animated: true, completion: nil)
         createRegisterButton()
         createAgreementTextView()
@@ -154,7 +144,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         self.present(alert, animated: true, completion: nil)
     }
     
-//MARK: displayImagePicker
+//MARK: Taking photoID picture.
 //Displays camera to take photo of users verification id, or photoLibrary if using simulator.
     func displayImagePicker() -> UIImagePickerController {
         
@@ -170,7 +160,6 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         return imagePicker
     }
     
-//MARK: imagePickerController
 //Sets the image from the camera or photoLibrary, calls uploadPhotoID function then starts a custom activity indicator(NVActivityIndicatorView).
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [AnyHashable: Any]!) {
         
@@ -180,34 +169,35 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         startAnimating()
     }
     
-//MARK: uploadPhotoID
+//MARK: Uploading photoID Image to connect account.
 //Makes api request to upload photoID to Stripe account created earlier.
     func uploadPhotoID() {
-        let URL = "https://splitterstripeservertest.herokuapp.com/account/id"
-        let imageData = UIImageJPEGRepresentation(photoID, 0.5)
-        let params = ["stripe_account": stripeAccountID,
-                      "purpose": "identity_document"] as [String : Any]
-        let manager = AFHTTPSessionManager()
-        manager.requestSerializer = AFHTTPRequestSerializer()
-        manager.responseSerializer = AFHTTPResponseSerializer()
-        manager.requestSerializer.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        manager.post(URL, parameters: params, constructingBodyWith: { (formData: AFMultipartFormData!) -> Void in
-            formData.appendPart(withFileData: imageData!, name: "file", fileName: "photoID.jpg", mimeType: "image/jpeg")
-        }, success: {(_ task: URLSessionDataTask, _ responseObject: Any) -> Void in
-            do {
-                let response = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
-                self.fileID = response?["id"] as! String
-                self.stopAnimating()
-            } catch {
-                print("Serialising account id json object went wrong.")
-            }
-        }, failure: { (operation, error) -> Void in
-            self.handleError(error as NSError)
-            self.stopAnimating()
+        
+        HttpRequest().postWithImageData(params: self.setUploadPhotoIDParams(), URLExtension: "account/id", imageData: UIImageJPEGRepresentation(photoID, 0.5)!,
+                                        
+                           success: { response in
+                            
+                                    self.successfulUploadRequest(response: response as AnyObject) },
+                           
+                           fail: { response in
+                            
+                                    self.failedRequest(response: response as AnyObject)
         })
     }
     
-//MARK: createRegisterButton
+//If api request is successful then save received file id, stop activity indicator.
+    func successfulUploadRequest(response: AnyObject) {
+        
+        self.fileID = response["id"] as! String
+        self.stopAnimating()
+    }
+    
+    func setUploadPhotoIDParams() -> [String : Any] {
+        
+        return ["stripe_account": stripeAccountID,
+                "purpose": "identity_document"] as [String : Any]
+    }
+    
 //Show register button once all fields contain text.
     func createRegisterButton() {
         let button = RegistrationButton(title: "Register")
@@ -215,7 +205,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         bottomView.addSubview(button)
     }
     
-//MARK: registerButtonWasPressed
+//MARK: Saving photoID to Connect account.
 //Starts a custom activity indicator(NVActivityIndicatorView) then calls api request to upload verification id.
     func registerButtonWasPressed() {
         startAnimating()
@@ -223,33 +213,28 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         performSegue(withIdentifier: "segueToMyBillsViewController", sender: self)
     }
     
+//Create params to send with api request to Stripe.
+    func setPhotoIDParams() -> [String : Any] {
+        
+        return ["stripe_account": stripeAccountID,
+                "file_id": fileID] as [String : Any]
+    }
     
+//Makes api request to save photoID to Stripe account created earlier.
     func savePhotoIDToAccount() {
-        let URL = "https://splitterstripeservertest.herokuapp.com/account/id/save"
-        let params = ["stripe_account": stripeAccountID,
-                      "file_id": fileID] as [String : Any]
-        let manager = AFHTTPSessionManager()
-        manager.requestSerializer = AFHTTPRequestSerializer()
-        manager.responseSerializer = AFHTTPResponseSerializer()
-        manager.post(URL, parameters: params, progress: nil, success: {(_ task: URLSessionDataTask, _ responseObject: Any) -> Void in
-            do {
-                _ = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
-                self.stopAnimating()
-            } catch {
-                print("Serialising account with verification id json object went wrong.")
-            }
-        }, failure: { (operation, error) -> Void in
-            self.handleError(error as NSError)
-            self.stopAnimating()
+        
+        HttpRequest().post(params: self.setParams(), URLExtension: "account/id/save",
+                           success: { response in
+                            
+                                    self.stopAnimating() },
+                           
+                           fail: { response in
+                            
+                                    self.failedRequest(response: response as AnyObject)
         })
     }
-    
-    func handleError(_ error: NSError) {
-        let alert = UIAlertController(title: "Please Try Again", message: error.localizedDescription, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
+
+//Adds required agreement text and Stripe T's and C's once photo has been taken.
     func createAgreementTextView() {
         
         let width = bottomView.frame.width

@@ -26,7 +26,7 @@
 		68101FE51E4CBFC4002DA5CF /* ProfilePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FE41E4CBFC4002DA5CF /* ProfilePhoto.swift */; };
 		68101FE71E4CCCAC002DA5CF /* CheckTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FE61E4CCCAC002DA5CF /* CheckTextField.swift */; };
 		68101FEB1E4CF9C6002DA5CF /* RegistrationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FEA1E4CF9C6002DA5CF /* RegistrationButton.swift */; };
-		68101FED1E4CFD41002DA5CF /* HttpRequestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FEC1E4CFD41002DA5CF /* HttpRequestHelper.swift */; };
+		68101FED1E4CFD41002DA5CF /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FEC1E4CFD41002DA5CF /* HttpRequest.swift */; };
 		68101FF01E4F4925002DA5CF /* AgreementTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68101FEF1E4F4925002DA5CF /* AgreementTextView.swift */; };
 		6845BDFB1E2426560099A2CD /* InitialRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6845BDFA1E2426560099A2CD /* InitialRegistrationViewController.swift */; };
 		6845F1971E2D000B00138C66 /* SovietStyle.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6845F1951E2CFE8400138C66 /* SovietStyle.ttf */; };
@@ -85,7 +85,7 @@
 		68101FE41E4CBFC4002DA5CF /* ProfilePhoto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePhoto.swift; sourceTree = "<group>"; };
 		68101FE61E4CCCAC002DA5CF /* CheckTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckTextField.swift; sourceTree = "<group>"; };
 		68101FEA1E4CF9C6002DA5CF /* RegistrationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationButton.swift; sourceTree = "<group>"; };
-		68101FEC1E4CFD41002DA5CF /* HttpRequestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequestHelper.swift; sourceTree = "<group>"; };
+		68101FEC1E4CFD41002DA5CF /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
 		68101FEF1E4F4925002DA5CF /* AgreementTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgreementTextView.swift; sourceTree = "<group>"; };
 		6845BDFA1E2426560099A2CD /* InitialRegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialRegistrationViewController.swift; sourceTree = "<group>"; };
 		6845F1951E2CFE8400138C66 /* SovietStyle.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SovietStyle.ttf; path = ../SovietStyle.ttf; sourceTree = "<group>"; };
@@ -159,7 +159,7 @@
 				68101FE21E4CB6D0002DA5CF /* Alert.swift */,
 				68101FE41E4CBFC4002DA5CF /* ProfilePhoto.swift */,
 				68101FE61E4CCCAC002DA5CF /* CheckTextField.swift */,
-				68101FEC1E4CFD41002DA5CF /* HttpRequestHelper.swift */,
+				68101FEC1E4CFD41002DA5CF /* HttpRequest.swift */,
 			);
 			name = ClassHelpers;
 			sourceTree = "<group>";
@@ -521,7 +521,7 @@
 				68EE13EF1E42A06400744A1F /* BillCarouselItemTableView.swift in Sources */,
 				68C2819E1E37CD1000EA3848 /* SplitterCarouselEditButton.swift in Sources */,
 				680F528B1E27E2A6005786F1 /* Item+CoreDataProperties.swift in Sources */,
-				68101FED1E4CFD41002DA5CF /* HttpRequestHelper.swift in Sources */,
+				68101FED1E4CFD41002DA5CF /* HttpRequest.swift in Sources */,
 				680F528D1E27E2A6005786F1 /* Bill+CoreDataProperties.swift in Sources */,
 				684C05D91E4A6E2E0089D739 /* CarouselItemDateLabel.swift in Sources */,
 				6845F19F1E2D3FA800138C66 /* WelcomeViewController.swift in Sources */,
