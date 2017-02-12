@@ -25,6 +25,9 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        accountNumberTextField.text = "12345678"
+        sortCodeTextField.text = "123456"
 
         setTextFieldTags()
         addTextFieldTargets()
@@ -32,6 +35,12 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         // Hides keyboard when tapping anywhere other than a textfield.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(FinalRegistrationViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+    }
+    
+//MARK: dismissKeyboard
+//Hides keyboard when tapping anywhere other than a textfield.
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
     
 // MARK: setTextFieldTags
@@ -96,41 +105,83 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         bottomView.addSubview(button)
     }
     
-//MARK: createRegisterButton
-//Show register button once all fields contain text.
-    func createRegisterButton() {
-        let button = RegistrationButton(title: "Register")
-        button.addTarget(self, action: #selector(registerButtonWasPressed), for: .touchUpInside)
-        bottomView.addSubview(button)
+//MARK: takePhotoButtonWasPressed
+//Starts a custom activity indicator(NVActivityIndicatorView) then calls api request to add external account details to Stripe account made in previous view controller.
+    @IBAction func takePhotoButtonWasPressed(_sender: UIButton) {
+        
+        addExternalAccount()
     }
     
-//MARK: dismissKeyboard
-//Hides keyboard when tapping anywhere other than a textfield.
-    func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-    func addExternalAccount() {
-        let manager = AFHTTPSessionManager()
-        let URL = "https://splitterstripeservertest.herokuapp.com/account/external_account"
+//MARK: setParams
+//Create params to send with api request to Stripe.
+    func setParams() -> [String : Any] {
+        
         let params = [
             "stripe_account": stripeAccountID,
-            "account_number": accountNumberTextField.text!,
-            "sort_code": sortCodeTextField.text!] as [String : Any]
+            "account_number": accountNumberTextField.text!.trim(),
+            "sort_code": sortCodeTextField.text!.trim()] as [String : Any]
         
-        manager.requestSerializer = AFHTTPRequestSerializer()
-        manager.responseSerializer = AFHTTPResponseSerializer()
-        manager.post(URL, parameters: params, progress: nil, success: {(_ task: URLSessionDataTask, _ responseObject: Any) -> Void in
-            do {
-                _ = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
-            } catch {
-                print("Serialising new account json object went wrong.")
-            }
-        }, failure: { (operation, error) -> Void in
-            self.handleError(error as NSError)
+        return params
+    }
+    
+//MARK: addExternalAccount
+//Make request to Stripe to create add account details to account made previously.
+    func addExternalAccount() {
+        HttpRequest().post(params: self.setParams(), URLExtension: "account/external_account",
+                     success: { response in
+                        
+                        self.successfulRequest() },
+                     
+                     fail: { response in
+                        
+                        self.failedRequest(response: response as AnyObject)
         })
     }
     
+//MARK: successfulRequest
+//If api request is successful then save received account id, stop activity indicator and move onto next step in creating account.
+    func successfulRequest() {
+        present(self.displayImagePicker(), animated: true, completion: nil)
+        createRegisterButton()
+        createAgreementTextView()
+    }
+    
+//MARK: failedRequest
+//If api request fails, then create an alert view with reason why.
+    func failedRequest(response: AnyObject) {
+        self.stopAnimating()
+        let alert = HttpRequest().handleError(response["failed"] as! NSError)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+//MARK: displayImagePicker
+//Displays camera to take photo of users verification id, or photoLibrary if using simulator.
+    func displayImagePicker() -> UIImagePickerController {
+        
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            imagePicker.sourceType = .camera
+        } else {
+            imagePicker.sourceType = .photoLibrary
+        }
+        
+        return imagePicker
+    }
+    
+//MARK: imagePickerController
+//Sets the image from the camera or photoLibrary, calls uploadPhotoID function then starts a custom activity indicator(NVActivityIndicatorView).
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [AnyHashable: Any]!) {
+        
+        self.photoID = image
+        uploadPhotoID()
+        picker.dismiss(animated: true, completion: nil)
+        startAnimating()
+    }
+    
+//MARK: uploadPhotoID
+//Makes api request to upload photoID to Stripe account created earlier.
     func uploadPhotoID() {
         let URL = "https://splitterstripeservertest.herokuapp.com/account/id"
         let imageData = UIImageJPEGRepresentation(photoID, 0.5)
@@ -155,6 +206,23 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
             self.stopAnimating()
         })
     }
+    
+//MARK: createRegisterButton
+//Show register button once all fields contain text.
+    func createRegisterButton() {
+        let button = RegistrationButton(title: "Register")
+        button.addTarget(self, action: #selector(registerButtonWasPressed), for: .touchUpInside)
+        bottomView.addSubview(button)
+    }
+    
+//MARK: registerButtonWasPressed
+//Starts a custom activity indicator(NVActivityIndicatorView) then calls api request to upload verification id.
+    func registerButtonWasPressed() {
+        startAnimating()
+        savePhotoIDToAccount()
+        performSegue(withIdentifier: "segueToMyBillsViewController", sender: self)
+    }
+    
     
     func savePhotoIDToAccount() {
         let URL = "https://splitterstripeservertest.herokuapp.com/account/id/save"
@@ -182,58 +250,14 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
         self.present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func takePhotoButtonWasPressed(_sender: UIButton) {
-        
-        addExternalAccount()
-        imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            imagePicker.sourceType = .camera
-        } else {
-            imagePicker.sourceType = .photoLibrary
-        }
-        
-        present(imagePicker, animated: true, completion: nil)
-        createRegisterButton()
-        createAgreementTextView()
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [AnyHashable: Any]!) {
-        
-        self.photoID = image
-        uploadPhotoID()
-        picker.dismiss(animated: true, completion: nil)
-        startAnimating()
-    }
-    
     func createAgreementTextView() {
         
         let width = bottomView.frame.width
-        let height = bottomView.frame.height
-        let agreementTextView: UITextView = UITextView (frame:CGRect(x: 10, y: 50, width: width, height: height-50))
-        agreementTextView.backgroundColor = .clear
-        agreementTextView.isScrollEnabled = true
-        agreementTextView.isUserInteractionEnabled = true
-        agreementTextView.isEditable = false
-        agreementTextView.dataDetectorTypes = .link
-        
-        let text = NSMutableAttributedString(string: "By Tapping Register you agree that Payment processing services for you on Splitter are provided by Stripe and are subject to the Stripe Connected Account Agreement, which includes the Stripe Terms of Service. By agreeing to these terms or continuing to operate as a user on Splitter, you agree to be bound by the Stripe Services Agreement, as the same may be modified by Stripe from time to time. As a condition of Splitter enabling payment processing services through Stripe, you agree to provide Splitter accurate and complete information about you and your business, and you authorize Splitter to share it and transaction information related to your use of the payment processing services provided by Stripe.")
-        text.addAttribute(NSLinkAttributeName, value: "https://stripe.com/gb/connect-account/legal", range: NSRange(location: 128, length: 35))
-        text.addAttribute(NSForegroundColorAttributeName, value: UIColor(netHex: 0xe9edef), range: NSRange(location: 128, length: 35))
-        text.addAttribute(NSLinkAttributeName, value: "https://stripe.com/gb/legal", range: NSRange(location: 183, length: 24))
-        text.addAttribute(NSForegroundColorAttributeName, value: UIColor(netHex: 0xe9edef), range: NSRange(location: 183, length: 24))
-        text.addAttribute(NSForegroundColorAttributeName, value: UIColor(netHex: 0x000010), range: NSMakeRange(0, text.length))
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        text.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSRange(location: 0, length: text.length))
-        
-        agreementTextView.attributedText = text
+        let height = bottomView.frame.height - 60
+        let frame = CGRect(x: 0, y: 60, width: width, height: height)
+        let agreementTextView = AgreementTextView(frame: frame, textContainer: nil)
+
         bottomView.addSubview(agreementTextView)
     }
     
-    func registerButtonWasPressed() {
-        startAnimating()
-        savePhotoIDToAccount()
-        performSegue(withIdentifier: "segueToMyBillsViewController", sender: self)
-    }
 }

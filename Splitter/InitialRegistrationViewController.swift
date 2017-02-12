@@ -16,7 +16,6 @@ import AVFoundation
 
 class InitialRegistrationViewController: UIViewController, UINavigationControllerDelegate, NVActivityIndicatorViewable {
     
-    let request = HttpRequest()
     let alert: AlertHelper! = nil
     
     var quantity = CGFloat(200)
@@ -36,6 +35,14 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        firstNameTextField.text = "Wayne"
+        lastNameTextField.text = "Rumble"
+        dobTextField.text = "20/02/1985"
+        emailTextField.text = "ben@sdf.com"
+        addressLine1TextField.text = "4 Chedworth House"
+        cityTextField.text = "London"
+        postCodeTextField.text = "bh235db"
         
         // Hides keyboard when tapping anywhere other than a textfield.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -179,7 +186,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
 //MARK: nextButtonWasPressed
 //Starts a custom activity indicator(NVActivityIndicatorView) then calls create account request.
     @IBAction func nextButtonWasPressed(sender: UIButton) {
-        startAnimating(message: "Saving")
+        startAnimating()
         createAccount()
     }
     
@@ -207,7 +214,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
 //Make request to Stripe to create a connect account.
     func createAccount() {
         
-        request.post(params: self.setParams(), URLExtension: "account",
+        HttpRequest().post(params: self.setParams(), URLExtension: "account",
                          success: { response in
             
                             self.successfulRequest(response: response as AnyObject) },
@@ -231,7 +238,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
 //If api request fails, then create an alert view with reason why.
     func failedRequest(response: AnyObject) {
         self.stopAnimating()
-        let alert = request.handleError(response["failed"] as! NSError)
+        let alert = HttpRequest().handleError(response["failed"] as! NSError)
         self.present(alert, animated: true, completion: nil)
     }
     
