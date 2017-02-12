@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct Platform {
+class Platform {
     
-    static var isPhone: Bool {
+    func isPhone() -> Bool {
         return TARGET_OS_SIMULATOR == 0
     }
     

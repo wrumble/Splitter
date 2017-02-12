@@ -14,9 +14,7 @@ class SplitterCarouselItemPayButton: UIButton {
     required override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = UIColor(netHex: 0x000010)
-        self.setTitleColor(UIColor(netHex: 0xe9edef), for: .normal)
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        setupView()
         applyMaskLayer()
     }
     
@@ -24,7 +22,15 @@ class SplitterCarouselItemPayButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setupView() {
+        
+        self.backgroundColor = UIColor(netHex: 0x000010)
+        self.setTitleColor(UIColor(netHex: 0xe9edef), for: .normal)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+    }
+    
     func applyMaskLayer() {
+        
         let payBounds: CGRect = self.bounds
         let payMaskPath = UIBezierPath(roundedRect: payBounds, byRoundingCorners: ([.bottomLeft, .bottomRight]), cornerRadii: CGSize(width: CGFloat(10.0), height: CGFloat(10.0)))
         let payMaskLayer = CAShapeLayer()

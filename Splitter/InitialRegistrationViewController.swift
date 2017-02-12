@@ -14,18 +14,14 @@ import NVActivityIndicatorView
 import DeviceKit
 import AVFoundation
 
-class InitialRegistrationViewController: UIViewController, UINavigationControllerDelegate,  UIImagePickerControllerDelegate, NVActivityIndicatorViewable {
+class InitialRegistrationViewController: UIViewController, UINavigationControllerDelegate, NVActivityIndicatorViewable {
     
-    var session: AVCaptureSession?
-    var stillImageOutput: AVCaptureStillImageOutput?
+    let alert: AlertHelper! = nil
     
     var quantity = CGFloat(200)
-    var photoID = UIImage()
-    var imagePicker: UIImagePickerController!
     var stripeAccountID = String()
-    var fileID = String()
-    var activityIndicator: NVActivityIndicatorView!
     var profileImage = UIImageView()
+    var profilePhoto: ProfilePhoto!
     
     @IBOutlet weak var previewView: UIView!
     @IBOutlet weak var firstNameTextField: UITextField!
@@ -40,37 +36,101 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        lastNameTextField.text = "Stumfble"
+        firstNameTextField.text = "Wayne"
+        lastNameTextField.text = "Rumble"
         dobTextField.text = "20/02/1985"
         emailTextField.text = "ben@sdf.com"
         addressLine1TextField.text = "4 Chedworth House"
         cityTextField.text = "London"
+        postCodeTextField.text = "bh235db"
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(InitialRegistrationViewController.dismissKeyboard))
+        // Hides keyboard when tapping anywhere other than a textfield.
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         
+        setTextFieldTags()
         addTextFieldTargets()
     }
-    
-    
-    func addTextFieldTargets() {
-        firstNameTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
-        if Platform.isPhone {
-            firstNameTextField.addTarget(self, action: #selector(capturePhoto), for: .editingDidEnd)
-        }
-        lastNameTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
-        dobTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
-        addressLine1TextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
-        cityTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
-        postCodeTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
-        postCodeTextField.addTarget(self, action: #selector(checkPostCodeField), for: .editingDidEnd)
-        emailTextField.addTarget(self, action: #selector(checkEmailField), for: .editingDidEnd)
-        emailTextField.addTarget(self, action: #selector(checkFields), for: .editingDidEnd)
+
+//MARK: viewWillAppear
+//Start profile photo session.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        profilePhoto = ProfilePhoto()
+        profilePhoto.startSession()
     }
     
-    func checkFields(sender: UITextField) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "segueToFinalRegistrationViewController" {
+            
+            let destinationVC = segue.destination as! FinalRegistrationViewController
+            destinationVC.stripeAccountID = stripeAccountID
+        }
+    }
+    
+//MARK: datePicker
+//Display a date picker for D.O.B textField.
+    @IBAction func datePicker(_ sender: UITextField) {
+        let datePickerView  : UIDatePicker = UIDatePicker()
+        datePickerView.datePickerMode = UIDatePickerMode.date
+        sender.inputView = datePickerView
+        datePickerView.addTarget(self, action: #selector(handleDatePicker), for: .valueChanged)
+    }
+    
+//MARK: handleDatePicker
+//Format datePicker selection
+    func handleDatePicker(sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        dobTextField.text = dateFormatter.string(from: sender.date)
+    }
+    
+//MARK: capturePhoto
+//Take sneaky profile photo after first name has been entered.
+    func capturePhoto() {
+        
+        profilePhoto.capture(){(image: UIImage?) -> Void in
+            self.profileImage.image = image
+        }
+    }
+    
+// MARK: setTextFieldTags
+//Add tags to textfields with consistencies that can be checked.
+    func setTextFieldTags() {
+        emailTextField.tag = 0
+        postCodeTextField.tag = 1
+    }
+    
+// MARK: addTextFieldTargets
+//Assign target functions to any textFields that need them.
+    func addTextFieldTargets() {
+        
+        // Check if each textField is empty.
+        firstNameTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
+        lastNameTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
+        dobTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
+        emailTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
+        addressLine1TextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
+        cityTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
+        postCodeTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
+        
+        // Take profile photo if not running on a simulator.
+        if Platform().isPhone() { firstNameTextField.addTarget(self, action: #selector(capturePhoto), for: .editingDidEnd) }
+        
+        // Check if email and post codes are correct.
+        emailTextField.addTarget(self, action: #selector(checkField), for: .editingDidEnd)
+        postCodeTextField.addTarget(self, action: #selector(checkField), for: .editingDidEnd)
+    }
+    
+    
+// MARK: isEmptyField
+//If textfields aren't empty and have been filled in correctly, show the Next button.
+    func isEmptyField(sender: UITextField) {
         sender.text = sender.text?.trimmingCharacters(in: CharacterSet.whitespaces)
         guard
+            
             let firstName = firstNameTextField.text, !firstName.isEmpty,
             let lastName = lastNameTextField.text, !lastName.isEmpty,
             let dob = dobTextField.text, !dob.isEmpty,
@@ -78,198 +138,134 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
             let city = cityTextField.text, !city.isEmpty,
             let postCode = postCodeTextField.text, !postCode.isEmpty,
             let email = emailTextField.text, !email.isEmpty
-
+        
             else { return }
         
-        createNextButton()
+        showNextButton()
     }
     
-    func checkEmailField(sender: UITextField) {
-        let emailReg = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
-        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailReg)
-        if emailTest.evaluate(with: sender.text) == false {
-            let alert = UIAlertController(title: "Please Enter Valid Email Address", message: nil, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-            emailTextField.becomeFirstResponder()
-        }
-    }
-
-    func checkPostCodeField(sender: UITextField) {
-        let postCodeReg = "^([Gg][Ii][Rr] {0,}0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([AZa-z][0-9][A-Za-z])|([A-Za-‌​z][A-Ha-hJ-Yj-y]][0-9]?[A-Za-z])))) {0,}[0-9][A-Za-z]{2})$"
-
-        let postCodeTest = NSPredicate(format: "SELF MATCHES %@", postCodeReg)
-        if postCodeTest.evaluate(with: sender.text) == false {
-            let alert = UIAlertController(title: "Please Enter Valid Post Code", message: nil, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-            postCodeTextField.becomeFirstResponder()
+// MARK: checkField
+//Check any fields if they contain a set format.
+    func checkField(sender: UITextField) {
+        
+        var title:  String!
+        
+        // If textField is email then check it and present alertView if incorrect format entered.
+        if sender.tag == 0 {
+            
+            if !CheckTextField().email(sender: sender) {
+                title = "Please enter valid Email Address"
+                let alert = AlertHelper().warning(title: title, message: "", exit: false)
+                self.present(alert, animated: true, completion: nil)
+            }
+        // If textField is post code then check it and present alertView if incorrect format entered.
+        } else if sender.tag == 1 {
+            
+            if !CheckTextField().postCode(sender: sender) {
+                title = "Please enter valid Post Code"
+                let alert = AlertHelper().warning(title: title, message: "", exit: false)
+                self.present(alert, animated: true, completion: nil)
+            }
         }
     }
     
-    func createNextButton() {
-        let width = UIScreen.main.bounds.width
-        let button: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: width, height: 50))
-        button.backgroundColor = UIColor(netHex: 0x000010)
-        let title = NSAttributedString(string: "Next", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName : UIFont.systemFont(ofSize: 17.0)])
-        button.setAttributedTitle(title, for: .normal)
+//MARK: showNextButton
+//Show next button once all fields contain text.
+    func showNextButton() {
+        let button = RegistrationButton(title: "Next")
         button.addTarget(self, action: #selector(nextButtonWasPressed), for: .touchUpInside)
         bottomView.addSubview(button)
     }
     
+//MARK: dismissKeyboard
+//Hides keyboard when tapping anywhere other than a textfield.
     func dismissKeyboard() {
         view.endEditing(true)
     }
     
+//MARK: nextButtonWasPressed
+//Starts a custom activity indicator(NVActivityIndicatorView) then calls create account request.
     @IBAction func nextButtonWasPressed(sender: UIButton) {
-        startAnimating(message: "Saving")
+        startAnimating()
         createAccount()
     }
     
-    func createAccount() {
-        let manager = AFHTTPSessionManager()
+//MARK: setParams
+//Create params to send with api request to Stripe.
+    func setParams() -> [String : Any] {
+        
+        // Seperate Date of birth into day month and year as Stripe requires this format.
         let dob = self.dobTextField.text!.components(separatedBy: "/")
-        let URL = "https://splitterstripeservertest.herokuapp.com/account"
         let params = [
-                    "first_name": firstNameTextField.text!.trim(),
-                    "last_name": lastNameTextField.text!.trim(),
-                    "line1": addressLine1TextField.text!.trim(),
-                    "city": cityTextField.text!.trim(),
-                    "postal_code": postCodeTextField.text!.trim(),
-                    "email": emailTextField.text!.trim(),
-                    "day": UInt(dob[0])! as UInt,
-                    "month": UInt(dob[1])! as UInt,
-                    "year": UInt(dob[2])! as UInt] as [String : Any]
-                
-        manager.requestSerializer = AFHTTPRequestSerializer()
-        manager.responseSerializer = AFHTTPResponseSerializer()
-        manager.post(URL, parameters: params, progress: nil, success: {(_ task: URLSessionDataTask, _ responseObject: Any) -> Void in
-            do {
-                let response = try JSONSerialization.jsonObject(with: responseObject as! Data, options: .mutableContainers) as? [String: Any]
-                self.stripeAccountID = response?["id"] as! String
-                self.stopAnimating()
-                self.goToFinalStage()
-            } catch {
-                print("Serialising new account json object went wrong.")
-                self.stopAnimating()
-            }
-        }, failure: { (operation, error) -> Void in
-            self.handleError(error as NSError)
-            self.stopAnimating()
+            "first_name": firstNameTextField.text!.trim(),
+            "last_name": lastNameTextField.text!.trim(),
+            "line1": addressLine1TextField.text!.trim(),
+            "city": cityTextField.text!.trim(),
+            "postal_code": postCodeTextField.text!.trim(),
+            "email": emailTextField.text!.trim(),
+            "day": UInt(dob[0])! as UInt,
+            "month": UInt(dob[1])! as UInt,
+            "year": UInt(dob[2])! as UInt] as [String : Any]
+        
+        return params
+    }
+    
+//MARK: createAccount
+//Make request to Stripe to create a connect account.
+    func createAccount() {
+        
+        HttpRequest().post(params: self.setParams(), URLExtension: "account",
+                         success: { response in
+            
+                            self.successfulRequest(response: response as AnyObject) },
+                         
+                         fail: { response in
+                            
+                            self.failedRequest(response: response as AnyObject)
         })
     }
     
-    func goToFinalStage() {
+//MARK: successfulRequest
+//If api request is successful then save received account id, stop activity indicator and move onto next step in creating account.
+    func successfulRequest(response: AnyObject) {
+        self.stripeAccountID = response["id"] as! String
         createMainBillSplitter()
+        self.stopAnimating()
         performSegue(withIdentifier: "segueToFinalRegistrationViewController", sender: self)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "segueToFinalRegistrationViewController" {
-                
-            let destinationVC = segue.destination as! FinalRegistrationViewController
-            destinationVC.stripeAccountID = stripeAccountID
-        }
-    }
-    
-    func handleError(_ error: NSError) {
-        let alert = UIAlertController(title: "Please Try Again", message: error.localizedDescription, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+//MARK: failedRequest
+//If api request fails, then create an alert view with reason why.
+    func failedRequest(response: AnyObject) {
+        self.stopAnimating()
+        let alert = HttpRequest().handleError(response["failed"] as! NSError)
         self.present(alert, animated: true, completion: nil)
     }
+    
+//MARK: setmainBillSplitterValues
+//Prepare dictionary of splitter values to be saved.
+    func setmainBillSplitterValues() -> [String: Any] {
+        
+        let name = "\(firstNameTextField.text!) \(lastNameTextField.text!)"
+        let email = emailTextField.text!
+        let accountID = stripeAccountID
 
-    @IBAction func datePicker(_ sender: UITextField) {
-        let datePickerView  : UIDatePicker = UIDatePicker()
-        datePickerView.datePickerMode = UIDatePickerMode.date
-        sender.inputView = datePickerView
-        datePickerView.addTarget(self, action: #selector(handleDatePicker), for: .valueChanged)
+        var values = ["name": name,
+                      "email": email,
+                      "accountID": accountID,
+                      "isMainBillSplitter": true,
+                      "hasPaid": true] as [String : Any]
+        if Platform().isPhone() { values["image"] = profileImage.image! }
+        
+        return values
     }
 
-    
-    func handleDatePicker(sender: UIDatePicker) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
-        dobTextField.text = dateFormatter.string(from: sender.date)
-    }
-    
+//MARK: createMainBillSplitter
+//If the api call is succesful then create and save the main bill splitter for the rest of the app.
     func createMainBillSplitter() {
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
-        let entity =  NSEntityDescription.entity(forEntityName: "BillSplitter", in: managedContext)
-        let mainBillSplitter = NSManagedObject(entity: entity!, insertInto: managedContext)
-        let name = "\(firstNameTextField.text!) \(lastNameTextField.text!)"
+        let context = UIApplication.shared.delegate as! AppDelegate
         
-        if Platform.isPhone {
-            let imageData = UIImageJPEGRepresentation(profileImage.image!, 0.5)
-            mainBillSplitter.setValue(imageData, forKey: "image")
-        }
-
-        mainBillSplitter.setValue(name.trim(), forKey: "name")
-        mainBillSplitter.setValue(emailTextField.text?.trim(), forKey: "email")
-        mainBillSplitter.setValue(stripeAccountID, forKey: "accountID")
-        mainBillSplitter.setValue(true, forKey: "isMainBillSplitter")
-        mainBillSplitter.setValue(true, forKey: "hasPaid")
-        
-        
-        do {
-            try managedContext.save()
-        } catch let error as NSError  {
-            print("Could not save \(error), \(error.userInfo)")
-        }
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        if Platform.isPhone {
-            session = AVCaptureSession()
-            session!.sessionPreset = AVCaptureSessionPresetPhoto
-            
-            var frontCamera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
-            let availableCameraDevices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo)
-            for device in availableCameraDevices as! [AVCaptureDevice] {
-                if device.position == .front {
-                    frontCamera = device
-                }
-            }
-            
-            var error: NSError?
-            var input: AVCaptureDeviceInput!
-            do {
-                input = try AVCaptureDeviceInput(device: frontCamera)
-            } catch let error1 as NSError {
-                error = error1
-                input = nil
-                print(error!.localizedDescription)
-            }
-            
-            if error == nil && session!.canAddInput(input) {
-                session!.addInput(input)
-                stillImageOutput = AVCaptureStillImageOutput()
-                stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-                
-                if session!.canAddOutput(stillImageOutput) {
-                    session!.addOutput(stillImageOutput)
-                    session!.startRunning()
-                }
-            }
-        }
-    }
-
-    
-    func capturePhoto() {
-        if let videoConnection = stillImageOutput!.connection(withMediaType: AVMediaTypeVideo) {
-            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { (sampleBuffer, error) -> Void in
-                if sampleBuffer != nil {
-                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
-                    let dataProvider = CGDataProvider(data: imageData as! CFData)
-                    let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
-                    let image = UIImage(cgImage: cgImageRef!, scale: 1.0, orientation: UIImageOrientation.right)
-                    self.profileImage.image = image
-                }
-            })
-        }
+        CoreDataHelper().saveBillSplitter(context: context, values: self.setmainBillSplitterValues())
     }
 }

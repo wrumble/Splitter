@@ -17,7 +17,6 @@ public class Bill: NSManagedObject {
         
         name = ""
         date = NSDate()
-        id = ""
     }
 
 }

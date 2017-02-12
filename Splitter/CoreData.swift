@@ -31,7 +31,6 @@ class CoreDataHelper {
         }
         
         if allBills.count > 0 {
-            setBillTotals(allBills: allBills)
             do {
                 try managedContext.save()
             } catch let error as NSError  {
@@ -40,16 +39,26 @@ class CoreDataHelper {
         }
         return allBills
     }
-
-
-    func setBillTotals(allBills: [Bill]) {
-        allBills.forEach { bill in
-            var total = Double()
-            let items = bill.items?.allObjects as! [Item]
-            items.forEach { item in
-                total += Double(item.price)
-            }
-            bill.setValue(total, forKey: "total")
+    
+    func saveBillSplitter(context: AnyObject, values: [String: Any]) {
+        
+        let managedObjectContext = context.managedObjectContext
+        let entity =  NSEntityDescription.entity(forEntityName: "BillSplitter", in: managedObjectContext!)
+        let billSplitter = NSManagedObject(entity: entity!, insertInto: managedObjectContext)
+        
+        if Platform().isPhone() {
+            let imageData = UIImageJPEGRepresentation(values["image"] as! UIImage, 0.5)
+            billSplitter.setValue(imageData, forKey: "image")
+        }
+        
+        values.forEach { value in
+            billSplitter.setValue(value.value, forKey: value.key)
+        }
+        
+        do {
+            try managedObjectContext?.save()
+        } catch let error as NSError  {
+            print("Could not save \(error), \(error.userInfo)")
         }
     }
 }

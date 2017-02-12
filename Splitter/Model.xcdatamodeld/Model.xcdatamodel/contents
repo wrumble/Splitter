@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16C67" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16D32" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Bill" representedClassName="Bill" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="total" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="billSplitters" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BillSplitter" inverseName="bills" inverseEntity="BillSplitter" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Item" inverseName="bill" inverseEntity="Item" syncable="YES"/>
     </entity>
@@ -31,7 +29,7 @@
         <relationship name="billSplitters" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BillSplitter" inverseName="items" inverseEntity="BillSplitter" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Bill" positionX="-36" positionY="9" width="128" height="165"/>
+        <element name="Bill" positionX="-36" positionY="9" width="128" height="135"/>
         <element name="BillSplitter" positionX="0" positionY="45" width="128" height="195"/>
         <element name="Item" positionX="27" positionY="72" width="128" height="135"/>
     </elements>
