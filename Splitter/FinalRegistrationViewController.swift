@@ -223,7 +223,7 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
 //Makes api request to save photoID to Stripe account created earlier.
     func savePhotoIDToAccount() {
         
-        HttpRequest().post(params: self.setParams(), URLExtension: "account/id/save",
+        HttpRequest().post(params: self.setPhotoIDParams(), URLExtension: "account/id/save",
                            success: { response in
                             
                                     self.stopAnimating() },
