@@ -9,18 +9,6 @@
 import UIKit
 import CoreData
 
-extension String {
-    var containsADouble: Bool {
-        return range(of: "[0-9]{1,}.[0-9]{1,}", options: .regularExpression) != nil
-    }
-}
-
-extension String {
-    var isaWord: Bool {
-        return range(of: "^[a-zA-Z]+$", options: .regularExpression) != nil
-    }
-}
-
 class TextToItemConverter {
     
     var bill: NSManagedObject!
@@ -67,7 +55,7 @@ class TextToItemConverter {
     func returnItemQuantity(_ itemText: String) -> Int {
         let int = itemText.replacingOccurrences(of: ",", with: ".")
         var quantity = 1
-        if NSString(string: int).integerValue == 0 {
+        if NSString(string: int).integerValue == 0 { //FIXME This looks wrong, probably why its not duplicating items when saving.
             quantity = NSString(string: int).integerValue
         }
         return quantity

@@ -288,7 +288,7 @@
                                         </constraints>
                                         <state key="normal" title="Button" image="homeIconWhite"/>
                                         <connections>
-                                            <segue destination="uEY-Eo-sjy" kind="show" id="gIP-kN-jNI"/>
+                                            <segue destination="uEY-Eo-sjy" kind="show" identifier="segueToHomeFromBillView" id="gIP-kN-jNI"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bah-TM-Ph7">
@@ -440,7 +440,7 @@
                                                 </constraints>
                                                 <state key="normal" title="Button" image="homeIconWhite"/>
                                                 <connections>
-                                                    <segue destination="uEY-Eo-sjy" kind="show" id="hEp-Gc-gNG"/>
+                                                    <segue destination="uEY-Eo-sjy" kind="show" identifier="segueHomeFromSplittersView" id="hEp-Gc-gNG"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -1307,7 +1307,7 @@
                         <outlet property="billLocation" destination="BfA-pG-DJ7" id="ZeQ-WE-nlP"/>
                         <outlet property="billName" destination="5FZ-zY-PfB" id="zjH-CH-2nr"/>
                         <outlet property="imageView" destination="BnR-s3-R7f" id="0eh-Xl-Z5Q"/>
-                        <segue destination="uEY-Eo-sjy" kind="show" id="a9r-J0-2KG"/>
+                        <segue destination="uEY-Eo-sjy" kind="show" identifier="segueToHomeFromNewBills" id="a9r-J0-2KG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="okF-us-Htx" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1403,7 +1403,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="959-yl-2K4"/>
-        <segue reference="fP8-O7-qcm"/>
-        <segue reference="dQC-F4-3d7"/>
+        <segue reference="hEp-Gc-gNG"/>
+        <segue reference="R29-NX-Cd2"/>
     </inferredMetricsTieBreakers>
 </document>

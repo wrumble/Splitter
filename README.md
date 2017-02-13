@@ -32,3 +32,5 @@ To run:
 -run on whatever simulator you want :)
 
 -or run on phone for (possible)disappointment when adding Bill Splitters
+
+When testing a payment the card number must be 4242 4242 4242 4242, as long as other entries follow the standard format(account number: 8 digits, email: word@word.something, postcode: sw65ab etc) they will be accepted in test mode using Stripe.

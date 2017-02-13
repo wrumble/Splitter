@@ -31,6 +31,7 @@ class ProfilePhoto {
         }
     }
     
+//Assigns the front camera of the device as the AVCapture device.
     func findFrontCamera() {
         frontCamera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
         let availableCameraDevices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo)
@@ -41,6 +42,7 @@ class ProfilePhoto {
         }
     }
     
+//Assign errors and input devices.
     func setErrorAndInput() {
         do {
             input = try AVCaptureDeviceInput(device: frontCamera)
@@ -51,6 +53,7 @@ class ProfilePhoto {
         }
     }
     
+//Begin the AVCapture session.
     func beginSession() {
         if session!.canAddInput(input) {
             session!.addInput(input)

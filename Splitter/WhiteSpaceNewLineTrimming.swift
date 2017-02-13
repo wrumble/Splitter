@@ -8,6 +8,7 @@
 
 import Foundation
 
+//Remove any white spaces or new lines from the end of a string.
 extension String
 {
     func trim() -> String

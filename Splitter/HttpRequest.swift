@@ -53,7 +53,7 @@ class HttpRequest {
     func postWithImageData(params: [String: Any], URLExtension: String, imageData: Data, success:@escaping (([String: Any]) -> Void), fail:@escaping (([String: Any]) -> Void)) {
         
         manager.post(self.setURL(URLExtension: URLExtension), parameters: params, constructingBodyWith: { (formData: AFMultipartFormData!) -> Void in
-            formData.appendPart(withFileData: imageData, name: "file", fileName: "photoID.jpg", mimeType: "image/jpeg")},
+            formData.appendPart(withFileData: imageData, name: "file", fileName: "photoID.jpg", mimeType: "image/jpeg")},progress: nil,
                      success: {(_ task: URLSessionDataTask, _ responseObject: Any) -> Void in
                         
                                 do {
@@ -69,7 +69,6 @@ class HttpRequest {
                                 let response = ["failed": error]
                                 fail(response)
         })
-        
     }
     
 //Create alertView if api rquest fails for whatever reason.

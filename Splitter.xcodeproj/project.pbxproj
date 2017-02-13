@@ -37,7 +37,7 @@
 		684B889B1DA3E7A200134F0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 684B889A1DA3E7A200134F0D /* Assets.xcassets */; };
 		684B889E1DA3E7A200134F0D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 684B889C1DA3E7A200134F0D /* LaunchScreen.storyboard */; };
 		684C05D31E48ED4A0089D739 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684C05D21E48ED4A0089D739 /* Color.swift */; };
-		684C05D51E4A63F30089D739 /* StringWidth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684C05D41E4A63F30089D739 /* StringWidth.swift */; };
+		684C05D51E4A63F30089D739 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684C05D41E4A63F30089D739 /* String.swift */; };
 		684C05D91E4A6E2E0089D739 /* CarouselItemDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684C05D81E4A6E2E0089D739 /* CarouselItemDateLabel.swift */; };
 		684C05DB1E4A823C0089D739 /* CurrencyFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684C05DA1E4A823C0089D739 /* CurrencyFormat.swift */; };
 		684C05DD1E4A908E0089D739 /* WhiteSpaceNewLineTrimming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684C05DC1E4A908E0089D739 /* WhiteSpaceNewLineTrimming.swift */; };
@@ -98,7 +98,7 @@
 		684B889D1DA3E7A200134F0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		684B889F1DA3E7A200134F0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		684C05D21E48ED4A0089D739 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
-		684C05D41E4A63F30089D739 /* StringWidth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringWidth.swift; sourceTree = "<group>"; };
+		684C05D41E4A63F30089D739 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		684C05D81E4A6E2E0089D739 /* CarouselItemDateLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselItemDateLabel.swift; sourceTree = "<group>"; };
 		684C05DA1E4A823C0089D739 /* CurrencyFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyFormat.swift; sourceTree = "<group>"; };
 		684C05DC1E4A908E0089D739 /* WhiteSpaceNewLineTrimming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhiteSpaceNewLineTrimming.swift; sourceTree = "<group>"; };
@@ -154,6 +154,7 @@
 		68101FE81E4CE1E4002DA5CF /* ClassHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				68D517F21DCBECCC00028759 /* TextToItemConverter.swift */,
 				68EE13F01E439DE500744A1F /* Platform.swift */,
 				68101FE01E4CB112002DA5CF /* CoreData.swift */,
 				68101FE21E4CB6D0002DA5CF /* Alert.swift */,
@@ -176,11 +177,10 @@
 		68101FEE1E4E01D6002DA5CF /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				68D517F21DCBECCC00028759 /* TextToItemConverter.swift */,
 				684C05DC1E4A908E0089D739 /* WhiteSpaceNewLineTrimming.swift */,
 				680D8EAF1E0D996900809D8F /* TableView.swift */,
 				684C05D21E48ED4A0089D739 /* Color.swift */,
-				684C05D41E4A63F30089D739 /* StringWidth.swift */,
+				684C05D41E4A63F30089D739 /* String.swift */,
 				684C05DA1E4A823C0089D739 /* CurrencyFormat.swift */,
 			);
 			name = Extensions;
@@ -512,7 +512,7 @@
 				689B9A421DC27C8D00EEF40F /* NewBillViewController.swift in Sources */,
 				68101FE51E4CBFC4002DA5CF /* ProfilePhoto.swift in Sources */,
 				680F528E1E27E2A6005786F1 /* BillSplitter+CoreDataClass.swift in Sources */,
-				684C05D51E4A63F30089D739 /* StringWidth.swift in Sources */,
+				684C05D51E4A63F30089D739 /* String.swift in Sources */,
 				687BFF6B1E3BB75D005A41D4 /* SplitterCarouselItemTableViewCell.swift in Sources */,
 				68B47FDB1E03173C00B0A6AC /* BillReceiptViewController.swift in Sources */,
 				68101FE31E4CB6D0002DA5CF /* Alert.swift in Sources */,

@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+//Adds a label describing a lack of entries in the table view to be displayed.
 class TableViewHelper {
     
     class func EmptyMessage(_ message: String, tableView: UITableView) {
