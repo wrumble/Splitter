@@ -46,7 +46,7 @@ class CoreDataHelper {
         let entity =  NSEntityDescription.entity(forEntityName: "BillSplitter", in: managedObjectContext!)
         let billSplitter = NSManagedObject(entity: entity!, insertInto: managedObjectContext)
         
-        if Platform().isPhone() {
+        if Platform.isPhone {
             let imageData = UIImageJPEGRepresentation(values["image"] as! UIImage, 0.5)
             billSplitter.setValue(imageData, forKey: "image")
         }

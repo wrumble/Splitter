@@ -16,7 +16,6 @@ import AVFoundation
 
 class InitialRegistrationViewController: UIViewController, UINavigationControllerDelegate, NVActivityIndicatorViewable {
     
-    let alert: AlertHelper! = nil
     
     var quantity = CGFloat(200)
     var stripeAccountID = String()
@@ -52,7 +51,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         addTextFieldTargets()
     }
 
-//MARK: viewWillAppear
 //Start profile photo session.
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -70,40 +68,18 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         }
     }
     
-//MARK: datePicker
-//Display a date picker for D.O.B textField.
-    @IBAction func datePicker(_ sender: UITextField) {
-        let datePickerView  : UIDatePicker = UIDatePicker()
-        datePickerView.datePickerMode = UIDatePickerMode.date
-        sender.inputView = datePickerView
-        datePickerView.addTarget(self, action: #selector(handleDatePicker), for: .valueChanged)
+//Hides keyboard when tapping anywhere other than a textfield.
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
     
-//MARK: handleDatePicker
-//Format datePicker selection
-    func handleDatePicker(sender: UIDatePicker) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
-        dobTextField.text = dateFormatter.string(from: sender.date)
-    }
-    
-//MARK: capturePhoto
-//Take sneaky profile photo after first name has been entered.
-    func capturePhoto() {
-        
-        profilePhoto.capture(){(image: UIImage?) -> Void in
-            self.profileImage.image = image
-        }
-    }
-    
-// MARK: setTextFieldTags
+// MARK: Check TextFields
 //Add tags to textfields with consistencies that can be checked.
     func setTextFieldTags() {
         emailTextField.tag = 0
         postCodeTextField.tag = 1
     }
     
-// MARK: addTextFieldTargets
 //Assign target functions to any textFields that need them.
     func addTextFieldTargets() {
         
@@ -117,7 +93,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         postCodeTextField.addTarget(self, action: #selector(isEmptyField), for: .editingDidEnd)
         
         // Take profile photo if not running on a simulator.
-        if Platform().isPhone() { firstNameTextField.addTarget(self, action: #selector(capturePhoto), for: .editingDidEnd) }
+        if Platform.isPhone { firstNameTextField.addTarget(self, action: #selector(capturePhoto), for: .editingDidEnd) }
         
         // Check if email and post codes are correct.
         emailTextField.addTarget(self, action: #selector(checkField), for: .editingDidEnd)
@@ -125,7 +101,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     }
     
     
-// MARK: isEmptyField
 //If textfields aren't empty and have been filled in correctly, show the Next button.
     func isEmptyField(sender: UITextField) {
         sender.text = sender.text?.trimmingCharacters(in: CharacterSet.whitespaces)
@@ -144,7 +119,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         showNextButton()
     }
     
-// MARK: checkField
 //Check any fields if they contain a set format.
     func checkField(sender: UITextField) {
         
@@ -169,6 +143,31 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         }
     }
     
+//MARK: Displaying the DOB datepicker.
+//Display a date picker for D.O.B textField.
+    @IBAction func datePicker(_ sender: UITextField) {
+        let datePickerView  : UIDatePicker = UIDatePicker()
+        datePickerView.datePickerMode = UIDatePickerMode.date
+        sender.inputView = datePickerView
+        datePickerView.addTarget(self, action: #selector(handleDatePicker), for: .valueChanged)
+    }
+    
+//Format datePicker selection
+    func handleDatePicker(sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        dobTextField.text = dateFormatter.string(from: sender.date)
+    }
+
+//MARK: Capturing the profile photo.
+//Take sneaky profile photo after first name has been entered.
+    func capturePhoto() {
+        
+        profilePhoto.capture(){(image: UIImage?) -> Void in
+            self.profileImage.image = image
+        }
+    }
+    
 //MARK: showNextButton
 //Show next button once all fields contain text.
     func showNextButton() {
@@ -177,20 +176,13 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         bottomView.addSubview(button)
     }
     
-//MARK: dismissKeyboard
-//Hides keyboard when tapping anywhere other than a textfield.
-    func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-//MARK: nextButtonWasPressed
+//MARK: Creating Stripe Connect account.
 //Starts a custom activity indicator(NVActivityIndicatorView) then calls create account request.
     @IBAction func nextButtonWasPressed(sender: UIButton) {
         startAnimating()
         createAccount()
     }
     
-//MARK: setParams
 //Create params to send with api request to Stripe.
     func setParams() -> [String : Any] {
         
@@ -210,7 +202,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         return params
     }
     
-//MARK: createAccount
 //Make request to Stripe to create a connect account.
     func createAccount() {
         
@@ -225,7 +216,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         })
     }
     
-//MARK: successfulRequest
 //If api request is successful then save received account id, stop activity indicator and move onto next step in creating account.
     func successfulRequest(response: AnyObject) {
         self.stripeAccountID = response["id"] as! String
@@ -234,7 +224,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         performSegue(withIdentifier: "segueToFinalRegistrationViewController", sender: self)
     }
     
-//MARK: failedRequest
 //If api request fails, then create an alert view with reason why.
     func failedRequest(response: AnyObject) {
         self.stopAnimating()
@@ -242,25 +231,24 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         self.present(alert, animated: true, completion: nil)
     }
     
-//MARK: setmainBillSplitterValues
+//MARK: Create main bill splitter.
 //Prepare dictionary of splitter values to be saved.
+    
     func setmainBillSplitterValues() -> [String: Any] {
         
         let name = "\(firstNameTextField.text!) \(lastNameTextField.text!)"
-        let email = emailTextField.text!
-        let accountID = stripeAccountID
-
         var values = ["name": name,
-                      "email": email,
-                      "accountID": accountID,
+                      "email": emailTextField.text!,
+                      "accountID": stripeAccountID,
                       "isMainBillSplitter": true,
                       "hasPaid": true] as [String : Any]
-        if Platform().isPhone() { values["image"] = profileImage.image! }
+        
+        if Platform.isPhone { values["image"] = profileImage.image! }
         
         return values
+
     }
 
-//MARK: createMainBillSplitter
 //If the api call is succesful then create and save the main bill splitter for the rest of the app.
     func createMainBillSplitter() {
         

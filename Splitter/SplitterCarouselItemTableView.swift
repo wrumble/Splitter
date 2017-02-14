@@ -24,7 +24,7 @@
         
         func setupView() {
             
-            if Platform().isPhone() {
+            if Platform.isPhone {
                 let tableViewBackground = UIImageView(image: UIImage(data: splitter?.image as! Data, scale:1.0))
                 self.backgroundView = tableViewBackground
                 tableViewBackground.contentMode = .scaleAspectFit

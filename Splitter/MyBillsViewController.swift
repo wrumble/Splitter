@@ -14,11 +14,11 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     let coredataHelper = CoreDataHelper()
     
-    var allBills = [Bill]()
-    var height: Double!
-    var width: Double!
     var carouselIndex: Int!
     var itemIndex: Int?
+    var allBills = [Bill]()
+    var height = Double(UIScreen.main.bounds.height) * 0.75
+    var width = Double(UIScreen.main.bounds.width) * 0.88
     
     @IBOutlet weak var splitterTitleLabel: UILabel!
     @IBOutlet var carousel: iCarousel!
@@ -27,13 +27,20 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewDidLoad()
         
         allBills = coredataHelper.getAllBills()
-                
-        height = Double(UIScreen.main.bounds.height) * 0.75
-        width = Double(UIScreen.main.bounds.width) * 0.88
-        
-        splitterTitleLabel.text = "Splitter"
-        splitterTitleLabel.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.75)
 
+        setCarouselStyle()
+        setTitleLabel()
+        checkEmptyCarousel()
+        carousel.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        carousel.scroll(byNumberOfItems: allBills.count, duration: 1.5)
+    }
+    
+    func setCarouselStyle() {
+        
         if allBills.count < 3 {
             carousel.type = .coverFlow
         } else {
@@ -43,22 +50,19 @@ class MyBillsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         carousel.isPagingEnabled = true
-        
-        if allBills.count == 0 {
-            let noBillsLabel = UILabel(frame: CGRect(x: 5, y: 0, width: carousel.frame.width - 5, height: carousel.frame.height))
-            noBillsLabel.text = "You have no bills to split yet. Tap the plus icon to start splitting a new bill."
-            noBillsLabel.textAlignment = .center
-            noBillsLabel.numberOfLines = 0
-            view.addSubview(noBillsLabel)
-            view.setNeedsDisplay()
-        }
-        
-        carousel.reloadData()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        carousel.scroll(byNumberOfItems: allBills.count, duration: 1.5)
+    func checkEmptyCarousel() {
+        if allBills.count == 0 {
+            let noBillsLabel = EmptyCarouselLabel(frame: CGRect(x: 5, y: 0, width: carousel.frame.width - 5, height: carousel.frame.height))
+            view.addSubview(noBillsLabel)
+        }
+    }
+    
+    func setTitleLabel() {
+        
+        splitterTitleLabel.text = "Splitter"
+        splitterTitleLabel.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.75)
     }
     
     func numberOfItems(in carousel: iCarousel) -> Int {

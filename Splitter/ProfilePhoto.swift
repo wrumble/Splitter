@@ -21,7 +21,7 @@ class ProfilePhoto {
 //MARK: Begin the image capturing session
     func startSession() {
         
-        if Platform().isPhone() {
+        if Platform.isPhone {
             session = AVCaptureSession()
             session!.sessionPreset = AVCaptureSessionPresetPhoto
             
