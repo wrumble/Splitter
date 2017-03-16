@@ -8,8 +8,6 @@ target 'Splitter' do
     pod 'TesseractOCRiOS', '4.0.0'
     pod 'WDImagePicker', :git => 'https://github.com/justwudi/WDImagePicker.git', :tag => '0.2.2'
     pod 'GooglePlaces'
-    pod 'GooglePlacePicker'
-    pod 'GoogleMaps'
     pod 'Stripe'
     pod 'CardIO'
     pod 'AFNetworking', '~> 3.0'
@@ -17,7 +15,6 @@ target 'Splitter' do
     pod 'DeviceKit', '~> 1.0'
     pod 'iCarousel'
     pod 'IQKeyboardManagerSwift'
-    pod 'SCLAlertView'
 end
 
 post_install do |installer|

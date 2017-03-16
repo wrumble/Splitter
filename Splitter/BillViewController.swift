@@ -10,11 +10,11 @@ import Foundation
 import CoreData
 
 class BillViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
-
-    var bill: NSManagedObject!
-    var billName: String!
-    var allItems: [Item]!
     
+    let coreDataHelper = CoreDataHelper()
+
+    var bill: Bill!
+    var allItems: [Item]!
 
     @IBOutlet weak var billNameLabel: UILabel!
     @IBOutlet var tableView: UITableView!
@@ -22,7 +22,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        billNameLabel.text = "\(billName!)"
+        billNameLabel.text = "\(bill.name!)"
         billNameLabel.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.75)
         fetchBillItems()
     }
@@ -33,34 +33,14 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             let destinationVC = segue.destination as! BillReceiptViewController
             
-            destinationVC.bill = bill as! Bill
+            destinationVC.bill = bill
             
         } else if segue.identifier == "segueToBillSplitters" {
             
-            var allBillSplitters = [BillSplitter]()
-            
-            let managedContext = bill.managedObjectContext
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BillSplitter")
-            let predicate = NSPredicate(format: "ANY bills == %@", bill)
-            let sortDescriptor = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
-            
-            fetchRequest.sortDescriptors = [sortDescriptor]
-            fetchRequest.predicate = predicate
-            
-            do {
-                let results =
-                    try managedContext!.fetch(fetchRequest)
-                allBillSplitters = results as! [BillSplitter]
-            } catch let error as NSError {
-                print("Could not fetch \(error), \(error.userInfo)")
-            }
-            
             let destinationVC = segue.destination as! BillSplittersViewController
-            let passedBill: NSManagedObject = bill as NSManagedObject
             
-            destinationVC.billName = billName
-            destinationVC.bill = passedBill
-            destinationVC.allBillSplitters = allBillSplitters
+            destinationVC.bill = bill
+            destinationVC.allBillSplitters = bill.billSplitters?.allObjects as! [BillSplitter]
         }
     }
     
@@ -117,12 +97,17 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if allItems.count > 0 {
             return allItems.count
         } else {
-            TableViewHelper.EmptyMessage("\(billName) has no items.\nTap Add to manually add items or try to re-take the phot by creating a new bill again.", tableView: tableView)
+            
+            let message = "\(bill.name) has no items.\nTap Add to manually add items or try to re-take the phot by creating a new bill again."
+            
+            TableViewHelper().createEmptyMessage(message, tableView: tableView)
+            
             return 0
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell: ItemCell = tableView.dequeueReusableCell(withIdentifier: "ItemCell") as! ItemCell
         fetchBillItems()
         let item = allItems[indexPath.row]
@@ -160,20 +145,30 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
         if editingStyle == .delete {
             let item = allItems[indexPath.row]
-            let managedContext = self.bill.managedObjectContext
+            let managedContext = bill.managedObjectContext
+            let quantity = item.quantity - 1
+            
+            
+            allItems.forEach { otherItem in
+                
+                if item.creationDateTime == otherItem.creationDateTime {
+                    
+                    otherItem.setValue(quantity, forKeyPath: "quantity")
+                }
+            }
             
             removeItem(item)
             managedContext?.delete(item)
             
             do {
-                try managedContext!.save()
+                try managedContext?.save()
             }
             catch let error as NSError {
                 print("Core Data save failed: \(error)")
             }
-            setBillTotal()
             tableView.reloadData()
         }
     }
@@ -201,6 +196,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func updateEditedItem(indexPath: IndexPath, itemName: String, itemPrice: Double){
+        
         let managedContext = self.bill.managedObjectContext
         let currentItems = self.bill.mutableSetValue(forKey: "items")
         currentItems.removeAllObjects()
@@ -216,7 +212,6 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         catch let error as NSError {
             print("Core Data save failed: \(error)")
         }
-        setBillTotal()
     }
     
     func createAlertViewItem(_ alertController: UIAlertController, itemName: String, itemStringPrice: String) {
@@ -237,7 +232,6 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         catch let error as NSError {
             print("Core Data save failed: \(error)")
         }
-        setBillTotal()
     }
     
     func createAddItemAlertSubView() -> UIAlertController {
@@ -297,7 +291,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         itemPrice.placeholder = "Item Price"
         itemPrice.borderStyle = .roundedRect
         itemPrice.keyboardAppearance = .alert
-        itemPrice.keyboardType = UIKeyboardType.numberPad
+        itemPrice.keyboardType = .decimalPad
         itemPrice.tag = 2
         itemPrice.delegate = self
         view.addSubview(itemPrice)
@@ -312,34 +306,6 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func priceFromString(_ string: String) -> Double {
         let price = (NumberFormatter().number(from: string)?.doubleValue)!
         return price
-    }
-    
-    func setBillTotal() {
-        let managedContext = bill.managedObjectContext
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
-        let predicate = NSPredicate(format: "bill == %@", bill)
-        fetchRequest.predicate = predicate
-        
-        var items = [Item]()
-        do {
-            let results =
-                try managedContext!.fetch(fetchRequest)
-            items = results as! [Item]
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
-        }
-        
-        var total = Double()
-        items.forEach { item in
-            total += Double(item.price)
-        }
-        total = Double(round(100*total)/100)
-        bill.setValue(total, forKey: "total")
-        do {
-            try managedContext!.save()
-        } catch let error as NSError  {
-            print("Could not save \(error), \(error.userInfo)")
-        }
     }
 }
 

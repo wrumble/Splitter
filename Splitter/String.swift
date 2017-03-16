@@ -11,6 +11,11 @@ import Foundation
 //Returns the width of the String to allow for resizing labels. 
 extension String {
     
+    func trim() -> String {
+        
+        return self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
     func widthWithConstrainedHeight(height: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height )
         let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)

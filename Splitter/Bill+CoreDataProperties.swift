@@ -2,7 +2,7 @@
 //  Bill+CoreDataProperties.swift
 //  Splitter
 //
-//  Created by Wayne Rumble on 10/02/2017.
+//  Created by Wayne Rumble on 15/03/2017.
 //  Copyright © 2017 Wayne Rumble. All rights reserved.
 //
 
@@ -20,6 +20,7 @@ extension Bill {
     @NSManaged public var image: NSData?
     @NSManaged public var location: String?
     @NSManaged public var name: String?
+    @NSManaged public var id: String?
     @NSManaged public var billSplitters: NSSet?
     @NSManaged public var items: NSSet?
 
@@ -57,16 +58,4 @@ extension Bill {
     @objc(removeItems:)
     @NSManaged public func removeFromItems(_ values: NSSet)
 
-}
-
-extension Bill {
-    
-    func total() -> String {
-        var total = Double()
-        let items = self.items?.allObjects as! [Item]
-        items.forEach { item in
-            total += item.price
-        }
-        return total.asLocalCurrency
-    }
 }

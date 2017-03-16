@@ -40,7 +40,6 @@ class BillReceiptViewController: UIViewController, UIGestureRecognizerDelegate {
         let destinationVC = segue.destination as! BillViewController
         
         destinationVC.bill = bill
-        destinationVC.billName = bill.name
     }
     
     @IBAction func backButtonWasPressed(_ sender: UIButton) {

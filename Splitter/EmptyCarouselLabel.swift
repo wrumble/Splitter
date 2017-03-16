@@ -10,8 +10,11 @@ import UIKit
 
 class EmptyCarouselLabel: UILabel {
     
+    let height = UIScreen.main.bounds.height
+    let width = UIScreen.main.bounds.width - 5
+    
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        super.init(frame: CGRect(x: 5, y: 0, width: width, height: height))
         setupView()
     }
     

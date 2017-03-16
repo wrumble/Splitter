@@ -23,7 +23,7 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
     var requestIP: String!
     var stripeAccountID = String()
     var splitter: BillSplitter!
-    var bill: NSManagedObject!
+    var bill: Bill!
     
     @IBOutlet var cardNumberTextField: UITextField!
     @IBOutlet var cardExpiryTextField: UITextField!
@@ -146,7 +146,7 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
     }
     
     func handleSuccess() {
-        let message = "You succesfully paid \(splitter.total.asLocalCurrency) to \(getMainSplitterName())'s bank account"
+        let message = "You succesfully paid \(splitter.total().asLocalCurrency) to \(getMainSplitterName())'s bank account"
         let alert = UIAlertController(title: "Success!", message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
             
@@ -159,15 +159,9 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueToBillSplitters" {
             
-            let allBillSplitters = getAllSplitters()
-            
             let destinationVC = segue.destination as! BillSplittersViewController
-            let passedBill: NSManagedObject = bill as NSManagedObject
-            let billName = (bill as! Bill).name
             
-            destinationVC.billName = billName
-            destinationVC.bill = passedBill
-            destinationVC.allBillSplitters = allBillSplitters
+            destinationVC.bill = bill
         }
     }
     

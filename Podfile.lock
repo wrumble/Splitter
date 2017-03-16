@@ -16,20 +16,12 @@ PODS:
     - AFNetworking/NSURLSession
   - CardIO (5.4.1)
   - DeviceKit (1.0.0)
-  - GoogleMaps (2.1.1):
-    - GoogleMaps/Maps (= 2.1.1)
   - GoogleMaps/Base (2.1.1)
-  - GoogleMaps/Maps (2.1.1):
-    - GoogleMaps/Base
-  - GooglePlacePicker (2.1.1):
-    - GoogleMaps (= 2.1.1)
-    - GooglePlaces (= 2.1.1)
   - GooglePlaces (2.1.1):
     - GoogleMaps/Base (= 2.1.1)
   - iCarousel (1.8.3)
   - IQKeyboardManagerSwift (4.0.7)
   - NVActivityIndicatorView (3.0)
-  - SCLAlertView (0.7.0)
   - Stripe (9.2.0)
   - TesseractOCRiOS (4.0.0)
   - WDImagePicker (0.2.2)
@@ -38,13 +30,10 @@ DEPENDENCIES:
   - AFNetworking (~> 3.0)
   - CardIO
   - DeviceKit (~> 1.0)
-  - GoogleMaps
-  - GooglePlacePicker
   - GooglePlaces
   - iCarousel
   - IQKeyboardManagerSwift
   - NVActivityIndicatorView
-  - SCLAlertView
   - Stripe
   - TesseractOCRiOS (= 4.0.0)
   - WDImagePicker (from `https://github.com/justwudi/WDImagePicker.git`, tag `0.2.2`)
@@ -64,16 +53,14 @@ SPEC CHECKSUMS:
   CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
   DeviceKit: ddead7f3a7c9603ba3a63cb748566428c38dd11f
   GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
-  GooglePlacePicker: 665f39f931f2df32f9dd3fcc45f7e8abf71e535c
   GooglePlaces: 35636d86e5020cba3856eb988c09a5491de0a65a
   iCarousel: d782f635afac190c49bb8ee455882284cff8b85f
   IQKeyboardManagerSwift: 58bbcf46b5cf9fd4ed625d28a60cb2fbae4ab0f4
   NVActivityIndicatorView: 81953b5e65093ba79edf4fe7268e002039ca5268
-  SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   Stripe: a47770e82db059d0e7e160f9aabc2997055ee911
   TesseractOCRiOS: 90638afbe43d082433f2e76b384c7901d23956df
   WDImagePicker: 0014e231d67a63db9a97db74332a8a16723809bc
 
-PODFILE CHECKSUM: caaf40f4013966e0448ee2fbcf9d2b10668f4da0
+PODFILE CHECKSUM: 2f47dd0afe108ab09e4a4b686963adfcf4643848
 
 COCOAPODS: 1.2.0

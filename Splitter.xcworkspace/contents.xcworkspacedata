@@ -10,4 +10,7 @@
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:../../Downloads/EasyImagy-swift-3 3/EasyImagy.xcodeproj">
+   </FileRef>
 </Workspace>

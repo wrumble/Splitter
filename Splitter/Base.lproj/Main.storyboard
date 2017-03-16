@@ -34,10 +34,6 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XBH-WH-YiQ" customClass="iCarousel">
                                         <rect key="frame" x="0.0" y="50" width="375" height="527"/>
                                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <connections>
-                                            <outlet property="dataSource" destination="uEY-Eo-sjy" id="tWP-Ks-Dog"/>
-                                            <outlet property="delegate" destination="uEY-Eo-sjy" id="C5b-zM-uK2"/>
-                                        </connections>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Sd-Qi-xbP">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
@@ -1402,8 +1398,8 @@
         <image name="scissorIconWhite" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="959-yl-2K4"/>
-        <segue reference="hEp-Gc-gNG"/>
-        <segue reference="R29-NX-Cd2"/>
+        <segue reference="dQC-F4-3d7"/>
+        <segue reference="Oz6-dd-x1Q"/>
+        <segue reference="fP8-O7-qcm"/>
     </inferredMetricsTieBreakers>
 </document>

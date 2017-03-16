@@ -20,18 +20,27 @@ class TextToItemConverter {
     }
     
     func createItems(_ itemText: String) {
+        
         if itemText.characters.count > 5 {
             
             let managedContext = bill.managedObjectContext
             let entity =  NSEntityDescription.entity(forEntityName: "Item", in: managedContext!)
-            let newItem = NSManagedObject(entity: entity!, insertInto: managedContext)
-            
-            newItem.setValue(returnItemName(itemText), forKey: "name")
-            newItem.setValue(returnItemQuantity(itemText), forKey: "quantity")
-            newItem.setValue(returnItemPrice(itemText), forKey: "price")
-            
             let currentItems = bill.mutableSetValue(forKey: "items")
-            currentItems.add(newItem)
+            let quantity = returnItemQuantity(itemText)
+            let date = Date() as NSDate
+            
+            for _ in 1...quantity {
+                
+                let newItem = NSManagedObject(entity: entity!, insertInto: managedContext)
+                
+                newItem.setValue(quantity, forKey: "quantity")
+                newItem.setValue(returnItemName(itemText), forKey: "name")
+                newItem.setValue(returnItemPrice(itemText), forKey: "price")
+                newItem.setValue(date, forKey: "creationDateTime")
+                newItem.setValue((bill as! Bill).id, forKey: "id")
+                currentItems.add(newItem)
+            }
+            
             do {
                 try managedContext!.save()
             } catch let error as NSError  {
@@ -53,15 +62,18 @@ class TextToItemConverter {
     }
     
     func returnItemQuantity(_ itemText: String) -> Int {
-        let int = itemText.replacingOccurrences(of: ",", with: ".")
+        
         var quantity = 1
-        if NSString(string: int).integerValue == 0 { //FIXME This looks wrong, probably why its not duplicating items when saving.
-            quantity = NSString(string: int).integerValue
+        if NSString(string: itemText).integerValue > 1 {
+            
+            quantity = NSString(string: itemText).integerValue
         }
+        
         return quantity
     }
     
     func returnItemPrice(_ itemText: String) -> Double {
+        
         let removedCommas = itemText.replacingOccurrences(of: ",", with: ".")
         let words = removedCommas.characters.split{$0 == " "}.map(String.init)
         var double = String()
@@ -77,12 +89,14 @@ class TextToItemConverter {
     }
     
     func removeCharsFromString(_ text: String) -> String {
+        
         let okayChars : Set<Character> =
             Set("0123456789".characters)
         return String(text.characters.filter {okayChars.contains($0) })
     }
     
     func priceFromString(_ string: String) -> Double {
+        
         var newString = removeCharsFromString(string)
         let index = newString.characters.count - 2
         newString.insert(".", at: newString.characters.index(newString.startIndex, offsetBy: index))

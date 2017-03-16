@@ -10,7 +10,6 @@ import UIKit
 import AFNetworking
 import Stripe
 import NVActivityIndicatorView
-import CoreData
 
 class FinalRegistrationViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, NVActivityIndicatorViewable {
     

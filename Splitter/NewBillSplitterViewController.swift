@@ -12,8 +12,7 @@ import AVFoundation
 
 class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var bill: NSManagedObject!
-    var billName: String!
+    var bill: Bill!
     var allItems: [Item]!
     var selectedItems = [Item]()
     var checked = [Bool]()
@@ -62,6 +61,7 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         super.viewWillAppear(animated)
         if splitter == nil && Platform.isPhone {
             session = AVCaptureSession()
@@ -98,17 +98,21 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let destinationVC = segue.destination as! BillSplittersViewController
-        let passedBill: NSManagedObject = bill as NSManagedObject
 
         destinationVC.allBillSplitters = getUpdatedSplitters()
-        destinationVC.billName = billName
-        destinationVC.bill = passedBill
+        destinationVC.bill = bill
     }
     
     func getUpdatedSplitters() -> [BillSplitter] {
+        
         var allBillSplitters = [BillSplitter]()
         
         let managedContext = bill.managedObjectContext
@@ -141,6 +145,7 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
         var sharedSplittersText = String()
         
         if numberOfSplitters == 0 {
+            
             sharedSplittersText = "No one is paying for this item yet."
         } else {
             
@@ -202,6 +207,7 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func dismissKeyboard() {
+        
         view.endEditing(true)
     }
     
@@ -232,12 +238,11 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
             catch let error as NSError {
                 print("Core Data save failed: \(error)")
             }
-            
         }
-        
     }
     
     func managedContextDidSave() {
+        
         DispatchQueue.main.async { [weak weakSelf = self] in
             guard let weakSelf = weakSelf else { return }
             weakSelf.performSegue(withIdentifier: "segueToBillSplitters", sender: self)
@@ -256,6 +261,7 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
         
         splitterObject.setValue(billSplitterName?.text?.trim(), forKey: "name")
         splitterObject.setValue(billSplitterEmail?.text?.trim(), forKey: "email")
+        splitterObject.setValue(bill.id, forKey: "id")
         
         if splitter == nil {
             let currentBillSplitters = self.bill.mutableSetValue(forKey: "billSplitters")
@@ -265,7 +271,7 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
             }
             currentBillSplitters.add(splitterObject)
         }
-        }
+    }
     
     func capturePhoto() {
         DispatchQueue.global(qos: .background).async { [weak weakSelf = self] in

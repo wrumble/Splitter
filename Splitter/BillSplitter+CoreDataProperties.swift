@@ -2,7 +2,7 @@
 //  BillSplitter+CoreDataProperties.swift
 //  Splitter
 //
-//  Created by Wayne Rumble on 19/01/2017.
+//  Created by Wayne Rumble on 15/03/2017.
 //  Copyright © 2017 Wayne Rumble. All rights reserved.
 //
 
@@ -20,10 +20,9 @@ extension BillSplitter {
     @NSManaged public var email: String?
     @NSManaged public var hasPaid: Bool
     @NSManaged public var id: String?
+    @NSManaged public var image: NSData?
     @NSManaged public var isMainBillSplitter: Bool
     @NSManaged public var name: String?
-    @NSManaged public var total: Double
-    @NSManaged public var image: NSData?
     @NSManaged public var bills: NSSet?
     @NSManaged public var items: NSSet?
 

@@ -33,6 +33,7 @@ class ProfilePhoto {
     
 //Assigns the front camera of the device as the AVCapture device.
     func findFrontCamera() {
+        
         frontCamera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
         let availableCameraDevices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo)
         for device in availableCameraDevices as! [AVCaptureDevice] {
@@ -55,6 +56,7 @@ class ProfilePhoto {
     
 //Begin the AVCapture session.
     func beginSession() {
+        
         if session!.canAddInput(input) {
             session!.addInput(input)
             self.setStillImageOutput()
@@ -75,8 +77,10 @@ class ProfilePhoto {
     func capture(completion: @escaping (UIImage?) -> Void) {
         
         if let videoConnection = stillImageOutput!.connection(withMediaType: AVMediaTypeVideo) {
+
             stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { (sampleBuffer, error) -> Void in
                 if sampleBuffer != nil {
+
                     let cgImageRef = self.setBufferData(sampleBuffer: sampleBuffer!)
                     let image: UIImage! = UIImage(cgImage: cgImageRef, scale: 1.0, orientation: UIImageOrientation.right)
                     completion(image)
@@ -91,6 +95,7 @@ class ProfilePhoto {
     
     
     func setBufferData(sampleBuffer: CMSampleBuffer ) -> CGImage {
+        
         let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
         let dataProvider = CGDataProvider(data: imageData as! CFData)
         let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)

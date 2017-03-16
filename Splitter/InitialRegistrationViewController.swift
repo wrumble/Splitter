@@ -9,7 +9,6 @@
 import UIKit
 import Stripe
 import AFNetworking
-import CoreData
 import NVActivityIndicatorView
 import DeviceKit
 import AVFoundation
@@ -17,10 +16,10 @@ import AVFoundation
 class InitialRegistrationViewController: UIViewController, UINavigationControllerDelegate, NVActivityIndicatorViewable {
     
     
-    var quantity = CGFloat(200)
+    var quantity: CGFloat = 200
     var stripeAccountID = String()
     var profileImage = UIImageView()
-    var profilePhoto: ProfilePhoto!
+    var profilePhoto = ProfilePhoto()
     
     @IBOutlet weak var previewView: UIView!
     @IBOutlet weak var firstNameTextField: UITextField!
@@ -35,7 +34,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        firstNameTextField.text = "Wayne"
         lastNameTextField.text = "Rumble"
         dobTextField.text = "20/02/1985"
         emailTextField.text = "ben@sdf.com"
@@ -55,7 +53,6 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        profilePhoto = ProfilePhoto()
         profilePhoto.startSession()
     }
     
@@ -70,12 +67,14 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     
 //Hides keyboard when tapping anywhere other than a textfield.
     func dismissKeyboard() {
+        
         view.endEditing(true)
     }
     
 // MARK: Check TextFields
 //Add tags to textfields with consistencies that can be checked.
     func setTextFieldTags() {
+        
         emailTextField.tag = 0
         postCodeTextField.tag = 1
     }
@@ -103,6 +102,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     
 //If textfields aren't empty and have been filled in correctly, show the Next button.
     func isEmptyField(sender: UITextField) {
+        
         sender.text = sender.text?.trimmingCharacters(in: CharacterSet.whitespaces)
         guard
             
@@ -168,9 +168,9 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
         }
     }
     
-//MARK: showNextButton
 //Show next button once all fields contain text.
     func showNextButton() {
+        
         let button = RegistrationButton(title: "Next")
         button.addTarget(self, action: #selector(nextButtonWasPressed), for: .touchUpInside)
         bottomView.addSubview(button)
@@ -179,6 +179,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
 //MARK: Creating Stripe Connect account.
 //Starts a custom activity indicator(NVActivityIndicatorView) then calls create account request.
     @IBAction func nextButtonWasPressed(sender: UIButton) {
+
         startAnimating()
         createAccount()
     }
@@ -218,6 +219,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     
 //If api request is successful then save received account id, stop activity indicator and move onto next step in creating account.
     func successfulRequest(response: AnyObject) {
+        
         self.stripeAccountID = response["id"] as! String
         createMainBillSplitter()
         self.stopAnimating()
@@ -226,6 +228,7 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     
 //If api request fails, then create an alert view with reason why.
     func failedRequest(response: AnyObject) {
+        
         self.stopAnimating()
         let alert = HttpRequest().handleError(response["failed"] as! NSError)
         self.present(alert, animated: true, completion: nil)
