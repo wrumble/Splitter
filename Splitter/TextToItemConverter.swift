@@ -78,10 +78,13 @@ class TextToItemConverter {
         
         //Replace any commas in text to avoid confusion when finding a double
         let removedCommas = itemText.replacingOccurrences(of: ",", with: ".")
-        let words = removedCommas.characters.split{$0 == " "}.map(String.init)
+        var words = removedCommas.characters.split{$0 == " "}.map(String.init)
+        
+        words = words.filter { $0 != "" }
+        
         var priceString = words.last!
         var price: Double = 0.0
-        print(priceString)
+        
         priceString.replaceWhereFiveShouldBe()
         priceString.replaceWhereOneShouldBe()
         

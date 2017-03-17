@@ -43,6 +43,12 @@ class MyBillsViewController: UIViewController {
         carousel.scroll(byNumberOfItems: allBills.count, duration: 1.5)
     }
     
+//Remove observer on app delegate after viewController closes
+    override func viewDidDisappear(_ animated: Bool) {
+        
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         //View bill to make edits etc, passing bill selected.
@@ -172,6 +178,7 @@ class MyBillsViewController: UIViewController {
             
             allBills.remove(at: index)
             carouselDataSource.allBills = allBills
+            carouselDataSource.tableViewDataSource.allBills = allBills
             checkEmptyCarousel()
         }
         

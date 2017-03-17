@@ -10,7 +10,7 @@ import UIKit
 
 class CarouselBillTableViewDataSource: NSObject, UITableViewDataSource {
     
-    let allBills = CoreDataHelper().getAllBills()
+    var allBills = CoreDataHelper().getAllBills()
     var cellWidth = CGFloat()
     var textWidth = CGFloat()
     var height = CGFloat()
@@ -54,7 +54,6 @@ class CarouselBillTableViewDataSource: NSObject, UITableViewDataSource {
     
     func returnCollatedBillItems(_ tableViewTag: Int) -> [Item] {
         
-        print(allBills[tableViewTag].items!.allObjects)
         let items = (allBills[tableViewTag].items)?.allObjects as! [Item]
         var collatedItems = [Item]()
         
