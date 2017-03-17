@@ -40,7 +40,6 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let destinationVC = segue.destination as! BillSplittersViewController
             
             destinationVC.bill = bill
-            destinationVC.allBillSplitters = bill.billSplitters?.allObjects as! [BillSplitter]
         }
     }
     
@@ -147,6 +146,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
+            
             let item = allItems[indexPath.row]
             let managedContext = bill.managedObjectContext
             let quantity = item.quantity - 1
@@ -304,6 +304,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func priceFromString(_ string: String) -> Double {
+        
         let price = (NumberFormatter().number(from: string)?.doubleValue)!
         return price
     }

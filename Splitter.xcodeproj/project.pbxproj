@@ -188,6 +188,7 @@
 		68101FE81E4CE1E4002DA5CF /* ClassHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				680D8EAF1E0D996900809D8F /* TableView.swift */,
 				68D517F21DCBECCC00028759 /* TextToItemConverter.swift */,
 				68EE13F01E439DE500744A1F /* Platform.swift */,
 				68101FE01E4CB112002DA5CF /* CoreData.swift */,
@@ -213,7 +214,6 @@
 		68101FEE1E4E01D6002DA5CF /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				680D8EAF1E0D996900809D8F /* TableView.swift */,
 				684C05D21E48ED4A0089D739 /* Color.swift */,
 				684C05D41E4A63F30089D739 /* String.swift */,
 				684C05DA1E4A823C0089D739 /* CurrencyFormat.swift */,

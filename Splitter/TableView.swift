@@ -56,6 +56,6 @@ class TableViewHelper {
 //Adds the view to the tableView
     func setTableView() {
         
-        tableView.backgroundView?.addSubview(messageView)
+        tableView.superview?.addSubview(messageView)
     }
 }

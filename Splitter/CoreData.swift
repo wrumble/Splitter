@@ -34,6 +34,7 @@ class CoreDataHelper {
         return allBills
     }
     
+//Saves the bill then returns it to be passsed to the next viewController
     func saveBill(_ values: [String: Any]) -> NSManagedObject {
         
         let managedContext = appDelegate.managedObjectContext
@@ -52,6 +53,31 @@ class CoreDataHelper {
         return newBill
     }
     
+//Saves each item to the bill it has been passed
+    func saveItem(_ context: AnyObject, values: [String: Any]) {
+        
+        let managedContext = context.managedObjectContext
+        let entity =  NSEntityDescription.entity(forEntityName: "Item", in: managedContext!)
+        let currentItems = context.mutableSetValue(forKey: "items")
+        let quantity = values["quantity"] as! Int
+        let date = Date() as NSDate
+        
+        for _ in 1...quantity {
+            
+            let newItem = NSManagedObject(entity: entity!, insertInto: managedContext)
+            
+            newItem.setValue(quantity, forKey: "quantity")
+            newItem.setValue(values["name"], forKey: "name")
+            newItem.setValue(values["price"], forKey: "price")
+            newItem.setValue(date, forKey: "creationDateTime")
+            newItem.setValue(values["id"], forKey: "id")
+            currentItems.add(newItem)
+        }
+        
+        save(managedContext!)
+    }
+    
+//Returns the main bill splitter(phone owner), to be added to new bills or to view their items
     func returnMainBillSplitter() -> BillSplitter {
         
         var mainBillSplitter: BillSplitter!

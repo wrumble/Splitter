@@ -34,12 +34,12 @@ class InitialRegistrationViewController: UIViewController, UINavigationControlle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        lastNameTextField.text = "Rumble"
-        dobTextField.text = "20/02/1985"
-        emailTextField.text = "ben@sdf.com"
-        addressLine1TextField.text = "4 Chedworth House"
-        cityTextField.text = "London"
-        postCodeTextField.text = "bh235db"
+        lastNameTextField.text = "Rumble"//FIXME remove for production
+        dobTextField.text = "20/02/1985"//FIXME remove for production
+        emailTextField.text = "ben@sdf.com"//FIXME remove for production
+        addressLine1TextField.text = "4 Chedworth House"//FIXME remove for production
+        cityTextField.text = "London"//FIXME remove for production
+        postCodeTextField.text = "bh235db"//FIXME remove for production
         
         // Hides keyboard when tapping anywhere other than a textfield.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))

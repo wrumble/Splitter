@@ -146,6 +146,7 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
     }
     
     func handleSuccess() {
+        
         let message = "You succesfully paid \(splitter.total().asLocalCurrency) to \(getMainSplitterName())'s bank account"
         let alert = UIAlertController(title: "Success!", message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
@@ -156,16 +157,25 @@ class SplitterPaymentViewController: UIViewController, CardIOPaymentViewControll
         self.present(alert, animated: true, completion: nil)
     }
     
+    
+    @IBAction func backButtonWasPressed(_ sender: Any) {
+        performSegue(withIdentifier: "segueToBillSplitters", sender: self)
+    }
+
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         if segue.identifier == "segueToBillSplitters" {
             
             let destinationVC = segue.destination as! BillSplittersViewController
             
             destinationVC.bill = bill
+            destinationVC.allBillSplitters = bill.billSplitters?.allObjects as! [BillSplitter]
         }
     }
     
     func getAllSplitters() -> [BillSplitter] {
+        
         var allBillSplitters = [BillSplitter]()
         
         let managedContext = bill.managedObjectContext

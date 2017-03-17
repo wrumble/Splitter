@@ -1,6 +1,6 @@
 # Splitter iOS App
 
-The main pointof Splitter is to display my skills as a developer and help me continue learning the vast chasm that is the world of programming.
+The main point of Splitter is to display my skills as a developer and help me continue learning the vast chasm that is the world of programming.
 
 Splitter, is designed to speed up service in a restaurant or any payment situation with a printed bill that needs to be split in a customised fashion for each person. You will be able to photograph your bill and allow the text recoginition to pick up the name, quantity and price of each item. These items can them be assigned to one or multiple people. The app works out each persons total and then alows them to pay the phone owner using Stripe and Card.io who then pays the whole bill total to the restaurant server.
 

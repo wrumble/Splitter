@@ -12,58 +12,40 @@ import CoreData
 class TextToItemConverter {
     
     var bill: NSManagedObject!
+    var coreDataHelper = CoreDataHelper()
     
     func seperateTextToLines(_ receiptText: String) {
+        
         let newlineChars = CharacterSet.newlines
         let lines = receiptText.utf16.split { newlineChars.contains(UnicodeScalar($0)!) }.flatMap(String.init)
-        for line in lines { createItems(line) }
+        
+        for line in lines { saveItems(line) }
     }
     
-    func createItems(_ itemText: String) {
+//Save each item line to the bill if it is above 5 characters long
+    func saveItems(_ itemText: String) {
         
+        //Each item line on the receipt will have the price 0.01 and at least a word so minnimum line length can be minimum 5 characters, maybe even 6
         if itemText.characters.count > 5 {
             
-            let managedContext = bill.managedObjectContext
-            let entity =  NSEntityDescription.entity(forEntityName: "Item", in: managedContext!)
-            let currentItems = bill.mutableSetValue(forKey: "items")
-            let quantity = returnItemQuantity(itemText)
-            let date = Date() as NSDate
-            
-            for _ in 1...quantity {
-                
-                let newItem = NSManagedObject(entity: entity!, insertInto: managedContext)
-                
-                newItem.setValue(quantity, forKey: "quantity")
-                newItem.setValue(returnItemName(itemText), forKey: "name")
-                newItem.setValue(returnItemPrice(itemText), forKey: "price")
-                newItem.setValue(date, forKey: "creationDateTime")
-                newItem.setValue((bill as! Bill).id, forKey: "id")
-                currentItems.add(newItem)
-            }
-            
-            do {
-                try managedContext!.save()
-            } catch let error as NSError  {
-                print("Could not save \(error), \(error.userInfo)")
-            }
+            coreDataHelper.saveItem(bill, values: createItemValues(itemText))
         }
     }
     
-    func returnItemName(_ itemText: String) -> String {
-        let words = itemText.characters.split{$0 == " "}.map(String.init)
-        var name = [String]()
+//Create has of item values to be passed to the coredata helper.
+    func createItemValues(_ itemText: String) -> [String: Any] {
         
-        for word in words {
-            if word.isaWord {
-                name.append(word)
-            }
-        }
-        return name.joined(separator: " ")
+        return ["quantity": returnItemQuantity(itemText),
+                "name": returnItemName(itemText),
+                "price": returnItemPrice(itemText),
+                "id": (bill as! Bill).id!] as [String: Any]
     }
     
+//Returns just the integer value form the string
     func returnItemQuantity(_ itemText: String) -> Int {
         
         var quantity = 1
+        
         if NSString(string: itemText).integerValue > 1 {
             
             quantity = NSString(string: itemText).integerValue
@@ -72,35 +54,38 @@ class TextToItemConverter {
         return quantity
     }
     
-    func returnItemPrice(_ itemText: String) -> Double {
+//Removes any numbers or symbols from the string
+    func returnItemName(_ itemText: String) -> String {
         
-        let removedCommas = itemText.replacingOccurrences(of: ",", with: ".")
-        let words = removedCommas.characters.split{$0 == " "}.map(String.init)
-        var double = String()
-        var price: Double = 0.0
+        let words = itemText.characters.split{$0 == " "}.map(String.init)
+        var name = [String]()
         
-        for number in words {
-            if number.containsADouble {
-                double = number
-                price = priceFromString(double)
+        for word in words {
+            
+            //See string extensions
+            if word.isaWord {
+                
+                name.append(word)
             }
         }
-        return price
+        
+        return name.joined(separator: " ")
     }
     
-    func removeCharsFromString(_ text: String) -> String {
-        
-        let okayChars : Set<Character> =
-            Set("0123456789".characters)
-        return String(text.characters.filter {okayChars.contains($0) })
-    }
     
-    func priceFromString(_ string: String) -> Double {
+//Returns just the Double value contained within the string
+    func returnItemPrice(_ itemText: String) -> Double {
         
-        var newString = removeCharsFromString(string)
-        let index = newString.characters.count - 2
-        newString.insert(".", at: newString.characters.index(newString.startIndex, offsetBy: index))
-        let price = (NumberFormatter().number(from: newString)?.doubleValue)!
+        //Replace any commas in text to avoid confusion when finding a double
+        let removedCommas = itemText.replacingOccurrences(of: ",", with: ".")
+        let words = removedCommas.characters.split{$0 == " "}.map(String.init)
+        var priceString = words.last!
+        var price: Double = 0.0
+        print(priceString)
+        priceString.replaceWhereFiveShouldBe()
+        priceString.replaceWhereOneShouldBe()
+        
+        price = priceString.priceFromStringWithDouble()
         
         return price
     }

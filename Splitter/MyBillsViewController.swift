@@ -159,9 +159,8 @@ class MyBillsViewController: UIViewController {
         
         return UIAlertAction(title: "Yes", style: .default, handler: { (action) -> Void in
 
+            self.addBillNotification()
             self.removeBill()
-            self.carousel.reloadData()
-            self.carousel.scroll(byNumberOfItems: self.allBills.count, duration: 1.5)
         })
     }
 
@@ -175,7 +174,23 @@ class MyBillsViewController: UIViewController {
             carouselDataSource.allBills = allBills
             checkEmptyCarousel()
         }
+        
         self.coredataHelper.deleteBill(bill: bill)
+    }
+    
+//Adds notification as to when bill has been deleted.
+    func addBillNotification() {
+        
+        let notificationCenter = NotificationCenter.default
+        let context = (UIApplication.shared.delegate as! AppDelegate).managedObjectContext
+        notificationCenter.addObserver(self, selector: #selector(billWasDeleted), name: NSNotification.Name.NSManagedObjectContextDidSave, object: context)
+    }
+    
+//Reload data after bill has deleted.
+    func billWasDeleted() {
+        
+        self.carousel.reloadData()
+        self.carousel.scroll(byNumberOfItems: self.allBills.count, duration: 1.5)
     }
 }
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-//Allows use of hex colors.
+//Allows use of hex and rgb colors.
 extension UIColor {
     
     convenience init(red: Int, green: Int, blue: Int) {

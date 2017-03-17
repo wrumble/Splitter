@@ -25,8 +25,8 @@ class FinalRegistrationViewController: UIViewController, UINavigationControllerD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        accountNumberTextField.text = "12345678"
-        sortCodeTextField.text = "123456"
+        accountNumberTextField.text = "12345678"//FIXME remove for production
+        sortCodeTextField.text = "123456"//FIXME remove for production
 
         setTextFieldTags()
         addTextFieldTargets()

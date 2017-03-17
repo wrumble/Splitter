@@ -165,6 +165,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func payButtonWasPressed(_ sender: UIButton) {
+        
         itemIndex = sender.tag
         super.performSegue(withIdentifier: "segueToSplitterPaymentViewController", sender: nil)
     }
@@ -184,6 +185,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         let splitter = allBillSplitters[carouselIndex]
+        
         if (splitter.items?.count)! > 0 {
             
             if splitter.isMainBillSplitter {
@@ -195,7 +197,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
             }
         } else {
             
-            let message = "\(splitter.name!) has no items to pay for."
+            let message = "\(splitter.name!) has no items to pay for yet. Tap the edit button to add some items."
             
             TableViewHelper().createEmptyMessage(message, tableView: tableView)
             

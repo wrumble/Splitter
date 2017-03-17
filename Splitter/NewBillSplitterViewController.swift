@@ -174,7 +174,9 @@ class NewBillSplitterViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         if let cell = tableView.cellForRow(at: indexPath) {
+            
             if cell.accessoryType == .checkmark {
                 cell.accessoryType = .none
                 selectedItems.remove(at: selectedItems.index(of: allItems[indexPath.row])!)

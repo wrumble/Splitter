@@ -19,6 +19,7 @@ class Places {
         getNearestBarCafeRestaurant()
     }
     
+//Returns the nearest bar cafe or restaurant(under googles definitions, places most likely this app would be used for)
     func getNearestBarCafeRestaurant() {
         
         placesClient.currentPlace(callback: { (placeLikelihoodList, error) -> Void in

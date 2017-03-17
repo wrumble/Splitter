@@ -27,7 +27,7 @@ class CarouselBillTableViewDataSource: NSObject, UITableViewDataSource {
             return count
         } else {
             
-            let message = "You don't have any bills yet.\nTap plus button to begin."
+            let message = "You don't have any bills yet.\nTap the plus button to begin."
             
             TableViewHelper().createEmptyMessage(message, tableView: tableView)
             
@@ -54,21 +54,27 @@ class CarouselBillTableViewDataSource: NSObject, UITableViewDataSource {
     
     func returnCollatedBillItems(_ tableViewTag: Int) -> [Item] {
         
+        print(allBills[tableViewTag].items!.allObjects)
         let items = (allBills[tableViewTag].items)?.allObjects as! [Item]
         var collatedItems = [Item]()
-        var duplicateNames = Set<String>()
-
-        items.forEach { item in
+        
+        if items.count > 0 {
             
-            if !duplicateNames.contains(item.name!) {
+            var duplicateNames = Set<String>()
+            
+            items.forEach { item in
                 
-                collatedItems.append(item)
-                duplicateNames.insert(item.name!)
+                if !duplicateNames.contains(item.name!) {
+                    
+                    collatedItems.append(item)
+                    duplicateNames.insert(item.name!)
+                }
             }
+            
+            collatedItems.sort(by: { $0.creationDateTime?.compare($1.creationDateTime as! Date) == .orderedAscending })
+            
         }
         
-        collatedItems.sort(by: { $0.creationDateTime?.compare($1.creationDateTime as! Date) == .orderedAscending })
-
         return collatedItems
     }
     

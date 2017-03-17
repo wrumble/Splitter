@@ -765,19 +765,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KhS-AY-tk4">
-                                <rect key="frame" x="0.0" y="185" width="375" height="50"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="krB-hb-536"/>
-                                </constraints>
-                                <state key="normal" title="Button">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="payButtonWasPressed" destination="jVi-tb-OWk" eventType="touchUpInside" id="b3g-9A-qPV"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lY7-rf-GZQ">
                                 <rect key="frame" x="0.0" y="25" width="375" height="50"/>
                                 <subviews>
@@ -836,19 +823,49 @@
                                     <constraint firstAttribute="bottom" secondItem="Wfo-ZX-aTN" secondAttribute="bottom" constant="2" id="sC0-IH-DEq"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KhS-AY-tk4">
+                                <rect key="frame" x="0.0" y="185" width="375" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="krB-hb-536"/>
+                                </constraints>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="payButtonWasPressed" destination="jVi-tb-OWk" eventType="touchUpInside" id="b3g-9A-qPV"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eWX-rp-jcr" userLabel="Back Button">
+                                <rect key="frame" x="0.0" y="245" width="375" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="EAN-vc-ZL6"/>
+                                    <constraint firstAttribute="height" constant="50" id="ySR-hb-MSr"/>
+                                </constraints>
+                                <state key="normal" title="Back">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="backButtonWasPressed:" destination="jVi-tb-OWk" eventType="touchUpInside" id="rmv-5u-KMH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.19340321420000001" green="0.45229226350000001" blue="0.70000249150000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="KhS-AY-tk4" firstAttribute="leading" secondItem="WsS-BP-UXl" secondAttribute="leading" id="HH4-an-bxw"/>
                             <constraint firstAttribute="trailing" secondItem="KhS-AY-tk4" secondAttribute="trailing" id="IXW-SK-5ff"/>
                             <constraint firstItem="lY7-rf-GZQ" firstAttribute="top" secondItem="kZp-gh-heb" secondAttribute="bottom" constant="5" id="J4u-U8-X5y"/>
+                            <constraint firstItem="eWX-rp-jcr" firstAttribute="leading" secondItem="WsS-BP-UXl" secondAttribute="leading" id="L1D-yk-J5S"/>
                             <constraint firstItem="n0e-cl-NGi" firstAttribute="leading" secondItem="WsS-BP-UXl" secondAttribute="leading" id="TMY-Pw-Jk3"/>
                             <constraint firstItem="KhS-AY-tk4" firstAttribute="top" secondItem="AaO-VA-cAO" secondAttribute="bottom" constant="10" id="Urq-wz-wOM"/>
+                            <constraint firstItem="eWX-rp-jcr" firstAttribute="top" secondItem="KhS-AY-tk4" secondAttribute="bottom" constant="10" id="XrJ-XT-g2e"/>
                             <constraint firstAttribute="trailing" secondItem="lY7-rf-GZQ" secondAttribute="trailing" id="cR1-EL-k5K"/>
                             <constraint firstItem="AaO-VA-cAO" firstAttribute="top" secondItem="n0e-cl-NGi" secondAttribute="bottom" id="dhS-pW-rRn"/>
                             <constraint firstAttribute="trailing" secondItem="n0e-cl-NGi" secondAttribute="trailing" id="dn9-V3-eQL"/>
                             <constraint firstAttribute="trailing" secondItem="AaO-VA-cAO" secondAttribute="trailing" id="ecL-Kt-2YM"/>
                             <constraint firstItem="lY7-rf-GZQ" firstAttribute="leading" secondItem="WsS-BP-UXl" secondAttribute="leading" id="otl-Xa-3yI"/>
+                            <constraint firstAttribute="trailing" secondItem="eWX-rp-jcr" secondAttribute="trailing" id="t9a-AF-24e"/>
                             <constraint firstItem="AaO-VA-cAO" firstAttribute="leading" secondItem="WsS-BP-UXl" secondAttribute="leading" id="tnn-Gd-73L"/>
                             <constraint firstItem="n0e-cl-NGi" firstAttribute="top" secondItem="lY7-rf-GZQ" secondAttribute="bottom" id="v1d-qw-FLP"/>
                         </constraints>
@@ -858,13 +875,13 @@
                         <outlet property="cardCVVTextField" destination="Wfo-ZX-aTN" id="RSU-tK-fS4"/>
                         <outlet property="cardExpiryTextField" destination="lFJ-5X-1nI" id="6Qg-ef-AzF"/>
                         <outlet property="cardNumberTextField" destination="E8X-1f-vs2" id="Hg1-gh-x1B"/>
-                        <outlet property="payButton" destination="KhS-AY-tk4" id="3D8-f2-VtX"/>
+                        <outlet property="payButton" destination="KhS-AY-tk4" id="Lq8-8H-yNW"/>
                         <segue destination="zNw-7f-jBh" kind="show" identifier="segueToBillSplitters" id="aVh-aW-g2A"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q5y-2l-ti2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="167" y="1237"/>
+            <point key="canvasLocation" x="166" y="1237"/>
         </scene>
         <!--Initial Registration View Controller-->
         <scene sceneID="xoB-oa-g3Y">
@@ -1398,8 +1415,8 @@
         <image name="scissorIconWhite" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dQC-F4-3d7"/>
-        <segue reference="Oz6-dd-x1Q"/>
         <segue reference="fP8-O7-qcm"/>
+        <segue reference="dQC-F4-3d7"/>
+        <segue reference="aVh-aW-g2A"/>
     </inferredMetricsTieBreakers>
 </document>

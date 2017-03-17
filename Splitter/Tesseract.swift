@@ -11,6 +11,7 @@ import TesseractOCR
 
 class Tesseract {
     
+//Utilise tesseract to return any text found in given image
     func recognise(_ image: UIImage) -> String {
         
         let tesseract = G8Tesseract(language: "eng")

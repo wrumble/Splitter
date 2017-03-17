@@ -6,77 +6,87 @@
 //  Copyright © 2017 Wayne Rumble. All rights reserved.
 //
 
-        import UIKit
-        import CoreImage
+import UIKit
+import CoreImage
 
-        extension UIImage {
+extension UIImage {
+    
+//Grayscale the image
+    func toGrayScale() -> UIImage {
+        
+        let greyImage = UIImageView()
+        greyImage.image = self
+        let context = CIContext(options: nil)
+        let currentFilter = CIFilter(name: "CIPhotoEffectNoir")
+        currentFilter!.setValue(CIImage(image: greyImage.image!), forKey: kCIInputImageKey)
+        let output = currentFilter!.outputImage
+        let cgimg = context.createCGImage(output!,from: output!.extent)
+        let processedImage = UIImage(cgImage: cgimg!)
+        greyImage.image = processedImage
+        
+        return greyImage.image!
+    }
+    
+//Reduce the image to black or whitepixels only
+    func binarise() -> UIImage {
+        
+        let glContext = EAGLContext(api: .openGLES2)!
+        let ciContext = CIContext(eaglContext: glContext, options: [kCIContextOutputColorSpace : NSNull()])
+        let filter = CIFilter(name: "CIPhotoEffectMono")
+        
+        filter!.setValue(CIImage(image: self), forKey: "inputImage")
+        
+        let outputImage = filter!.outputImage
+        let cgimg = ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
+        
+        return UIImage(cgImage: cgimg!)
+    }
+    
+//Scales down the image so that either the width or height is less than 640px, which is optimal for tesseract OCR
+    func scaleImage() -> UIImage {
+        
+        let maxDimension: CGFloat = 640
+        var scaledSize = CGSize(width: maxDimension, height: maxDimension)
+        var scaleFactor: CGFloat
+        
+        if self.size.width > self.size.height {
             
-            func toGrayScale() -> UIImage {
-                
-                let greyImage = UIImageView()
-                greyImage.image = self
-                let context = CIContext(options: nil)
-                let currentFilter = CIFilter(name: "CIPhotoEffectNoir")
-                currentFilter!.setValue(CIImage(image: greyImage.image!), forKey: kCIInputImageKey)
-                let output = currentFilter!.outputImage
-                let cgimg = context.createCGImage(output!,from: output!.extent)
-                let processedImage = UIImage(cgImage: cgimg!)
-                greyImage.image = processedImage
-                
-                return greyImage.image!
-            }
+            scaleFactor = self.size.height / self.size.width
+            scaledSize.width = maxDimension
+            scaledSize.height = scaledSize.width * scaleFactor
+        } else {
             
-            func binarise() -> UIImage {
-                
-                let glContext = EAGLContext(api: .openGLES2)!
-                let ciContext = CIContext(eaglContext: glContext, options: [kCIContextOutputColorSpace : NSNull()])
-                let filter = CIFilter(name: "CIPhotoEffectMono")
-                filter!.setValue(CIImage(image: self), forKey: "inputImage")
-                let outputImage = filter!.outputImage
-                let cgimg = ciContext.createCGImage(outputImage!, from: (outputImage?.extent)!)
-                
-                return UIImage(cgImage: cgimg!)
-            }
-            
-            func scaleImage() -> UIImage {
-                
-                let maxDimension: CGFloat = 640
-                var scaledSize = CGSize(width: maxDimension, height: maxDimension)
-                var scaleFactor: CGFloat
-                
-                if self.size.width > self.size.height {
-                    scaleFactor = self.size.height / self.size.width
-                    scaledSize.width = maxDimension
-                    scaledSize.height = scaledSize.width * scaleFactor
-                } else {
-                    scaleFactor = self.size.width / self.size.height
-                    scaledSize.height = maxDimension
-                    scaledSize.width = scaledSize.height * scaleFactor
-                }
-                
-                UIGraphicsBeginImageContext(scaledSize)
-                self.draw(in: CGRect(x: 0, y: 0, width: scaledSize.width, height: scaledSize.height))
-                let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
-                
-                return scaledImage!
-            }
-            
-            func orientate(img: UIImage) -> UIImage {
-                
-                if (img.imageOrientation == UIImageOrientation.up) {
-                    return img;
-                }
-                
-                UIGraphicsBeginImageContextWithOptions(img.size, false, img.scale)
-                let rect = CGRect(x: 0, y: 0, width: img.size.width, height: img.size.height)
-                img.draw(in: rect)
-                
-                let normalizedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-                UIGraphicsEndImageContext()
-                
-                return normalizedImage
-                
-            }
-            
+            scaleFactor = self.size.width / self.size.height
+            scaledSize.height = maxDimension
+            scaledSize.width = scaledSize.height * scaleFactor
         }
+        
+        UIGraphicsBeginImageContext(scaledSize)
+        self.draw(in: CGRect(x: 0, y: 0, width: scaledSize.width, height: scaledSize.height))
+        
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsEndImageContext()
+        
+        return scaledImage!
+    }
+    
+//re- orientates the image when iOS decides to rotate it sometimes
+    func orientate(img: UIImage) -> UIImage {
+        
+        if (img.imageOrientation == UIImageOrientation.up) {
+            return img;
+        }
+        
+        UIGraphicsBeginImageContextWithOptions(img.size, false, img.scale)
+        let rect = CGRect(x: 0, y: 0, width: img.size.width, height: img.size.height)
+        img.draw(in: rect)
+        
+        let normalizedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        return normalizedImage
+        
+    }
+    
+}

@@ -201,7 +201,7 @@ class NewBillViewController: UIViewController, UINavigationControllerDelegate, U
         
         return ["name": (self.billName?.text?.trim())!,
                 "location": (self.billLocation?.text?.trim())!,
-                "image": imageData!] as [String : Any]
+                "image": imageData!] as [String: Any]
     }
     
 //Set high work load image recognition to background thread.
