@@ -22,6 +22,7 @@ class EmptyCarouselLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
+//Format Labels View
     func setupView() {
 
         self.text = "You have no bills to split yet. Tap the plus icon to start splitting a new bill."

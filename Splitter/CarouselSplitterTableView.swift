@@ -24,6 +24,7 @@ class CarouselSplitterTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+//Format the TableView depending on the phones platform and if a profile picture was taken or not.
     func setupView() {
         
         if Platform.isPhone {

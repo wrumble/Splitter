@@ -40,11 +40,12 @@ class CarouselBillTableViewDataSource: NSObject, UITableViewDataSource {
         
         let cell: CarouselTableViewCell = tableView.dequeueReusableCell(withIdentifier: "carouselTableViewCell") as! CarouselTableViewCell
         let item = returnCollatedBillItems(tableView.tag)[indexPath.row]
+        let price = item.price * Double(item.quantity)
         
         cell.name!.text = "\(item.quantity) x \(item.name!)"
-        cell.price!.text = "\(item.price.asLocalCurrency)"
+        cell.price!.text = "\(price.asLocalCurrency)"
         
-        setCellVariables(cell: cell)
+        setCellFrameVariables(cell: cell)
         
         cell.name.frame = returnNameFrame(cell: cell)
         cell.price.frame = returnPriceFrame(cell: cell)
@@ -52,6 +53,7 @@ class CarouselBillTableViewDataSource: NSObject, UITableViewDataSource {
         return cell
     }
     
+//Retrun the bills items as multiples not individual items
     func returnCollatedBillItems(_ tableViewTag: Int) -> [Item] {
         
         let items = (allBills[tableViewTag].items)?.allObjects as! [Item]
@@ -78,7 +80,7 @@ class CarouselBillTableViewDataSource: NSObject, UITableViewDataSource {
     }
     
 //Set necessary variables to create cell label sizes.
-    func setCellVariables(cell: CarouselTableViewCell) {
+    func setCellFrameVariables(cell: CarouselTableViewCell) {
         
         cellWidth = cell.frame.width
         textWidth = (cell.price.text?.widthWithConstrainedHeight(height: cell.view.frame.height, font: UIFont.systemFont(ofSize: 15)))!

@@ -19,6 +19,7 @@ class CarouselView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+//Format Carousel Item View
     func setupView() {
         
         self.isUserInteractionEnabled = true

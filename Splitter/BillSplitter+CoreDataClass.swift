@@ -24,13 +24,16 @@ public class BillSplitter: NSManagedObject {
     }
     
     func total() -> Double {
+        
         var total = 0.0
         let items = self.items?.allObjects as! [Item]
+        
         items.forEach { item in
             
             let numberOfSplitters = (item.billSplitters?.allObjects as! [BillSplitter]).count
             total += item.price/Double(numberOfSplitters)
         }
+        
         return total
     }
 }

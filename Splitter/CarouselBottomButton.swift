@@ -21,6 +21,7 @@ class CarouselBottomButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+//Format Buttons View
     func setupView() {
         
         self.backgroundColor = UIColor(netHex: 0x000010)
@@ -28,6 +29,7 @@ class CarouselBottomButton: UIButton {
         self.titleLabel?.font = UIFont.systemFont(ofSize: 17)
     }
     
+//Curve bott corners of the button to match the carousel
     func applyMaskLayer() {
         
         let payBounds: CGRect = self.bounds

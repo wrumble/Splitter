@@ -24,6 +24,7 @@ class RegistrationButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+//Format the buttons appearance
     func setupView() {
         
         self.backgroundColor = UIColor(netHex: 0x000010)

@@ -13,6 +13,7 @@ import CoreData
 public class Item: NSManagedObject {
     
     override public func awakeFromInsert() {
+        
         super.awakeFromInsert()
     }
 }

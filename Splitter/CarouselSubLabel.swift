@@ -12,6 +12,7 @@ class CarouselSubLabel: UILabel {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupView()
     }
     
@@ -19,7 +20,9 @@ class CarouselSubLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
+//Format Labels View
     func setupView() {
+        
         self.backgroundColor = .clear
         self.textAlignment = .left
         self.textColor = UIColor(netHex: 0x000010)

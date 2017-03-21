@@ -19,6 +19,7 @@ class CarouselBillTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+//FormatTableView
     func setupView() {
         
         self.backgroundColor = .clear

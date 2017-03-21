@@ -10,5 +10,5 @@ import UIKit
 
 class CarouselBillTableViewDelegate: NSObject, UITableViewDelegate {
     
-//Leaving this empty for the meantime but may fill it later if i come up with decent reasons to select a tableview vell within the carousel
+//Leaving this empty for the meantime but may fill it later if i come up with decent reasons to select a tableview cell within the carousel
 }

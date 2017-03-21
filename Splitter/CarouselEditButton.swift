@@ -22,6 +22,7 @@ class CarouselEditButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+//Format Buttons View
     func setupView() {
         
         self.backgroundColor = .clear

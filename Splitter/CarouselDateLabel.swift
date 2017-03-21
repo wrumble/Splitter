@@ -12,6 +12,7 @@ class CarouselDateLabel: UILabel {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupView()
     }
     
@@ -19,7 +20,9 @@ class CarouselDateLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
+//Format Labels View
     func setupView() {
+        
         self.backgroundColor = .clear
         self.textAlignment = .right
         self.textColor = UIColor(netHex: 0x000010)

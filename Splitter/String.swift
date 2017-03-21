@@ -46,10 +46,10 @@ extension String {
         let index = self.characters.count - 2
         
         self.insert(".", at: self.characters.index(self.startIndex, offsetBy: index))
+            
+        let price = NumberFormatter().number(from: self)?.doubleValue
         
-        let price = (NumberFormatter().number(from: self)?.doubleValue)!
-        
-        return price
+        return price!
     }
     
 //Leaves only numbers in the string
@@ -59,15 +59,24 @@ extension String {
             self = String(self.characters.filter {okayChars.contains($0) })
     }
     
-//Replaces any 'S' or 's' in a double with a five
+//Replaces any 'S' or 's' in a string with that contains a double with a five
     mutating func replaceWhereFiveShouldBe() {
         
         self = self.replacingOccurrences(of: "S", with: "5", options: .literal, range: nil)
         self = self.replacingOccurrences(of: "s", with: "5", options: .literal, range: nil)
     }
     
+//Replaces any 'l', 'i' or 'I' in a string with that contains a double with a One
     mutating func replaceWhereOneShouldBe() {
         
         self = self.replacingOccurrences(of: "l", with: "1", options: .literal, range: nil)
+        self = self.replacingOccurrences(of: "i", with: "1", options: .literal, range: nil)
+        self = self.replacingOccurrences(of: "I", with: "1", options: .literal, range: nil)
+    }
+    
+    mutating func replaceWhereZeroShouldBe() {
+        
+        self = self.replacingOccurrences(of: "o", with: "0", options: .literal, range: nil)
+        self = self.replacingOccurrences(of: "O", with: "0", options: .literal, range: nil)
     }
 }

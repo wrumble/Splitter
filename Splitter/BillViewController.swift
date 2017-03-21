@@ -22,9 +22,15 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setBillLabel()
+        fetchBillItems()
+    }
+    
+//Adds text and background color to the bills nameLabel.
+    func setBillLabel() {
+        
         billNameLabel.text = "\(bill.name!)"
         billNameLabel.backgroundColor = UIColor(netHex: 0xe9edef).withAlphaComponent(0.75)
-        fetchBillItems()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -50,25 +56,24 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let alertControllerView = alertController.view.viewWithTag(0)
         
         let itemName = alertControllerView?.viewWithTag(1) as! UITextField
-        let itemPrice = alertControllerView?.viewWithTag(2) as! UITextField
+        let itemPriceText = alertControllerView?.viewWithTag(2) as! UITextField
         let itemQuantityText = alertControllerView?.viewWithTag(3) as! UITextField
-        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
             let itemQuantity: Int
             
             if itemQuantityText.text == "" {
-                itemQuantity = 0
+                itemQuantity = 1
             } else {
-                itemQuantity = Int((itemQuantityText.text)!)!
+                itemQuantity = Int(itemQuantityText.text!)!
             }
-            if itemQuantity == 0 || itemQuantity == 1 {
-                self.createAlertViewItem(alertController, itemName: itemName.text!, itemStringPrice: itemPrice.text!)
-            } else {
-                for _ in 1...itemQuantity {
-                    self.createAlertViewItem(alertController, itemName: itemName.text!, itemStringPrice: itemPrice.text!)
-                }
-            }
+            let itemPrice = Double(itemPriceText.text!)!
+            let values = ["quantity": itemQuantity,
+                          "name": itemName.text!,
+                          "price": itemPrice,
+                          "id": self.bill.id!] as [String: Any]
+            
+            self.coreDataHelper.saveItem(self.bill, values: values)
             
             self.fetchBillItems()
             self.tableView.reloadData()
@@ -93,11 +98,12 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         if allItems.count > 0 {
             return allItems.count
         } else {
             
-            let message = "\(bill.name) has no items.\nTap Add to manually add items or try to re-take the phot by creating a new bill again."
+            let message = "\(bill.name) has no items.\nTap Add to manually add items or try to re-take the photo by creating a new bill again."
             
             TableViewHelper().createEmptyMessage(message, tableView: tableView)
             
@@ -151,7 +157,6 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let managedContext = bill.managedObjectContext
             let quantity = item.quantity - 1
             
-            
             allItems.forEach { otherItem in
                 
                 if item.creationDateTime == otherItem.creationDateTime {
@@ -175,22 +180,14 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func fetchBillItems() {
         
-        let managedContext = bill.managedObjectContext
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
-        
-        fetchRequest.predicate = NSPredicate(format: "bill == %@", bill)
-        
-        do {
-            let results =
-                try managedContext!.fetch(fetchRequest)
-            allItems = results as! [Item]
-        } catch let error as NSError {
-            print("Could not fetch \(error), \(error.userInfo)")
-        }
+        allItems = bill.items?.allObjects as! [Item]
+        allItems = allItems.sorted { $0.name! < $1.name! }
     }
     
     func removeItem(_ item: Item) {
+        
         if let index = allItems.index(of: item) {
+            
             allItems.remove(at: index)
         }
     }
@@ -199,11 +196,11 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let managedContext = self.bill.managedObjectContext
         let currentItems = self.bill.mutableSetValue(forKey: "items")
-        currentItems.removeAllObjects()
         
         allItems[indexPath.row].name = itemName.trim()
         allItems[indexPath.row].price = itemPrice
         
+        currentItems.removeAllObjects()
         currentItems.addObjects(from: allItems)
         
         do {
@@ -214,7 +211,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    func createAlertViewItem(_ alertController: UIAlertController, itemName: String, itemStringPrice: String) {
+    func createAlertViewItem(_ alertController: UIAlertController, itemName: String, itemStringPrice: String, itemQuantity: Int) {
 
         let managedContext = self.bill.managedObjectContext
         let entity = NSEntityDescription.entity(forEntityName: "Item", in: managedContext!)
@@ -224,6 +221,8 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         newItem.setValue(itemName.trim(), forKey: "name")
         newItem.setValue(itemPriceNumber, forKey: "price")
+        newItem.setValue(itemQuantity, forKey: "quantity")
+        
         currentItems.add(newItem)
         
         do {
@@ -305,8 +304,7 @@ class BillViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func priceFromString(_ string: String) -> Double {
         
-        let price = (NumberFormatter().number(from: string)?.doubleValue)!
-        return price
+        return (NumberFormatter().number(from: string)?.doubleValue)!
     }
 }
 

@@ -14,6 +14,7 @@ class TextToItemConverter {
     var bill: NSManagedObject!
     var coreDataHelper = CoreDataHelper()
     
+//Render the image text into individual lines
     func seperateTextToLines(_ receiptText: String) {
         
         let newlineChars = CharacterSet.newlines
@@ -35,9 +36,11 @@ class TextToItemConverter {
 //Create has of item values to be passed to the coredata helper.
     func createItemValues(_ itemText: String) -> [String: Any] {
         
+        let price = returnItemPrice(itemText)/Double(returnItemQuantity(itemText))
+        
         return ["quantity": returnItemQuantity(itemText),
                 "name": returnItemName(itemText),
-                "price": returnItemPrice(itemText),
+                "price": price,
                 "id": (bill as! Bill).id!] as [String: Any]
     }
     
@@ -81,15 +84,23 @@ class TextToItemConverter {
         var words = removedCommas.characters.split{$0 == " "}.map(String.init)
         
         words = words.filter { $0 != "" }
+        var moreThanThreeCharacters = [String]()
         
-        var priceString = words.last!
-        var price: Double = 0.0
+        words.forEach { word in
+         
+            if word.characters.count > 3 {
+                
+                moreThanThreeCharacters.append(word)
+            }
+        }
+        var priceString = moreThanThreeCharacters.last!
         
         priceString.replaceWhereFiveShouldBe()
         priceString.replaceWhereOneShouldBe()
+        priceString.replaceWhereZeroShouldBe()
         
-        price = priceString.priceFromStringWithDouble()
-        
+        let price = priceString.priceFromStringWithDouble()
+
         return price
     }
 }

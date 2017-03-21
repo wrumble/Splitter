@@ -14,14 +14,14 @@ class AgreementTextView: UITextView {
         super.init(frame: frame, textContainer: textContainer)
         
         setupView()
+        self.attributedText = self.setUpText()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-//MARK: setupView
-//Sets basic user interactions, colors and text to the textview.
+//Format the textView
     func setupView() {
         
         self.backgroundColor = .clear
@@ -30,12 +30,11 @@ class AgreementTextView: UITextView {
         self.isEditable = false
         self.dataDetectorTypes = .link
         self.linkTextAttributes = [NSForegroundColorAttributeName: UIColor(netHex: 0xe9edef)]
-        self.attributedText = self.setUpText()
     }
     
-//MARK: setUpText
-//Adds the text tot the text view.
+//Add text to the text view.
     func setUpText() -> NSMutableAttributedString {
+        
         let text = NSMutableAttributedString(string: "By Tapping Register you agree that Payment processing services for you on Splitter are provided by Stripe and are subject to the Stripe Connected Account Agreement, which includes the Stripe Terms of Service. By agreeing to these terms or continuing to operate as a user on Splitter, you agree to be bound by the Stripe Services Agreement, as the same may be modified by Stripe from time to time. As a condition of Splitter enabling payment processing services through Stripe, you agree to provide Splitter accurate and complete information about you and your business, and you authorize Splitter to share it and transaction information related to your use of the payment processing services provided by Stripe.")
         
         self.addTextLinks(text: text)
@@ -44,17 +43,17 @@ class AgreementTextView: UITextView {
         return text
     }
     
-//MARK: addTextLinks
-//Adds links and colors to the Stripe T's and C's.
+//Add links and colors to the Stripe T's and C's.
     func addTextLinks(text: NSMutableAttributedString) {
+        
         text.addAttribute(NSForegroundColorAttributeName, value: UIColor(netHex: 0x000010), range: NSMakeRange(0, text.length))
         text.addAttribute(NSLinkAttributeName, value: "https://stripe.com/gb/connect-account/legal", range: NSRange(location: 128, length: 35))
         text.addAttribute(NSLinkAttributeName, value: "https://stripe.com/gb/legal", range: NSRange(location: 183, length: 24))
     }
     
-//MARK: addParagraphStyling
-//Centers the text inside the textView.
+//Center the text inside the textView.
     func addParagraphStyling(text: NSMutableAttributedString) {
+        
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
         text.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSRange(location: 0, length: text.length))

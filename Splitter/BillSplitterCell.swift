@@ -13,5 +13,4 @@ class BillSplitterCell: UITableViewCell {
     @IBOutlet var name: UILabel!
     @IBOutlet var email: UILabel!
     @IBOutlet var total: UILabel!
-    
 }

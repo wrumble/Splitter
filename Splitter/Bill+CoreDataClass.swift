@@ -21,21 +21,30 @@ public class Bill: NSManagedObject {
     }
     
     func isPaid() -> Bool {
+        
         var paid = true
         let splitters = self.billSplitters?.allObjects as! [BillSplitter]
+        
         splitters.forEach { splitter in
+            
             if !splitter.hasPaid {
+                
                 paid = false
             }
         }
+        
         if splitters.count == 1 { paid = false }
+        
         return paid
     }
     
     func total() -> String {
+        
         var total = Double()
         let items = self.items?.allObjects as! [Item]
+        
         items.forEach { item in
+            
             total += item.price
         }
         return total.asLocalCurrency

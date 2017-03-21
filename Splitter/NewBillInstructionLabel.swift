@@ -14,12 +14,14 @@ class NewBillInstructionLabel: UILabel {
     let width = Int(UIScreen.main.bounds.width)
     
     override init(frame: CGRect) {
+        
         let frame = CGRect(x:5, y:0, width: width - 5, height: height)
         super.init(frame: frame)
         setupView()
     }
     
     required init?(coder aDecoder: NSCoder) {
+        
         fatalError("init(coder:) has not been implemented")
     }
     

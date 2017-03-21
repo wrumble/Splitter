@@ -215,7 +215,10 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
             item = mainBillSplitterItems[indexPath.row]
         } else {
             
-            item = ((allBillSplitters[tableView.tag].items)?.allObjects as! [Item])[indexPath.row]
+            let unsortedItems = (allBillSplitters[tableView.tag].items)?.allObjects as! [Item]
+            let sortedItems = unsortedItems.sorted { $0.name! < $1.name! }
+            
+            item = sortedItems[indexPath.row]
         }
         
         let count = Double((item.billSplitters?.count)!)
@@ -289,5 +292,7 @@ class BillSplittersViewController: UIViewController, UITableViewDelegate, UITabl
                 mainBillSplitterItems.append(item)
             }
         }
+                
+       mainBillSplitterItems = mainBillSplitterItems.sorted { $0.name! < $1.name! }//FIXME maybe?? does sorted rearrange the array and save or does its result need to be saved to a new variable?
     }
 }
